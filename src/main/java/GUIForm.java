@@ -1,4 +1,6 @@
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class GUIForm extends JFrame {
     private JTextField textFieldForIpDst;
@@ -18,6 +20,18 @@ public class GUIForm extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 
+        buttonToSendUdpMessage.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String ipDst = textFieldForIpDst.getText();
+                int portDst = Integer.parseInt(textFieldForPortDst.getText());
+                int portSrc = Integer.parseInt(textFieldForPortSrc.getText());
+                String messageForUdp = textFieldForMessageUdp.getText();
+                int intervalForSendingMessageUdp = Integer.parseInt(textFieldForIntervalSendingUDP.getText());
+                UDPClient udpClient = new UDPClient();
+                udpClient.withsetHost(ipDst).withPortDst(portDst).withMessageForUdp(messageForUdp).withIntervalForSendingMessageUdp(intervalForSendingMessageUdp).startSendingMessageUdp();
+            }
+        });
     }
 
 }

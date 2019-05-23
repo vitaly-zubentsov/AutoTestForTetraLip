@@ -28,7 +28,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value=""/>
+          <text value="192.168.1.124"/>
         </properties>
       </component>
       <vspacer id="a6e8e">
@@ -50,7 +50,9 @@
             <preferred-size width="150" height="-1"/>
           </grid>
         </constraints>
-        <properties/>
+        <properties>
+          <text value="1095"/>
+        </properties>
       </component>
       <component id="80d0d" class="javax.swing.JLabel">
         <constraints>
@@ -66,7 +68,9 @@
             <preferred-size width="150" height="-1"/>
           </grid>
         </constraints>
-        <properties/>
+        <properties>
+          <text value="1130"/>
+        </properties>
       </component>
       <component id="b422a" class="javax.swing.JLabel">
         <constraints>
@@ -82,7 +86,9 @@
             <preferred-size width="150" height="-1"/>
           </grid>
         </constraints>
-        <properties/>
+        <properties>
+          <text value="Hello World"/>
+        </properties>
       </component>
       <component id="133e8" class="javax.swing.JLabel">
         <constraints>
@@ -98,7 +104,9 @@
             <preferred-size width="150" height="-1"/>
           </grid>
         </constraints>
-        <properties/>
+        <properties>
+          <text value="1"/>
+        </properties>
       </component>
       <component id="c5c0a" class="javax.swing.JLabel">
         <constraints>
