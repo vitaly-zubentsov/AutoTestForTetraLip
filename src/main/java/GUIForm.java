@@ -10,6 +10,12 @@ public class GUIForm extends JFrame {
     private JTextField textFieldForPortSrc;
     private JTextField textFieldForMessageUdp;
     private JTextField textFieldForIntervalSendingUDP;
+    private JComboBox comboBoxPduType;
+    private JTextField textFieldForSSI;
+    private JComboBox comboBoxForTimeElapsed;
+    private JTextField a3766000628471TextField;
+    private JTextField a557839286TextField;
+    private JComboBox comboBoxForReasonForSending;
 
     public GUIForm() {
 
@@ -28,6 +34,7 @@ public class GUIForm extends JFrame {
                 int portSrc = Integer.parseInt(textFieldForPortSrc.getText());
                 String messageForUdp = textFieldForMessageUdp.getText();
                 int intervalForSendingMessageUdp = Integer.parseInt(textFieldForIntervalSendingUDP.getText());
+
                 UDPClient udpClient = new UDPClient();
                 udpClient.withsetHost(ipDst).withPortDst(portDst).withMessageForUdp(messageForUdp).withIntervalForSendingMessageUdp(intervalForSendingMessageUdp).startSendingMessageUdp();
             }
