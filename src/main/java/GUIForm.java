@@ -4,18 +4,21 @@ import java.awt.event.ActionListener;
 
 public class GUIForm extends JFrame {
     private JTextField textFieldForIpDst;
-    private JButton buttonToSendUdpMessage;
+    private JButton buttonToStartSendUdpMessages;
     private JPanel rootPanel;
     private JTextField textFieldForPortDst;
     private JTextField textFieldForPortSrc;
-    private JTextField textFieldForMessageUdp;
     private JTextField textFieldForIntervalSendingUDP;
-    private JComboBox comboBoxPduType;
     private JTextField textFieldForSSI;
-    private JComboBox comboBoxForTimeElapsed;
-    private JTextField a3766000628471TextField;
-    private JTextField a557839286TextField;
-    private JComboBox comboBoxForReasonForSending;
+    private JTextField textFieldForLongitude;
+    private JTextField textFieldForLatitude;
+    private JTextField textFieldForPduType;
+    private JTextField textFieldForTimeElapsed;
+    private JTextField textFieldForReasonForSending;
+    private JButton buttonToStopSendUdpMessages;
+    private UDPClient udpClientForLipMessages;
+    private UDPClient udpClientForAlivePackets = new UDPClient();
+    private boolean firstStarForSending = true;
 
     public GUIForm() {
 
@@ -26,17 +29,31 @@ public class GUIForm extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 
-        buttonToSendUdpMessage.addActionListener(new ActionListener() {
+        buttonToStartSendUdpMessages.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String ipDst = textFieldForIpDst.getText();
-                int portDst = Integer.parseInt(textFieldForPortDst.getText());
-                int portSrc = Integer.parseInt(textFieldForPortSrc.getText());
-                String messageForUdp = textFieldForMessageUdp.getText();
-                int intervalForSendingMessageUdp = Integer.parseInt(textFieldForIntervalSendingUDP.getText());
+                GeneratorUDPMessage generatorUDPMessage = new GeneratorUDPMessage();
+                String messageForUdp = generatorUDPMessage.withSSI(textFieldForSSI.getText())
+                        .withPdu_type(textFieldForPduType.getText())
+                        .withTime_elapsed(textFieldForTimeElapsed.getText())
+                        .withLongitude(textFieldForLongitude.getText())
+                        .withLatitude(textFieldForLatitude.getText())
+                        .withReason_for_sending(textFieldForReasonForSending.getText()).getUdpMessage();
 
-                UDPClient udpClient = new UDPClient();
-                udpClient.withsetHost(ipDst).withPortDst(portDst).withMessageForUdp(messageForUdp).withIntervalForSendingMessageUdp(intervalForSendingMessageUdp).startSendingMessageUdp();
+
+                udpClientForLipMessages = new UDPClient();
+                udpClientForLipMessages.withsetHost(textFieldForIpDst.getText()).
+                        withPortDst(Integer.parseInt(textFieldForPortDst.getText())).
+                        withMessageForUdp(messageForUdp).
+                        withIntervalForSendingMessageUdp(Integer.parseInt(textFieldForIntervalSendingUDP.getText())).
+                        withPortSrc(Integer.parseInt(textFieldForPortSrc.getText())).
+                        startSendingMessageUdp();
+            }
+        });
+        buttonToStopSendUdpMessages.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                udpClientForLipMessages.stopSendingMessageUdp();
             }
         });
     }
