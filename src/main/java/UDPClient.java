@@ -26,7 +26,7 @@ class UDPClient extends TimerTask {
         } catch (IOException e){
             e.printStackTrace();
         }
-        numberSendingPacketsBeforeAliveMessage = 30000 / intervalForSendingMessageUdp;
+        numberSendingPacketsBeforeAliveMessage = 25000 / intervalForSendingMessageUdp;
         counterSendingPackets = 0;
         // будем запускать каждых x секунд (x = x * 1000 миллисекунд)
         timer.scheduleAtFixedRate(this, 0, intervalForSendingMessageUdp);

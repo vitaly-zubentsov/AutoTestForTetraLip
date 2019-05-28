@@ -126,7 +126,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="7031"/>
+          <text value="7012"/>
         </properties>
       </component>
       <component id="32e4a" class="javax.swing.JLabel">
@@ -144,7 +144,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="37,66000628471"/>
+          <text value="0001101011000111110010111"/>
         </properties>
       </component>
       <component id="e02d" class="javax.swing.JTextField" binding="textFieldForLatitude">
@@ -154,7 +154,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="55,7839286"/>
+          <text value="010011110101011001001111"/>
         </properties>
       </component>
       <component id="83cd8" class="javax.swing.JLabel">
@@ -188,7 +188,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="0"/>
+          <text value="00"/>
         </properties>
       </component>
       <component id="4edc1" class="javax.swing.JTextField" binding="textFieldForTimeElapsed">
@@ -198,7 +198,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="0"/>
+          <text value="00"/>
         </properties>
       </component>
       <component id="d38e6" class="javax.swing.JTextField" binding="textFieldForReasonForSending">

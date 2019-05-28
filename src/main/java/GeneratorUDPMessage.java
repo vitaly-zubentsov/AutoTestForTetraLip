@@ -1,3 +1,5 @@
+import static java.lang.Integer.parseInt;
+
 public class GeneratorUDPMessage {
 
     public String
@@ -35,8 +37,8 @@ public class GeneratorUDPMessage {
                 pdu_headers +
                 pdu_type +
                 time_elapsed +
-                longitude_from_tetra_server + // поменять на нормальные значения
-                longitude_from_tetra_server +
+                longitude +
+                latitude +
                 position_error +
                 horizontal_velocity +
                 direction_of_travel +
@@ -50,7 +52,7 @@ public class GeneratorUDPMessage {
 
     private String convertDecStringNumberToHexStringNumber(String decNumber, int bitInHexNumber) {
 
-        StringBuilder hex = new StringBuilder(Integer.toBinaryString(Integer.parseInt(decNumber)));
+        StringBuilder hex = new StringBuilder(Integer.toBinaryString(parseInt(decNumber)));
         while (hex.length() < bitInHexNumber) {
             hex.insert(0, "0");
         }
@@ -59,11 +61,17 @@ public class GeneratorUDPMessage {
 
     private String convertBinStringToHexString(String binString) {
         String hexString = "";
-        while (binString.length() > 8) {
-            hexString += Integer.toString(Integer.parseInt(binString.substring(0,7), 2));
-            binString = binString.substring(8);
+        String result = "";
+        String resulthex = "";
+
+        while (binString.length() > 3) {
+            result = "" + parseInt(binString.substring(0, 4), 2);
+            String s = binString.substring(0, 4);
+            resulthex = Integer.toHexString(Integer.parseInt(binString.substring(0, 4), 2));
+            hexString += Integer.toHexString(parseInt(binString.substring(0, 4), 2));
+            binString = binString.substring(4);
         }
-        hexString += Integer.toHexString(Integer.parseInt(binString.substring(0,7), 2));
+        // hexString += Integer.toHexString(Integer.parseInt(binString.substring(0,3), 2));
         return hexString;
     }
 
