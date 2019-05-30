@@ -1,4 +1,4 @@
-
+import model.ShortLipMessage;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -8,22 +8,23 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 class UDPClient extends TimerTask {
-    private String host, messageForUDP;
+    private String host;
+    private byte[] messageForUDP;
     private int portDst;
     private int portSrc;
-    private boolean sendingMessages;
     private java.util.Timer timer;
     private int intervalForSendingMessageUdp;
     private DatagramSocket socket;
     private int numberSendingPacketsBeforeAliveMessage,
-    counterSendingPackets;
+            counterSendingPackets;
+    private ShortLipMessage shortLipMessage;
 
     void startSendingMessageUdp() {
 
         timer = new Timer(true);
         try {
-            socket = new DatagramSocket(portSrc);      //создаём сокет
-        } catch (IOException e){
+            socket = new DatagramSocket(portSrc);
+        } catch (IOException e) {
             e.printStackTrace();
         }
         numberSendingPacketsBeforeAliveMessage = 25000 / intervalForSendingMessageUdp;
@@ -37,41 +38,38 @@ class UDPClient extends TimerTask {
     @Override
     public void run() {
         try {
-            ++counterSendingPackets;
-            InetAddress address = InetAddress.getByName(host); //получаем адрес для передачи информации
+            InetAddress address = InetAddress.getByName(host);
+            messageForUDP = shortLipMessage.getUdpMessage();
+            DatagramPacket packet = new DatagramPacket(messageForUDP, messageForUDP.length, address, portDst);
+            socket.send(packet);
 
-            byte[] buf = messageForUDP.getBytes();                     //передаем i, и определяем массив с данными
-            System.out.println(buf.length);                //посмотрим между делом длину полученного массива
-            DatagramPacket packet = new DatagramPacket(buf, buf.length, address, portDst); //создадим объект класса DatagramPacket и передадим ему массив, длину массива, адрес куда слать и порт
-            socket.send(packet);                           //отправляем созданный UDP пакет
-            System.out.println(counterSendingPackets);
-            if ( counterSendingPackets >= numberSendingPacketsBeforeAliveMessage) {
+            if (counterSendingPackets >= numberSendingPacketsBeforeAliveMessage) {
                 String aliveMessage = "alive message";
                 byte[] bufAlive = aliveMessage.getBytes();
-                System.out.println(bufAlive.length);
                 DatagramPacket packetAlive = new DatagramPacket(bufAlive, bufAlive.length, address, portDst);
                 socket.send(packetAlive);
                 counterSendingPackets = 0;
             }
 
-           } catch (IOException e) {
-            e.printStackTrace();                          //отлавливаем необходимые исключения
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     public void stopSendingMessageUdp() {
         if (host != null) {
             timer.cancel();
+            socket.close();
         }
     }
 
-    UDPClient withsetHost(String host) {
+    UDPClient withHost(String host) {
         this.host = host;
         return this;
 
     }
 
-    UDPClient withMessageForUdp(String messageForUdp) {
+    UDPClient withMessageForUdp(byte[] messageForUdp) {
         this.messageForUDP = messageForUdp;
         return this;
     }
@@ -91,9 +89,10 @@ class UDPClient extends TimerTask {
         return this;
     }
 
-    UDPClient withSocket(DatagramSocket socket) {
-        this.socket = socket;
+    UDPClient withShortLipMessage(ShortLipMessage shortLipMessage) {
+        this.shortLipMessage = shortLipMessage;
         return this;
     }
+
 
 }

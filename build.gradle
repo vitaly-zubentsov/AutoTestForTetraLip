@@ -4,6 +4,7 @@ plugins {
     id 'idea'
 }
 
+
 group 'zubentsov'
 version '1.0-SNAPSHOT'
 
@@ -14,5 +15,5 @@ repositories {
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+   
 }
