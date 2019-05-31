@@ -28,7 +28,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="192.168.1.124"/>
+          <text value="192.168.1.125"/>
         </properties>
       </component>
       <vspacer id="a6e8e">
@@ -198,7 +198,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="00"/>
+          <text value=""/>
         </properties>
       </component>
       <component id="d38e6" class="javax.swing.JTextField" binding="textFieldForReasonForSending">

@@ -52,6 +52,12 @@ public class ShortLipMessage {
         return convertBinStringToByteArray(udpMessage);
     }
 
+    public byte[] getUdpAliveMessage() {
+        String udpAliveMessage = packet_counter + "00000000000000000000000000000000";
+        addTheNumberToBinString(packet_counter, 1);
+        return convertBinStringToByteArray(udpAliveMessage);
+    }
+
     private void addTheNumberToBinString(String binString, long number) {
 
         long numberFromBinString = convertBinStringToDecNumber(binString);
@@ -158,5 +164,4 @@ public class ShortLipMessage {
         this.reason_for_sending = reason_for_sending;
         return this;
     }
-
 }

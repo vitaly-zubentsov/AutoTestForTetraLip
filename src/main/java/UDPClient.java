@@ -42,11 +42,11 @@ class UDPClient extends TimerTask {
             messageForUDP = shortLipMessage.getUdpMessage();
             DatagramPacket packet = new DatagramPacket(messageForUDP, messageForUDP.length, address, portDst);
             socket.send(packet);
-
+            ++counterSendingPackets;
+            System.out.println("Hello from UDPRun");
             if (counterSendingPackets >= numberSendingPacketsBeforeAliveMessage) {
-                String aliveMessage = "alive message";
-                byte[] bufAlive = aliveMessage.getBytes();
-                DatagramPacket packetAlive = new DatagramPacket(bufAlive, bufAlive.length, address, portDst);
+                messageForUDP = shortLipMessage.getUdpAliveMessage();
+                DatagramPacket packetAlive = new DatagramPacket(messageForUDP, messageForUDP.length, address, portDst);
                 socket.send(packetAlive);
                 counterSendingPackets = 0;
             }
