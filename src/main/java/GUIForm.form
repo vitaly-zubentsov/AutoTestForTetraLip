@@ -28,7 +28,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="192.168.1.125"/>
+          <text value="192.168.1.26"/>
         </properties>
       </component>
       <vspacer id="a6e8e">
@@ -51,7 +51,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="1095"/>
+          <text value="11372"/>
         </properties>
       </component>
       <component id="80d0d" class="javax.swing.JLabel">
@@ -126,7 +126,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="7012"/>
+          <text value="7050"/>
         </properties>
       </component>
       <component id="32e4a" class="javax.swing.JLabel">
@@ -144,7 +144,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="0001101011000111110010111"/>
+          <text value="37.66000628471"/>
         </properties>
       </component>
       <component id="e02d" class="javax.swing.JTextField" binding="textFieldForLatitude">
@@ -154,7 +154,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="010011110101011001001111"/>
+          <text value="55.7839286"/>
         </properties>
       </component>
       <component id="83cd8" class="javax.swing.JLabel">
@@ -198,7 +198,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value=""/>
+          <text value="00"/>
         </properties>
       </component>
       <component id="d38e6" class="javax.swing.JTextField" binding="textFieldForReasonForSending">
