@@ -8,86 +8,77 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 class UDPClient extends TimerTask {
-    private String host;
-    private byte[] messageForUDP;
+
     private int portDst;
-    private int portSrc;
-    private java.util.Timer timer;
     private int intervalForSendingMessageUdp;
+
+    private java.util.Timer timer;
     private DatagramSocket socket;
-    private int numberSendingPacketsBeforeAliveMessage,
-            counterSendingPackets;
+    private int numberSendingPacketsBeforeAliveMessage;
+    private int counterSendingPackets;
     private ShortLipMessage shortLipMessage;
+    private boolean sendingUDPLIPMessage = false;
+    private InetAddress address;
 
-    void startSendingMessageUdp() {
+    private byte[] messageForUDP;
 
-        timer = new Timer(true);
+    void initUDPConnection(String host, String portDst, String portSrc, String intervalForSendingMessageUdp) {
+
+
         try {
-            socket = new DatagramSocket(portSrc);
+            this.socket = new DatagramSocket(Integer.parseInt(portSrc));
+            this.address = InetAddress.getByName(host);
+            this.portDst = Integer.parseInt(portDst);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        numberSendingPacketsBeforeAliveMessage = 25000 / intervalForSendingMessageUdp;
+        timer = new Timer(true);
+        this.intervalForSendingMessageUdp = Integer.parseInt(intervalForSendingMessageUdp);
+        numberSendingPacketsBeforeAliveMessage = 25000 / Integer.parseInt(intervalForSendingMessageUdp);
         counterSendingPackets = 0;
-        // будем запускать каждых x секунд (x = x * 1000 миллисекунд)
+        // запускаем переодическое выполнение (x = x * 1000 миллисекунд)
+
+
+    }
+
+    void startSendingMessageUdp() {
+        sendingUDPLIPMessage = true;
         timer.scheduleAtFixedRate(this, 0, intervalForSendingMessageUdp);
+    }
 
-
+    void continueSendingUdpLipMessage() {
+        sendingUDPLIPMessage = true;
     }
 
     @Override
     public void run() {
         try {
-            InetAddress address = InetAddress.getByName(host);
-            messageForUDP = shortLipMessage.getUdpMessage();
-            DatagramPacket packet = new DatagramPacket(messageForUDP, messageForUDP.length, address, portDst);
-            socket.send(packet);
+
+            if (sendingUDPLIPMessage) {
+                messageForUDP = shortLipMessage.getUdpMessage();
+                DatagramPacket packet = new DatagramPacket(messageForUDP, messageForUDP.length, address, portDst);
+                socket.send(packet);
+
+
+            }
             ++counterSendingPackets;
-            System.out.println("Hello from UDPRun");
             if (counterSendingPackets >= numberSendingPacketsBeforeAliveMessage) {
                 messageForUDP = shortLipMessage.getUdpAliveMessage();
                 DatagramPacket packetAlive = new DatagramPacket(messageForUDP, messageForUDP.length, address, portDst);
                 socket.send(packetAlive);
                 counterSendingPackets = 0;
-            }
-
-        } catch (IOException e) {
+                       }
+           } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void stopSendingMessageUdp() {
-        if (host != null) {
-            timer.cancel();
-            socket.close();
+    void stopSendingMessageUdp() {
+        if (sendingUDPLIPMessage) {
+            sendingUDPLIPMessage = false;
         }
     }
 
-    UDPClient withHost(String host) {
-        this.host = host;
-        return this;
-
-    }
-
-    UDPClient withMessageForUdp(byte[] messageForUdp) {
-        this.messageForUDP = messageForUdp;
-        return this;
-    }
-
-    UDPClient withPortDst(int portDst) {
-        this.portDst = portDst;
-        return this;
-    }
-
-    UDPClient withPortSrc(int portSrc) {
-        this.portSrc = portSrc;
-        return this;
-    }
-
-    UDPClient withIntervalForSendingMessageUdp(int intervalForSendingMessageUdp) {
-        this.intervalForSendingMessageUdp = intervalForSendingMessageUdp;
-        return this;
-    }
 
     UDPClient withShortLipMessage(ShortLipMessage shortLipMessage) {
         this.shortLipMessage = shortLipMessage;

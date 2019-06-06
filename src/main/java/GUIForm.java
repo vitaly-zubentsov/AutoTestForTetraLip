@@ -17,9 +17,11 @@ public class GUIForm extends JFrame {
     private JTextField textFieldForTimeElapsed;
     private JTextField textFieldForReasonForSending;
     private JButton buttonToStopSendUdpMessages;
-    private UDPClient udpClientForLipMessages;
+    private UDPClient udpClientForLipMessages = new UDPClient();
+    private boolean firstStart = true;
+    ShortLipMessage shortLipMessage = new ShortLipMessage();
 
-    public GUIForm() {
+    GUIForm() {
 
         super("Auto test for tetra LIP");
         add(rootPanel);
@@ -36,27 +38,40 @@ public class GUIForm extends JFrame {
                 inputValidation(textFieldForLongitude.getText(), -180.0, 179.0);
                 inputValidation(textFieldForLatitude.getText(), -90.0, 89.0);
 
-                ShortLipMessage shortLipMessage = new ShortLipMessage();
-                shortLipMessage.withSSI(textFieldForSSI.getText())
-                        .withPdu_type(textFieldForPduType.getText())
-                        .withTime_elapsed(textFieldForTimeElapsed.getText())
-                        .withLongitude(textFieldForLongitude.getText())
-                        .withLatitude(textFieldForLatitude.getText())
-                        .withReason_for_sending(textFieldForReasonForSending.getText());
+                if (firstStart) {
+                    firstStart = false;
+                    shortLipMessage.withSSI(textFieldForSSI.getText())
+                            .withPdu_type(textFieldForPduType.getText())
+                            .withTime_elapsed(textFieldForTimeElapsed.getText())
+                            .withLongitude(textFieldForLongitude.getText())
+                            .withLatitude(textFieldForLatitude.getText())
+                            .withReason_for_sending(textFieldForReasonForSending.getText()).initValuesFromUI();
 
-                udpClientForLipMessages = new UDPClient();
-                udpClientForLipMessages.withHost(textFieldForIpDst.getText()).
-                        withPortDst(Integer.parseInt(textFieldForPortDst.getText())).
-                        withIntervalForSendingMessageUdp(Integer.parseInt(textFieldForIntervalSendingUDP.getText())).
-                        withPortSrc(Integer.parseInt(textFieldForPortSrc.getText())).
-                        withShortLipMessage(shortLipMessage).
-                        startSendingMessageUdp();
+                    textFieldForIpDst.setEditable(false);
+                    textFieldForPortDst.setEditable(false);
+                    textFieldForIntervalSendingUDP.setEditable(false);
+                    textFieldForIpDst.setEditable(false);
+                    textFieldForLatitude.setEditable(false);
+                    textFieldForLongitude.setEditable(false);
+
+                    udpClientForLipMessages.initUDPConnection(
+                            textFieldForIpDst.getText(),
+                            textFieldForPortDst.getText(),
+                            textFieldForPortSrc.getText(),
+                            textFieldForIntervalSendingUDP.getText());
+                    udpClientForLipMessages.withShortLipMessage(shortLipMessage).startSendingMessageUdp();
+                } else {
+                    shortLipMessage.withSSI(textFieldForSSI.getText())
+                            .withPdu_type(textFieldForPduType.getText())
+                            .withTime_elapsed(textFieldForTimeElapsed.getText())
+                            .withReason_for_sending(textFieldForReasonForSending.getText());
+
+                    udpClientForLipMessages.withShortLipMessage(shortLipMessage).continueSendingUdpLipMessage();
+                }
 
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-
-
         });
         buttonToStopSendUdpMessages.addActionListener(e -> udpClientForLipMessages.stopSendingMessageUdp());
     }
@@ -65,7 +80,7 @@ public class GUIForm extends JFrame {
         int checkNumber = Integer.parseInt(checkString);
         if ((checkNumber < beginRange) || (checkNumber > endRange)) {
             String warning = "Value : '" + checkNumber + "' cannot be out of range [" + beginRange + ".." + endRange + "]";
-            JDialog dialog = createDialog("Модальное", true, warning);
+            JDialog dialog = createDialog(warning);
             dialog.setVisible(true);
 
             throw new Exception(checkNumber + "cannot be out of range [" + beginRange + ".." + endRange + "]");
@@ -75,12 +90,16 @@ public class GUIForm extends JFrame {
     private void inputValidation(String checkString, double beginRange, double endRange) throws Exception {
         double checkNumber = Double.parseDouble(checkString);
         if ((checkNumber < beginRange) || (checkNumber > endRange)) {
-            throw new Exception("Number = " + checkNumber + " cannot be out of range [" + beginRange + ".." + endRange + "]");
+            String warning = "Value : '" + checkNumber + "' cannot be out of range [" + beginRange + ".." + endRange + "]";
+            JDialog dialog = createDialog(warning);
+            dialog.setVisible(true);
+
+            throw new Exception(checkNumber + "cannot be out of range [" + beginRange + ".." + endRange + "]");
         }
     }
 
-    private JDialog createDialog(String title, boolean modal, String messageInDialog) {
-        JDialog dialog = new JDialog(this, title, modal);
+    private JDialog createDialog(String messageInDialog) {
+        JDialog dialog = new JDialog(this, "Ошибка", true);
         JLabel dialogLabel = new JLabel(messageInDialog);
         dialog.add(dialogLabel);
         dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);

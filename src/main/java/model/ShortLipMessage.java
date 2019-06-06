@@ -4,9 +4,7 @@ import static java.lang.Integer.parseInt;
 
 public class ShortLipMessage {
 
-    // private static byte[] ALIVE_MESSAGE = {0,0,9,121,};
-    private String
-            packet_counter = "00000000000000000000000000000001";
+    private String packet_counter = "00000000000000000000000000000001";
     private String ssi;
     private String longitude_from_tetra_server = "00000000001101011000111110010111";
     private String latitude_from_tetra_server = "00000000010011110101011001001111";
@@ -19,19 +17,28 @@ public class ShortLipMessage {
     private String position_error = "010"; // в клиенте не отображается, есть смысл сделать входным
     private String horizontal_velocity = "0000001"; //  надо исследовать, если отображается в клиенте
     private String direction_of_travel = "0111"; //  надо исследовать, если отображается в клиенте
-
     private static String type_of_additional_data = "0"; // в short lip на данный момент других решений не планируется.
-
     private String reason_for_sending;
     private String pdu_tail = "000001111"; //этот хвостик появляется только для short lip, какая то ошибка в сервере ОВ
 
+    private String binSSI;
+    private String binPduType;
+    private String binTimeElapsed;
+    private String binLongitude;
+    private String binLatitude;
+    private String binReasonForSending;
+
+    public void initValuesFromUI() {
+        binSSI = convertDecStringNumberToBinStringNumber(ssi, 32);
+        binPduType = convertDecStringNumberToBinStringNumber(pdu_type, 2);
+        binTimeElapsed = convertDecStringNumberToBinStringNumber(time_elapsed, 2);
+        binLongitude = calculateLipLongitudeFromDecLongitude(longitude);
+        binLatitude = calculateLipLatitudeFromDecLatitude(latitude);
+        binReasonForSending = convertDecStringNumberToBinStringNumber(reason_for_sending, 8);
+
+    }
+
     public byte[] getUdpMessage() {
-        String binSSI = convertDecStringNumberToBinStringNumber(ssi, 32);
-        String binPduType = convertDecStringNumberToBinStringNumber(pdu_type, 2);
-        String binTimeElapsed = convertDecStringNumberToBinStringNumber(time_elapsed, 2);
-        String binLongitude = calculateLipLongitudeFromDecLongitude(longitude);
-        String binLatitude = calculateLipLatitudeFromDecLatitude(latitude);
-        String binReasonForSending = convertDecStringNumberToBinStringNumber(reason_for_sending, 8);
         String udpMessage = packet_counter +
                 binSSI +
                 longitude_from_tetra_server +
@@ -49,8 +56,11 @@ public class ShortLipMessage {
                 binReasonForSending +
                 pdu_tail + "000";
         addTheNumberToBinString(packet_counter, 1);
+        addTheNumberToBinString(binLongitude, 10);
+        addTheNumberToBinString(binLatitude, 10);
         return convertBinStringToByteArray(udpMessage);
     }
+
 
     public byte[] getUdpAliveMessage() {
         String udpAliveMessage = packet_counter + "00000000000000000000000000000000";
@@ -76,10 +86,6 @@ public class ShortLipMessage {
     private int convertBinStringToDecNumber(String binString) {
         return Integer.parseInt(binString, 2);
     }
-
-   /* byte [] getAliveMessage() {
-        return ALIVE_MESSAGE;
-    }*/
 
     private byte[] convertBinStringToByteArray(String binString) {
 
@@ -112,14 +118,14 @@ public class ShortLipMessage {
     private String convertBinStringToHexString(String binString) {
 
 
-        String hexString = "";
+        StringBuilder hexString = new StringBuilder();
 
         while (binString.length() > 3) {
-            hexString += Integer.toHexString(parseInt(binString.substring(0, 4), 2));
+            hexString.append(Integer.toHexString(parseInt(binString.substring(0, 4), 2)));
             binString = binString.substring(4);
         }
         // hexString += Integer.toHexString(Integer.parseInt(binString.substring(0,3), 2));
-        return hexString;
+        return hexString.toString();
     }
 
     private String calculateLipLatitudeFromDecLatitude(String latitude) {
