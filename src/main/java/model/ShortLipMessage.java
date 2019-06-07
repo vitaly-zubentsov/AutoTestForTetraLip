@@ -4,7 +4,7 @@ import static java.lang.Integer.parseInt;
 
 public class ShortLipMessage {
 
-    private String packet_counter = "00000000000000000000000000000001";
+    private String packet_counter = "00000000000000000000000001000001";
     private String ssi;
     private String longitude_from_tetra_server = "00000000001101011000111110010111";
     private String latitude_from_tetra_server = "00000000010011110101011001001111";
@@ -41,7 +41,8 @@ public class ShortLipMessage {
     public byte[] getUdpMessage() {
         String udpMessage = packet_counter +
                 binSSI +
-                longitude_from_tetra_server +
+                "0000000"+ binLongitude+
+               // longitude_from_tetra_server +
                 latitude_from_tetra_server +
                 length_in_bits +
                 PDU_HEADERS +
@@ -55,9 +56,10 @@ public class ShortLipMessage {
                 type_of_additional_data +
                 binReasonForSending +
                 pdu_tail + "000";
-        addTheNumberToBinString(packet_counter, 1);
-        addTheNumberToBinString(binLongitude, 10);
-        addTheNumberToBinString(binLatitude, 10);
+        packet_counter = addTheNumberToBinString(packet_counter, 1);
+        binLongitude = addTheNumberToBinString(binLongitude, 10);
+        binLatitude = addTheNumberToBinString(binLatitude, 10);
+        System.out.println(binLatitude);
         return convertBinStringToByteArray(udpMessage);
     }
 
@@ -68,10 +70,10 @@ public class ShortLipMessage {
         return convertBinStringToByteArray(udpAliveMessage);
     }
 
-    private void addTheNumberToBinString(String binString, long number) {
+    private String addTheNumberToBinString(String binString, long number) {
 
         long numberFromBinString = convertBinStringToDecNumber(binString);
-        packet_counter = convertDecStringNumberToBinStringNumber(numberFromBinString + number, binString.length());
+        return convertDecStringNumberToBinStringNumber(numberFromBinString + number, binString.length());
     }
 
     private String convertDecStringNumberToBinStringNumber(long number, int lengthOfBinString) {
