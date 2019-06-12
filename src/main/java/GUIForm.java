@@ -18,7 +18,7 @@ public class GUIForm extends JFrame {
     private JTextField textFieldForPduType;
     private JTextField textFieldForTimeElapsed;
     private JTextField textFieldForReasonForSending;
-    private JButton buttonToStopSendUdpMessages;
+    private JButton buttonToPauseSendingLIPMessages;
     private JCheckBox checkBoxChangingSSI;
     private JCheckBox checkBoxChangingLongitude;
     private JCheckBox checkBoxChangingLatitude;
@@ -50,7 +50,6 @@ public class GUIForm extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         buttonToStartSendUdpMessages.addActionListener(e -> {
-            initChangeMap();
             try {
                 inputValidation();
                 initChangeMap();
@@ -77,49 +76,35 @@ public class GUIForm extends JFrame {
                 textFieldForPortDst.setEditable(false);
                 textFieldForIntervalSendingUDP.setEditable(false);
                 textFieldForIpDst.setEditable(false);
-                textFieldForLatitude.setEditable(false);
-                textFieldForLongitude.setEditable(false);
+
                 buttonToStartSendUdpMessages.setEnabled(false);
                 continueSendingLIPMessagesButton.setEnabled(true);
+                buttonToPauseSendingLIPMessages.setEnabled(true);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         });
-        buttonToStopSendUdpMessages.addActionListener(e -> udpClientForLipMessages.stopSendingMessageUdp());
+        buttonToPauseSendingLIPMessages.addActionListener(e -> udpClientForLipMessages.stopSendingMessageUdp());
 
-        continueSendingLIPMessagesButton.addActionListener(e -> {  // Это надо подробнее расписать позже
+        continueSendingLIPMessagesButton.addActionListener(e -> {
             initChangeMap();
             try {
                 inputValidation();
 
-                if (firstStart) {
-                    firstStart = false;
-                    shortLipMessage.withSSI(textFieldForSSI.getText())
+                shortLipMessage.withSSI(textFieldForSSI.getText())
+                        .withTimeElapsed(textFieldForTimeElapsed.getText())
+                        .withLongitude(textFieldForLongitude.getText())
+                        .withLatitude(textFieldForLatitude.getText())
+                        .withPositionError(textFieldForPositionError.getText())
+                        .withHorizontalVelocity(textFieldForHorizontalVelocity.getText())
+                        .withDirectionOfTravel(textFieldForDirectionOfTravel.getText())
+                        .withReasonForSending(textFieldForReasonForSending.getText())
+                        .withChangeMap(changeMap)
+                        .initValuesFromUI();
 
 
-                            .withLongitude(textFieldForLongitude.getText())
-                            .withLatitude(textFieldForLatitude.getText())
-                         .initValuesFromUI();
+                udpClientForLipMessages.withShortLipMessage(shortLipMessage).continueSendingUdpLipMessage();
 
-                    textFieldForIpDst.setEditable(false);
-                    textFieldForPortDst.setEditable(false);
-                    textFieldForIntervalSendingUDP.setEditable(false);
-                    textFieldForIpDst.setEditable(false);
-                    textFieldForLatitude.setEditable(false);
-                    textFieldForLongitude.setEditable(false);
-
-                    udpClientForLipMessages.initUDPConnection(
-                            textFieldForIpDst.getText(),
-                            textFieldForPortDst.getText(),
-                            textFieldForPortSrc.getText(),
-                            textFieldForIntervalSendingUDP.getText());
-                    udpClientForLipMessages.withShortLipMessage(shortLipMessage).startSendingMessageUdp();
-                } else {
-                    shortLipMessage.withSSI(textFieldForSSI.getText());
-
-
-                    udpClientForLipMessages.withShortLipMessage(shortLipMessage).continueSendingUdpLipMessage();
-                }
 
             } catch (Exception ex) {
                 ex.printStackTrace();
