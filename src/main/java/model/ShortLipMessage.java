@@ -62,55 +62,56 @@ public class ShortLipMessage {
                 binReasonForSending +
                 pdu_tail +
                 "000"; // без этого хвостика почему то сервер не может распарсить сообщение
-
         changeValuesOfElementsLipMessage();
         return convertBinStringToByteArray(udpMessage);
     }
 
     private void changeValuesOfElementsLipMessage() {
         if (changeMap.get(0)) {
-            binSSI = addTheNumberToBinString(binSSI,1);
+            binSSI = addTheNumberToBinString(binSSI, 1, 16777215);
         }
         if (changeMap.get(1)) {
-            binTimeElapsed = addTheNumberToBinString(binSSI,1);
+            binTimeElapsed = addTheNumberToBinString(binTimeElapsed, 1, 3);
         }
         if (changeMap.get(2)) {
-            binLongitude = addTheNumberToBinString(binLongitude,10);
+            binLongitude = addTheNumberToBinString(binLongitude, 10, 33554431);
         }
         if (changeMap.get(3)) {
-            binLatitude = addTheNumberToBinString(binLatitude,10);
+            binLatitude = addTheNumberToBinString(binLatitude, 10, 16777215);
         }
         if (changeMap.get(4)) {
-            binPositionError = addTheNumberToBinString(binPositionError,1);
+            binPositionError = addTheNumberToBinString(binPositionError, 1, 3);
         }
         if (changeMap.get(5)) {
-            binHorizontalVelocity = addTheNumberToBinString(binHorizontalVelocity,1);
+            binHorizontalVelocity = addTheNumberToBinString(binHorizontalVelocity, 1, 7);
         }
         if (changeMap.get(6)) {
-            binDirectionOfTravel = addTheNumberToBinString(binDirectionOfTravel,1);
+            binDirectionOfTravel = addTheNumberToBinString(binDirectionOfTravel, 1, 4);
         }
         if (changeMap.get(7)) {
-            binReasonForSending = addTheNumberToBinString(binReasonForSending,1);
+            binReasonForSending = addTheNumberToBinString(binReasonForSending, 1, 8);
         }
 
-
-        packet_counter = addTheNumberToBinString(packet_counter, 1);
-        binLongitude = addTheNumberToBinString(binLongitude, 10);
-        binLatitude = addTheNumberToBinString(binLatitude, 10);
         System.out.println(binLatitude);
+        System.out.println(binTimeElapsed);
     }
 
 
     public byte[] getUdpAliveMessage() {
         String udpAliveMessage = packet_counter + "00000000000000000000000000000000";
-        addTheNumberToBinString(packet_counter, 1);
+        addTheNumberToBinString(packet_counter, 1, 1294967295);
         return convertBinStringToByteArray(udpAliveMessage);
     }
 
-    private String addTheNumberToBinString(String binString, long number) {
+    private String addTheNumberToBinString(String binString, long number, long maxValue) {
 
         long numberFromBinString = convertBinStringToDecNumber(binString);
-        return convertDecStringNumberToBinStringNumber(numberFromBinString + number, binString.length());
+        if (numberFromBinString == maxValue) {
+            return convertDecStringNumberToBinStringNumber(0, binString.length());
+        } else {
+            return convertDecStringNumberToBinStringNumber(numberFromBinString + number, binString.length());
+        }
+
     }
 
     private String convertDecStringNumberToBinStringNumber(long number, int lengthOfBinString) {

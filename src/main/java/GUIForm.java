@@ -15,7 +15,7 @@ public class GUIForm extends JFrame {
     private JTextField textFieldForSSI;
     private JTextField textFieldForLongitude;
     private JTextField textFieldForLatitude;
-    private JTextField textFieldForPduType;
+  //  private JTextField textFieldForPduType;
     private JTextField textFieldForTimeElapsed;
     private JTextField textFieldForReasonForSending;
     private JButton buttonToPauseSendingLIPMessages;
@@ -109,10 +109,7 @@ public class GUIForm extends JFrame {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-
-
         });
-
     }
 
     private void inputValidation() throws Exception {
