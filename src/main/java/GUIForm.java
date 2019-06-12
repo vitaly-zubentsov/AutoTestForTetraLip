@@ -1,6 +1,8 @@
 import model.ShortLipMessage;
 
 import javax.swing.*;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class GUIForm extends JFrame {
@@ -17,8 +19,26 @@ public class GUIForm extends JFrame {
     private JTextField textFieldForTimeElapsed;
     private JTextField textFieldForReasonForSending;
     private JButton buttonToStopSendUdpMessages;
+    private JCheckBox checkBoxChangingSSI;
+    private JCheckBox checkBoxChangingLongitude;
+    private JCheckBox checkBoxChangingLatitude;
+    private JCheckBox checkBoxChangingReasonForSending;
+    private JRadioButton shortLIPRadioButton;
+    private JRadioButton longLIP1RadioButton;
+    private JRadioButton longLIPTelRadioButton;
+    private JRadioButton longLIP2RadioButton;
+    private JRadioButton longLIP3RadioButton;
+    private JTextField textFieldForHorizontalVelocity;
+    private JTextField textFieldForDirectionOfTravel;
+    private JCheckBox checkBoxTimeElapsed;
+    private JCheckBox checkBoxChangingPositionError;
+    private JCheckBox checkBoxChangingHorizontalVelocity;
+    private JCheckBox checkBoxChangingDirectionOfTravel;
+    private JButton continueSendingLIPMessagesButton;
+    private JTextField textFieldForPositionError;
     private UDPClient udpClientForLipMessages = new UDPClient();
     private boolean firstStart = true;
+    private Map<Integer, Boolean> changeMap;
     ShortLipMessage shortLipMessage = new ShortLipMessage();
 
     GUIForm() {
@@ -30,22 +50,56 @@ public class GUIForm extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         buttonToStartSendUdpMessages.addActionListener(e -> {
+            initChangeMap();
             try {
+                inputValidation();
+                initChangeMap();
+                shortLipMessage.withSSI(textFieldForSSI.getText())
+                        .withTimeElapsed(textFieldForTimeElapsed.getText())
+                        .withLongitude(textFieldForLongitude.getText())
+                        .withLatitude(textFieldForLatitude.getText())
+                        .withPositionError(textFieldForPositionError.getText())
+                        .withHorizontalVelocity(textFieldForHorizontalVelocity.getText())
+                        .withDirectionOfTravel(textFieldForDirectionOfTravel.getText())
+                        .withReasonForSending(textFieldForReasonForSending.getText())
+                        .withChangeMap(changeMap)
+                        .initValuesFromUI();
 
-                inputValidation(textFieldForSSI.getText(), 0, 16777215);
-                inputValidation(textFieldForPduType.getText(), 0, 3);
-                inputValidation(textFieldForTimeElapsed.getText(), 0, 3);
-                inputValidation(textFieldForLongitude.getText(), -180.0, 179.0);
-                inputValidation(textFieldForLatitude.getText(), -90.0, 89.0);
+
+                udpClientForLipMessages.initUDPConnection(
+                        textFieldForIpDst.getText(),
+                        textFieldForPortDst.getText(),
+                        textFieldForPortSrc.getText(),
+                        textFieldForIntervalSendingUDP.getText());
+                udpClientForLipMessages.withShortLipMessage(shortLipMessage).startSendingMessageUdp();
+
+                textFieldForIpDst.setEditable(false);
+                textFieldForPortDst.setEditable(false);
+                textFieldForIntervalSendingUDP.setEditable(false);
+                textFieldForIpDst.setEditable(false);
+                textFieldForLatitude.setEditable(false);
+                textFieldForLongitude.setEditable(false);
+                buttonToStartSendUdpMessages.setEnabled(false);
+                continueSendingLIPMessagesButton.setEnabled(true);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+        buttonToStopSendUdpMessages.addActionListener(e -> udpClientForLipMessages.stopSendingMessageUdp());
+
+        continueSendingLIPMessagesButton.addActionListener(e -> {  // Это надо подробнее расписать позже
+            initChangeMap();
+            try {
+                inputValidation();
 
                 if (firstStart) {
                     firstStart = false;
                     shortLipMessage.withSSI(textFieldForSSI.getText())
-                            .withPdu_type(textFieldForPduType.getText())
-                            .withTime_elapsed(textFieldForTimeElapsed.getText())
+
+
                             .withLongitude(textFieldForLongitude.getText())
                             .withLatitude(textFieldForLatitude.getText())
-                            .withReason_for_sending(textFieldForReasonForSending.getText()).initValuesFromUI();
+                         .initValuesFromUI();
 
                     textFieldForIpDst.setEditable(false);
                     textFieldForPortDst.setEditable(false);
@@ -61,10 +115,8 @@ public class GUIForm extends JFrame {
                             textFieldForIntervalSendingUDP.getText());
                     udpClientForLipMessages.withShortLipMessage(shortLipMessage).startSendingMessageUdp();
                 } else {
-                    shortLipMessage.withSSI(textFieldForSSI.getText())
-                            .withPdu_type(textFieldForPduType.getText())
-                            .withTime_elapsed(textFieldForTimeElapsed.getText())
-                            .withReason_for_sending(textFieldForReasonForSending.getText());
+                    shortLipMessage.withSSI(textFieldForSSI.getText());
+
 
                     udpClientForLipMessages.withShortLipMessage(shortLipMessage).continueSendingUdpLipMessage();
                 }
@@ -72,29 +124,85 @@ public class GUIForm extends JFrame {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
+
+
         });
-        buttonToStopSendUdpMessages.addActionListener(e -> udpClientForLipMessages.stopSendingMessageUdp());
+
     }
 
-    private void inputValidation(String checkString, int beginRange, int endRange) throws Exception {
-        int checkNumber = Integer.parseInt(checkString);
-        if ((checkNumber < beginRange) || (checkNumber > endRange)) {
-            String warning = "Value : '" + checkNumber + "' cannot be out of range [" + beginRange + ".." + endRange + "]";
-            JDialog dialog = createDialog(warning);
-            dialog.setVisible(true);
+    private void inputValidation() throws Exception {
+        checkIntValueFromString(textFieldForSSI.getText(), 0, 16777215, "SSI");
+        checkIntValueFromString(textFieldForTimeElapsed.getText(), 0, 3, "TimeElapsed");
+        checkDoubleValueFromString(textFieldForLongitude.getText(), -180.0, 179.0, "Longitude");
+        checkDoubleValueFromString(textFieldForLatitude.getText(), -90.0, 89.0, "Latitude");
+        checkIntValueFromString(textFieldForPositionError.getText(), 0, 7, "PositionError");
+        checkIntValueFromString(textFieldForHorizontalVelocity.getText(), 0, 127, "HorizontalVelocity");
+        checkIntValueFromString(textFieldForDirectionOfTravel.getText(), 0, 15, "DirectionOfTravel");
+        checkIntValueFromString(textFieldForReasonForSending.getText(), 0, 255, "ReasonForSending");
+    }
 
-            throw new Exception(checkNumber + "cannot be out of range [" + beginRange + ".." + endRange + "]");
+    private void initChangeMap() {
+        this.changeMap = new HashMap<Integer, Boolean>();
+        for (int i = 0; i < 8; i++) {
+            changeMap.put(i, false);
+        }
+        if (checkBoxChangingSSI.isSelected()) {
+            changeMap.replace(0, true);
+        }
+        if (checkBoxTimeElapsed.isSelected()) {
+            changeMap.replace(1, true);
+        }
+        if (checkBoxChangingLongitude.isSelected()) {
+            changeMap.replace(2, true);
+        }
+        if (checkBoxChangingLatitude.isSelected()) {
+            changeMap.replace(3, true);
+        }
+        if (checkBoxChangingPositionError.isSelected()) {
+            changeMap.replace(4, true);
+        }
+        if (checkBoxChangingHorizontalVelocity.isSelected()) {
+            changeMap.replace(5, true);
+        }
+        if (checkBoxChangingDirectionOfTravel.isSelected()) {
+            changeMap.replace(6, true);
+        }
+        if (checkBoxChangingReasonForSending.isSelected()) {
+            changeMap.replace(7, true);
         }
     }
 
-    private void inputValidation(String checkString, double beginRange, double endRange) throws Exception {
-        double checkNumber = Double.parseDouble(checkString);
-        if ((checkNumber < beginRange) || (checkNumber > endRange)) {
-            String warning = "Value : '" + checkNumber + "' cannot be out of range [" + beginRange + ".." + endRange + "]";
-            JDialog dialog = createDialog(warning);
-            dialog.setVisible(true);
+    private void checkIntValueFromString(String checkString, int beginRange, int endRange, String nameOfField) throws Exception {
+        try {
+            int checkNumber = Integer.parseInt(checkString);
 
-            throw new Exception(checkNumber + "cannot be out of range [" + beginRange + ".." + endRange + "]");
+            if ((checkNumber < beginRange) || (checkNumber > endRange)) {
+                String warning = nameOfField + " = " + checkNumber + " cannot be out of range [" + beginRange + ".." + endRange + "]";
+                JDialog dialog = createDialog(warning);
+                dialog.setVisible(true);
+                throw new Exception(warning);
+            }
+        } catch (Exception ex) {
+            JDialog dialog = createDialog("Wrong type Of value for " + nameOfField);
+            dialog.setVisible(true);
+            throw new Exception(nameOfField + " should be int");
+        }
+
+    }
+
+    private void checkDoubleValueFromString(String checkString, double beginRange, double endRange, String nameOfField) throws Exception {
+        try {
+            double checkNumber = Double.parseDouble(checkString);
+            if ((checkNumber < beginRange) || (checkNumber > endRange)) {
+                String warning = nameOfField + " = " + checkNumber + " cannot be out of range [" + beginRange + ".." + endRange + "]";
+                JDialog dialog = createDialog(warning);
+                dialog.setVisible(true);
+                throw new Exception(checkNumber + "cannot be out of range [" + beginRange + ".." + endRange + "]");
+            }
+        } catch (Exception ex) {
+            JDialog dialog = createDialog("Wrong type value for " + nameOfField);
+            dialog.setVisible(true);
+            throw new Exception(nameOfField + " should be double");
         }
     }
 

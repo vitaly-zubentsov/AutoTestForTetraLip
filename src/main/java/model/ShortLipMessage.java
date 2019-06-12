@@ -1,39 +1,45 @@
 package model;
 
+import java.util.Map;
+
 import static java.lang.Integer.parseInt;
 
 public class ShortLipMessage {
 
     private String packet_counter = "00000000000000000000000001000001";
     private String ssi;
-    private String longitude_from_tetra_server = "00000000001101011000111110010111";
-    private String latitude_from_tetra_server = "00000000010011110101011001001111";
-    private String length_in_bits = "00000000000000000000000001011101";  //надо научиться определять потом.
+    private static String LENGTH_IN_BITS = "00000000000000000000000001011101";  //сделать счетчик количества бит, хотя по факту он всегда будет определён.
     private static String PDU_HEADERS = "00001010";
-    private String pdu_type;
+    private static String PDU_TYPE = "00";
     private String time_elapsed;
     private String longitude;
     private String latitude;
-    private String position_error = "010"; // в клиенте не отображается, есть смысл сделать входным
-    private String horizontal_velocity = "0000001"; //  надо исследовать, если отображается в клиенте
-    private String direction_of_travel = "0111"; //  надо исследовать, если отображается в клиенте
-    private static String type_of_additional_data = "0"; // в short lip на данный момент других решений не планируется.
+    private String position_error; // в клиенте не отображается, есть смысл сделать входным
+    private String horizontal_velocity; //  надо исследовать, если отображается в клиенте
+    private String direction_of_travel; //  надо исследовать, если отображается в клиенте
+    private static String TYPE_OF_Additional_DATA = "0"; // в short lip на данный момент других решений не планируется.
     private String reason_for_sending;
     private String pdu_tail = "000001111"; //этот хвостик появляется только для short lip, какая то ошибка в сервере ОВ
 
     private String binSSI;
-    private String binPduType;
     private String binTimeElapsed;
     private String binLongitude;
     private String binLatitude;
+    private String binPositionError;
+    private String binHorizontalVelocity;
+    private String binDirectionOfTravel;
     private String binReasonForSending;
+
+    private Map<Integer, Boolean> changeMap;
 
     public void initValuesFromUI() {
         binSSI = convertDecStringNumberToBinStringNumber(ssi, 32);
-        binPduType = convertDecStringNumberToBinStringNumber(pdu_type, 2);
         binTimeElapsed = convertDecStringNumberToBinStringNumber(time_elapsed, 2);
         binLongitude = calculateLipLongitudeFromDecLongitude(longitude);
         binLatitude = calculateLipLatitudeFromDecLatitude(latitude);
+        binPositionError = convertDecStringNumberToBinStringNumber(position_error, 3);
+        binHorizontalVelocity = convertDecStringNumberToBinStringNumber(horizontal_velocity, 7);
+        binDirectionOfTravel = convertDecStringNumberToBinStringNumber(direction_of_travel, 4);
         binReasonForSending = convertDecStringNumberToBinStringNumber(reason_for_sending, 8);
 
     }
@@ -41,26 +47,57 @@ public class ShortLipMessage {
     public byte[] getUdpMessage() {
         String udpMessage = packet_counter +
                 binSSI +
-                "0000000"+ binLongitude+
-               // longitude_from_tetra_server +
-                latitude_from_tetra_server +
-                length_in_bits +
+                "0000000" + binLongitude +
+                "000000" + binLatitude +
+                LENGTH_IN_BITS +
                 PDU_HEADERS +
-                binPduType +
+                PDU_TYPE +
                 binTimeElapsed +
                 binLongitude +
                 binLatitude +
-                position_error +
-                horizontal_velocity +
-                direction_of_travel +
-                type_of_additional_data +
+                binPositionError +
+                binHorizontalVelocity +
+                binDirectionOfTravel +
+                TYPE_OF_Additional_DATA +
                 binReasonForSending +
-                pdu_tail + "000";
+                pdu_tail +
+                "000"; // без этого хвостика почему то сервер не может распарсить сообщение
+
+        changeValuesOfElementsLipMessage();
+        return convertBinStringToByteArray(udpMessage);
+    }
+
+    private void changeValuesOfElementsLipMessage() {
+        if (changeMap.get(0)) {
+            binSSI = addTheNumberToBinString(binSSI,1);
+        }
+        if (changeMap.get(1)) {
+            binTimeElapsed = addTheNumberToBinString(binSSI,1);
+        }
+        if (changeMap.get(2)) {
+            binLongitude = addTheNumberToBinString(binLongitude,10);
+        }
+        if (changeMap.get(3)) {
+            binLatitude = addTheNumberToBinString(binLatitude,10);
+        }
+        if (changeMap.get(4)) {
+            binPositionError = addTheNumberToBinString(binPositionError,1);
+        }
+        if (changeMap.get(5)) {
+            binHorizontalVelocity = addTheNumberToBinString(binHorizontalVelocity,1);
+        }
+        if (changeMap.get(6)) {
+            binDirectionOfTravel = addTheNumberToBinString(binDirectionOfTravel,1);
+        }
+        if (changeMap.get(7)) {
+            binReasonForSending = addTheNumberToBinString(binReasonForSending,1);
+        }
+
+
         packet_counter = addTheNumberToBinString(packet_counter, 1);
         binLongitude = addTheNumberToBinString(binLongitude, 10);
         binLatitude = addTheNumberToBinString(binLatitude, 10);
         System.out.println(binLatitude);
-        return convertBinStringToByteArray(udpMessage);
     }
 
 
@@ -153,12 +190,7 @@ public class ShortLipMessage {
     }
 
 
-    public ShortLipMessage withPdu_type(String pdu_type) {
-        this.pdu_type = pdu_type;
-        return this;
-    }
-
-    public ShortLipMessage withTime_elapsed(String time_elapsed) {
+    public ShortLipMessage withTimeElapsed(String time_elapsed) {
         this.time_elapsed = time_elapsed;
         return this;
     }
@@ -173,8 +205,29 @@ public class ShortLipMessage {
         return this;
     }
 
-    public ShortLipMessage withReason_for_sending(String reason_for_sending) {
+    public ShortLipMessage withReasonForSending(String reason_for_sending) {
         this.reason_for_sending = reason_for_sending;
         return this;
     }
+
+    public ShortLipMessage withPositionError(String position_error) {
+        this.position_error = position_error;
+        return this;
+    }
+
+    public ShortLipMessage withHorizontalVelocity(String horizontal_velocity) {
+        this.horizontal_velocity = horizontal_velocity;
+        return this;
+    }
+
+    public ShortLipMessage withDirectionOfTravel(String direction_of_travel) {
+        this.direction_of_travel = direction_of_travel;
+        return this;
+    }
+
+    public ShortLipMessage withChangeMap(Map<Integer, Boolean> changeMap) {
+        this.changeMap = changeMap;
+        return this;
+    }
+
 }
