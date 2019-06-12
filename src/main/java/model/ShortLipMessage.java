@@ -6,7 +6,7 @@ import static java.lang.Integer.parseInt;
 
 public class ShortLipMessage {
 
-    private String packet_counter = "00000000000000000000000001000001";
+    private String packet_counter = "00000000000000000000000000000001";
     private String ssi;
     private static String LENGTH_IN_BITS = "00000000000000000000000001011101";  //сделать счетчик количества бит, хотя по факту он всегда будет определён.
     private static String PDU_HEADERS = "00001010";
@@ -48,7 +48,7 @@ public class ShortLipMessage {
         String udpMessage = packet_counter +
                 binSSI +
                 "0000000" + binLongitude +
-                "000000" + binLatitude +
+                "00000000" + binLatitude +
                 LENGTH_IN_BITS +
                 PDU_HEADERS +
                 PDU_TYPE +
@@ -91,7 +91,7 @@ public class ShortLipMessage {
         if (changeMap.get(7)) {
             binReasonForSending = addTheNumberToBinString(binReasonForSending, 1, 8);
         }
-
+        packet_counter = addTheNumberToBinString(packet_counter,1,1294967295);
         System.out.println(binLatitude);
         System.out.println(binTimeElapsed);
     }

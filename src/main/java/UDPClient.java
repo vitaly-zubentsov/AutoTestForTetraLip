@@ -58,6 +58,7 @@ class UDPClient extends TimerTask {
                 messageForUDP = shortLipMessage.getUdpMessage();
                 DatagramPacket packet = new DatagramPacket(messageForUDP, messageForUDP.length, address, portDst);
                 socket.send(packet);
+                System.out.println("Lip");
 
 
             }
@@ -67,6 +68,7 @@ class UDPClient extends TimerTask {
                 DatagramPacket packetAlive = new DatagramPacket(messageForUDP, messageForUDP.length, address, portDst);
                 socket.send(packetAlive);
                 counterSendingPackets = 0;
+                System.out.println("Alive");
                        }
            } catch (IOException e) {
             e.printStackTrace();
