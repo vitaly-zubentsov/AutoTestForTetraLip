@@ -1,6 +1,10 @@
 import model.ShortLipMessage;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -110,6 +114,47 @@ public class GUIForm extends JFrame {
                 ex.printStackTrace();
             }
         });
+        shortLIPRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setSelectedOnlyForChoosingRadioButton(shortLIPRadioButton);
+
+            }
+        });
+        longLIP1RadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setSelectedOnlyForChoosingRadioButton(longLIP1RadioButton);
+            }
+        });
+        longLIP2RadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setSelectedOnlyForChoosingRadioButton(longLIP2RadioButton);
+            }
+        });
+        longLIP3RadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setSelectedOnlyForChoosingRadioButton(longLIP3RadioButton);
+            }
+        });
+        longLIPTelRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setSelectedOnlyForChoosingRadioButton(longLIPTelRadioButton);
+            }
+        });
+
+    }
+
+    private void setSelectedOnlyForChoosingRadioButton(JRadioButton choosingRadioButton) {
+        shortLIPRadioButton.setSelected(false);
+        longLIP1RadioButton.setSelected(false);
+        longLIP2RadioButton.setSelected(false);
+        longLIP3RadioButton.setSelected(false);
+        longLIPTelRadioButton.setSelected(false);
+        choosingRadioButton.setSelected(true);
     }
 
     private void inputValidation() throws Exception {

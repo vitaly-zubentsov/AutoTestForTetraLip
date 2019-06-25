@@ -80,16 +80,16 @@ public class ShortLipMessage {
             binLatitude = addTheNumberToBinString(binLatitude, 10, 16777215);
         }
         if (changeMap.get(4)) {
-            binPositionError = addTheNumberToBinString(binPositionError, 1, 3);
+            binPositionError = addTheNumberToBinString(binPositionError, 1, 7);
         }
         if (changeMap.get(5)) {
-            binHorizontalVelocity = addTheNumberToBinString(binHorizontalVelocity, 1, 7);
+            binHorizontalVelocity = addTheNumberToBinString(binHorizontalVelocity, 1, 127);
         }
         if (changeMap.get(6)) {
-            binDirectionOfTravel = addTheNumberToBinString(binDirectionOfTravel, 1, 4);
+            binDirectionOfTravel = addTheNumberToBinString(binDirectionOfTravel, 1, 15);
         }
         if (changeMap.get(7)) {
-            binReasonForSending = addTheNumberToBinString(binReasonForSending, 1, 8);
+            binReasonForSending = addTheNumberToBinString(binReasonForSending, 1, 255);
         }
         packet_counter = addTheNumberToBinString(packet_counter,1,1294967295);
         System.out.println(binLatitude);
