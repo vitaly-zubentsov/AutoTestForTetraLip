@@ -68,7 +68,8 @@ public class ShortLipMessage {
 
     private void changeValuesOfElementsLipMessage() {
         if (changeMap.get(0)) {
-            binSSI = addTheNumberToBinString(binSSI, 1, 16777215);
+            binSSI = addTheNumberToBinStringForSSI(binSSI, 1, 8000);
+            System.out.println(convertBinStringToDecNumber(binSSI));
         }
         if (changeMap.get(1)) {
             binTimeElapsed = addTheNumberToBinString(binTimeElapsed, 1, 3);
@@ -103,11 +104,22 @@ public class ShortLipMessage {
         return convertBinStringToByteArray(udpAliveMessage);
     }
 
+
     private String addTheNumberToBinString(String binString, long number, long maxValue) {
 
         long numberFromBinString = convertBinStringToDecNumber(binString);
-        if (numberFromBinString == maxValue) {
+        if ((numberFromBinString + number) >= maxValue) {
             return convertDecStringNumberToBinStringNumber(0, binString.length());
+        } else {
+            return convertDecStringNumberToBinStringNumber(numberFromBinString + number, binString.length());
+        }
+
+    }
+    private String addTheNumberToBinStringForSSI(String binString, long number, long maxValue) {
+
+        long numberFromBinString = convertBinStringToDecNumber(binString);
+        if ((numberFromBinString + number) >= maxValue) {
+            return convertDecStringNumberToBinStringNumber(7000, binString.length());
         } else {
             return convertDecStringNumberToBinStringNumber(numberFromBinString + number, binString.length());
         }

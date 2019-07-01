@@ -40,6 +40,21 @@ public class GUIForm extends JFrame {
     private JCheckBox checkBoxChangingDirectionOfTravel;
     private JButton continueSendingLIPMessagesButton;
     private JTextField textFieldForPositionError;
+    private JTextField textFieldForPDUType;
+    private JTextField textFieldForPDUTypeExtention;
+    private JTextField textFieldForTimeData;
+    private JTextField textFieldForHorizontalPositionUncertainty;
+    private JTextField textFieldForVelocityData;
+    private JTextField textFieldForAcnowlegementRequest;
+    private JTextField textFieldForTypeOfAdditionalData;
+    private JTextField textFieldForLocationAltitude;
+    private JTextField textField1;
+    private JTextField textFieldForTimeOfPosition;
+    private JLabel labelForSSi;
+    private JLabel labelForPDUType;
+    private JLabel labelForPDUTypeExtention;
+    private JLabel labelForTimeData;
+    private JLabel labelForTimeElapsed;
     private UDPClient udpClientForLipMessages = new UDPClient();
     private boolean firstStart = true;
     private Map<Integer, Boolean> changeMap;
@@ -118,6 +133,7 @@ public class GUIForm extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setSelectedOnlyForChoosingRadioButton(shortLIPRadioButton);
+
 
             }
         });
@@ -241,5 +257,10 @@ public class GUIForm extends JFrame {
         dialog.setSize(500, 90);
         return dialog;
     }
+
+/*    private JDialog createDialogForShortLip(String messageInDialog) {
+        JDialog = new JDialog(this,"Добавить short lip абонента", true)
+        return dialogForShortLip;
+    }*/
 
 }
