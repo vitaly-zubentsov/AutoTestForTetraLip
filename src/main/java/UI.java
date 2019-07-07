@@ -1,0 +1,572 @@
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class UI extends JFrame {
+    private static final long serialVersionUID = 1L;
+
+
+    public UI() {
+
+        super("DialogWindows");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+
+        JButton buttonSetUDPOptions = new JButton("Set UDP options");
+        JButton buttonAddShortLip = new JButton("Add short LIP");
+        JButton buttonAddLongLipType1 = new JButton("Add long LIP type 1");
+        JButton buttonAddLongLipType2 = new JButton("Add long LIP type 2");
+        JButton buttonAddLongLipType3 = new JButton("Add long LIP type 3");
+        // Создание панели содержимого с размещением кнопок
+        JPanel contents = new JPanel();
+        contents.add(buttonAddShortLip);
+        contents.add(buttonAddLongLipType1);
+        contents.add(buttonAddLongLipType2);
+        contents.add(buttonAddLongLipType3);
+        contents.add(buttonSetUDPOptions);
+        setContentPane(contents);
+        // Определение размера и открытие окна
+        setSize(350, 100);
+        setVisible(true);
+
+        buttonAddShortLip.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JDialog dialogForShortLIP = createDialog("Input data for short LIP", true, 600, 350, 11, 3);
+
+                JLabel labelForSSI = new JLabel("SSI");
+                JTextField textFieldForSSI = new JTextField("7031", 1);
+                JCheckBox checkBoxForSSI = new JCheckBox("Changing");
+                dialogForShortLIP.add(labelForSSI);
+                dialogForShortLIP.add(textFieldForSSI);
+                dialogForShortLIP.add(checkBoxForSSI);
+
+                JLabel labelForPDUType = new JLabel("PDU Type");
+                JTextField textFieldFoForPDUType = new JTextField("0", 1);
+                textFieldFoForPDUType.setEditable(false);
+                JCheckBox checkBoxForForPDUType = new JCheckBox("Changing");
+                checkBoxForForPDUType.setEnabled(false);
+                dialogForShortLIP.add(labelForPDUType);
+                dialogForShortLIP.add(textFieldFoForPDUType);
+                dialogForShortLIP.add(checkBoxForForPDUType);
+
+                JLabel labelForTimeElapsed = new JLabel("Time elapsed");
+                JTextField textFieldForTimeElapsed = new JTextField("0", 1);
+                JCheckBox checkBoxForTimeElapsed = new JCheckBox("Changing");
+                dialogForShortLIP.add(labelForTimeElapsed);
+                dialogForShortLIP.add(textFieldForTimeElapsed);
+                dialogForShortLIP.add(checkBoxForTimeElapsed);
+
+                JLabel labelForLongitude = new JLabel("Longitude");
+                JTextField textFieldForLongitude = new JTextField("37.66000628471", 1);
+                JCheckBox checkBoxForLongitude = new JCheckBox("Changing");
+                dialogForShortLIP.add(labelForLongitude);
+                dialogForShortLIP.add(textFieldForLongitude);
+                dialogForShortLIP.add(checkBoxForLongitude);
+
+                JLabel labelForLatitude = new JLabel("Latitude");
+                JTextField textFieldForLatitude = new JTextField("55.7839286", 1);
+                JCheckBox checkBoxForLatitude = new JCheckBox("Changing");
+                dialogForShortLIP.add(labelForLatitude);
+                dialogForShortLIP.add(textFieldForLatitude);
+                dialogForShortLIP.add(checkBoxForLatitude);
+
+                JLabel labelForPositionError = new JLabel("Position error");
+                JTextField textFieldForPositionError = new JTextField("0", 1);
+                JCheckBox checkBoxForPositionError = new JCheckBox("Changing");
+                dialogForShortLIP.add(labelForPositionError);
+                dialogForShortLIP.add(textFieldForPositionError);
+                dialogForShortLIP.add(checkBoxForPositionError);
+
+                JLabel labelForHorizontalVelocity = new JLabel("Horizontal velocity");
+                JTextField textFieldForHorizontalVelocity = new JTextField("0", 1);
+                JCheckBox checkBoxForHorizontalVelocity = new JCheckBox("Changing");
+                dialogForShortLIP.add(labelForHorizontalVelocity);
+                dialogForShortLIP.add(textFieldForHorizontalVelocity);
+                dialogForShortLIP.add(checkBoxForHorizontalVelocity);
+
+                JLabel labelForDirectionOfTravel = new JLabel("DirectionOfTravel");
+                JTextField textFieldForDirectionOfTravel = new JTextField("0", 1);
+                JCheckBox checkBoxForDirectionOfTravel = new JCheckBox("Changing");
+                dialogForShortLIP.add(labelForDirectionOfTravel);
+                dialogForShortLIP.add(textFieldForDirectionOfTravel);
+                dialogForShortLIP.add(checkBoxForDirectionOfTravel);
+
+                JLabel labelForTypeOfAdditionalData = new JLabel("Type of additional data");
+                JTextField textFieldForTypeOfAdditionalData = new JTextField("0", 1);
+                JCheckBox checkBoxForTypeOfAdditionalData = new JCheckBox("Changing");
+                dialogForShortLIP.add(labelForTypeOfAdditionalData);
+                dialogForShortLIP.add(textFieldForTypeOfAdditionalData);
+                dialogForShortLIP.add(checkBoxForTypeOfAdditionalData);
+
+                JLabel labelForReasonForSending = new JLabel("Reason for sending");
+                JTextField textFieldForReasonForSending = new JTextField("129", 1);
+                JCheckBox checkBoxForReasonForSending = new JCheckBox("Changing");
+                dialogForShortLIP.add(labelForReasonForSending);
+                dialogForShortLIP.add(textFieldForReasonForSending);
+                dialogForShortLIP.add(checkBoxForReasonForSending);
+
+                JButton buttonToAddShortLip = new JButton("Add ShortLIP");
+                dialogForShortLIP.add(buttonToAddShortLip);
+
+                buttonToAddShortLip.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        dialogForShortLIP.dispose();
+                    }
+                });
+
+                dialogForShortLIP.setVisible(true);
+            }
+        });
+        buttonAddLongLipType1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JDialog dialogForLongLIPType1 = createDialog("Input data for long LIP type 1", true, 600, 500, 15, 3);
+
+                JLabel labelForSSI = new JLabel("SSI");
+                JTextField textFieldForSSI = new JTextField("7031", 1);
+                JCheckBox checkBoxForSSI = new JCheckBox("Changing");
+                dialogForLongLIPType1.add(labelForSSI);
+                dialogForLongLIPType1.add(textFieldForSSI);
+                dialogForLongLIPType1.add(checkBoxForSSI);
+
+                JLabel labelForPDUType = new JLabel("PDU Type");
+                JTextField textFieldFoForPDUType = new JTextField("1", 1);
+                textFieldFoForPDUType.setEditable(false);
+                JCheckBox checkBoxForForPDUType = new JCheckBox("Changing");
+                checkBoxForForPDUType.setEnabled(false);
+                dialogForLongLIPType1.add(labelForPDUType);
+                dialogForLongLIPType1.add(textFieldFoForPDUType);
+                dialogForLongLIPType1.add(checkBoxForForPDUType);
+
+                JLabel labelForPDUTypeExtension = new JLabel("PDU Type extension");
+                JTextField textFieldForPDUTypeExtension = new JTextField("3", 1);
+                textFieldForPDUTypeExtension.setEditable(false);
+                JCheckBox checkBoxForPDUTypeExtension = new JCheckBox("Changing");
+                checkBoxForPDUTypeExtension.setEnabled(false);
+                dialogForLongLIPType1.add(labelForPDUTypeExtension);
+                dialogForLongLIPType1.add(textFieldForPDUTypeExtension);
+                dialogForLongLIPType1.add(checkBoxForPDUTypeExtension);
+
+                JLabel labelForTimeData = new JLabel("Time data");
+                JTextField textFieldFoTimeData = new JTextField("0", 1);
+                textFieldFoTimeData.setEditable(false);
+                JCheckBox checkBoxForForTimeData = new JCheckBox("Changing");
+                checkBoxForForPDUType.setEnabled(false);
+                dialogForLongLIPType1.add(labelForTimeData);
+                dialogForLongLIPType1.add(textFieldFoTimeData);
+                dialogForLongLIPType1.add(checkBoxForForTimeData);
+
+                JLabel labelForLocationShape = new JLabel("Location shape");
+                JTextField textFieldForLocationShape = new JTextField("5", 1);
+                textFieldForLocationShape.setEditable(false);
+                JCheckBox checkBoxForLocationShape = new JCheckBox("Changing");
+                checkBoxForLocationShape.setEnabled(false);
+                dialogForLongLIPType1.add(labelForLocationShape);
+                dialogForLongLIPType1.add(textFieldForLocationShape);
+                dialogForLongLIPType1.add(checkBoxForLocationShape);
+
+                JLabel labelForLongitude = new JLabel("Longitude");
+                JTextField textFieldForLongitude = new JTextField("37.66000628471", 1);
+                JCheckBox checkBoxForLongitude = new JCheckBox("Changing");
+                dialogForLongLIPType1.add(labelForLongitude);
+                dialogForLongLIPType1.add(textFieldForLongitude);
+                dialogForLongLIPType1.add(checkBoxForLongitude);
+
+                JLabel labelForLatitude = new JLabel("Latitude");
+                JTextField textFieldForLatitude = new JTextField("55.7839286", 1);
+                JCheckBox checkBoxForLatitude = new JCheckBox("Changing");
+                dialogForLongLIPType1.add(labelForLatitude);
+                dialogForLongLIPType1.add(textFieldForLatitude);
+                dialogForLongLIPType1.add(checkBoxForLatitude);
+
+                JLabel labelForHorizontalPositionUncertainty = new JLabel("Horizontal position uncertainty");
+                JTextField textFieldForHorizontalPositionUncertainty = new JTextField("0", 1);
+                JCheckBox checkBoxForHorizontalPositionUncertainty = new JCheckBox("Changing");
+                dialogForLongLIPType1.add(labelForHorizontalPositionUncertainty);
+                dialogForLongLIPType1.add(textFieldForHorizontalPositionUncertainty);
+                dialogForLongLIPType1.add(checkBoxForHorizontalPositionUncertainty);
+
+                JLabel labelForLocationAltitude = new JLabel("Location altitude");
+                JTextField textFieldForLocationAltitude = new JTextField("0", 1);
+                JCheckBox checkBoxForLocationAltitude = new JCheckBox("Changing");
+                dialogForLongLIPType1.add(labelForLocationAltitude);
+                dialogForLongLIPType1.add(textFieldForLocationAltitude);
+                dialogForLongLIPType1.add(checkBoxForLocationAltitude);
+
+                JLabel labelForVelocityType = new JLabel("Velocity type");
+                JTextField textFieldForVelocityType = new JTextField("5", 1);
+                textFieldForVelocityType.setEditable(false);
+                JCheckBox checkBoxForVelocityType = new JCheckBox("Changing");
+                checkBoxForVelocityType.setEnabled(false);
+                dialogForLongLIPType1.add(labelForVelocityType);
+                dialogForLongLIPType1.add(textFieldForVelocityType);
+                dialogForLongLIPType1.add(checkBoxForVelocityType);
+
+                JLabel labelForHorizontalVelocity = new JLabel("Horizontal velocity");
+                JTextField textFieldForHorizontalVelocity = new JTextField("0", 1);
+                JCheckBox checkBoxForHorizontalVelocity = new JCheckBox("Changing");
+                dialogForLongLIPType1.add(labelForHorizontalVelocity);
+                dialogForLongLIPType1.add(textFieldForHorizontalVelocity);
+                dialogForLongLIPType1.add(checkBoxForHorizontalVelocity);
+
+                JLabel labelForDirectionOfTravelExtended = new JLabel("Direction of travel extended");
+                JTextField textFieldForDirectionOfTravelExtended = new JTextField("0", 1);
+                JCheckBox checkBoxForDirectionOfTravelExtended = new JCheckBox("Changing");
+                dialogForLongLIPType1.add(labelForDirectionOfTravelExtended);
+                dialogForLongLIPType1.add(textFieldForDirectionOfTravelExtended);
+                dialogForLongLIPType1.add(checkBoxForDirectionOfTravelExtended);
+
+                JLabel labelForTypeOfAdditionalData = new JLabel("Type of additional data");
+                JTextField textFieldForTypeOfAdditionalData = new JTextField("0", 1);
+                JCheckBox checkBoxForTypeOfAdditionalData = new JCheckBox("Changing");
+                dialogForLongLIPType1.add(labelForTypeOfAdditionalData);
+                dialogForLongLIPType1.add(textFieldForTypeOfAdditionalData);
+                dialogForLongLIPType1.add(checkBoxForTypeOfAdditionalData);
+
+                JLabel labelForReasonForSending = new JLabel("Reason for sending");
+                JTextField textFieldForReasonForSending = new JTextField("129", 1);
+                JCheckBox checkBoxForReasonForSending = new JCheckBox("Changing");
+                dialogForLongLIPType1.add(labelForReasonForSending);
+                dialogForLongLIPType1.add(textFieldForReasonForSending);
+                dialogForLongLIPType1.add(checkBoxForReasonForSending);
+
+                JButton buttonToAddShortLip = new JButton("Add long LIP type 3");
+                dialogForLongLIPType1.add(buttonToAddShortLip);
+
+                buttonToAddShortLip.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        dialogForLongLIPType1.dispose();
+                    }
+                });
+
+                dialogForLongLIPType1.setVisible(true);
+            }
+        });
+        buttonAddLongLipType2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JDialog dialogForLongLIPType2 = createDialog("Input data for long LIP type 2", true, 600, 500, 16, 3);
+
+                JLabel labelForSSI = new JLabel("SSI");
+                JTextField textFieldForSSI = new JTextField("7031", 1);
+                JCheckBox checkBoxForSSI = new JCheckBox("Changing");
+                dialogForLongLIPType2.add(labelForSSI);
+                dialogForLongLIPType2.add(textFieldForSSI);
+                dialogForLongLIPType2.add(checkBoxForSSI);
+
+                JLabel labelForPDUType = new JLabel("PDU Type");
+                JTextField textFieldFoForPDUType = new JTextField("1", 1);
+                textFieldFoForPDUType.setEditable(false);
+                JCheckBox checkBoxForForPDUType = new JCheckBox("Changing");
+                checkBoxForForPDUType.setEnabled(false);
+                dialogForLongLIPType2.add(labelForPDUType);
+                dialogForLongLIPType2.add(textFieldFoForPDUType);
+                dialogForLongLIPType2.add(checkBoxForForPDUType);
+
+                JLabel labelForPDUTypeExtension = new JLabel("PDU Type extension");
+                JTextField textFieldForPDUTypeExtension = new JTextField("3", 1);
+                textFieldForPDUTypeExtension.setEditable(false);
+                JCheckBox checkBoxForPDUTypeExtension = new JCheckBox("Changing");
+                checkBoxForPDUTypeExtension.setEnabled(false);
+                dialogForLongLIPType2.add(labelForPDUTypeExtension);
+                dialogForLongLIPType2.add(textFieldForPDUTypeExtension);
+                dialogForLongLIPType2.add(checkBoxForPDUTypeExtension);
+
+                JLabel labelForTimeData = new JLabel("Time data");
+                JTextField textFieldFoTimeData = new JTextField("1", 1);
+                textFieldFoTimeData.setEditable(false);
+                JCheckBox checkBoxForForTimeData = new JCheckBox("Changing");
+                checkBoxForForPDUType.setEnabled(false);
+                dialogForLongLIPType2.add(labelForTimeData);
+                dialogForLongLIPType2.add(textFieldFoTimeData);
+                dialogForLongLIPType2.add(checkBoxForForTimeData);
+
+                JLabel labelForTimeElapsed = new JLabel("Time elapsed");
+                JTextField textFieldForTimeElapsed = new JTextField("0", 1);
+                JCheckBox checkBoxForTimeElapsed = new JCheckBox("Changing");
+                dialogForLongLIPType2.add(labelForTimeElapsed);
+                dialogForLongLIPType2.add(textFieldForTimeElapsed);
+                dialogForLongLIPType2.add(checkBoxForTimeElapsed);
+
+                JLabel labelForLocationShape = new JLabel("Location shape");
+                JTextField textFieldForLocationShape = new JTextField("5", 1);
+                textFieldForLocationShape.setEditable(false);
+                JCheckBox checkBoxForLocationShape = new JCheckBox("Changing");
+                checkBoxForLocationShape.setEnabled(false);
+                dialogForLongLIPType2.add(labelForLocationShape);
+                dialogForLongLIPType2.add(textFieldForLocationShape);
+                dialogForLongLIPType2.add(checkBoxForLocationShape);
+
+                JLabel labelForLongitude = new JLabel("Longitude");
+                JTextField textFieldForLongitude = new JTextField("37.66000628471", 1);
+                JCheckBox checkBoxForLongitude = new JCheckBox("Changing");
+                dialogForLongLIPType2.add(labelForLongitude);
+                dialogForLongLIPType2.add(textFieldForLongitude);
+                dialogForLongLIPType2.add(checkBoxForLongitude);
+
+                JLabel labelForLatitude = new JLabel("Latitude");
+                JTextField textFieldForLatitude = new JTextField("55.7839286", 1);
+                JCheckBox checkBoxForLatitude = new JCheckBox("Changing");
+                dialogForLongLIPType2.add(labelForLatitude);
+                dialogForLongLIPType2.add(textFieldForLatitude);
+                dialogForLongLIPType2.add(checkBoxForLatitude);
+
+                JLabel labelForHorizontalPositionUncertainty = new JLabel("Horizontal position uncertainty");
+                JTextField textFieldForHorizontalPositionUncertainty = new JTextField("0", 1);
+                JCheckBox checkBoxForHorizontalPositionUncertainty = new JCheckBox("Changing");
+                dialogForLongLIPType2.add(labelForHorizontalPositionUncertainty);
+                dialogForLongLIPType2.add(textFieldForHorizontalPositionUncertainty);
+                dialogForLongLIPType2.add(checkBoxForHorizontalPositionUncertainty);
+
+                JLabel labelForLocationAltitude = new JLabel("Location altitude");
+                JTextField textFieldForLocationAltitude = new JTextField("0", 1);
+                JCheckBox checkBoxForLocationAltitude = new JCheckBox("Changing");
+                dialogForLongLIPType2.add(labelForLocationAltitude);
+                dialogForLongLIPType2.add(textFieldForLocationAltitude);
+                dialogForLongLIPType2.add(checkBoxForLocationAltitude);
+
+                JLabel labelForVelocityType = new JLabel("Velocity type");
+                JTextField textFieldForVelocityType = new JTextField("5", 1);
+                textFieldForVelocityType.setEditable(false);
+                JCheckBox checkBoxForVelocityType = new JCheckBox("Changing");
+                checkBoxForVelocityType.setEnabled(false);
+                dialogForLongLIPType2.add(labelForVelocityType);
+                dialogForLongLIPType2.add(textFieldForVelocityType);
+                dialogForLongLIPType2.add(checkBoxForVelocityType);
+
+                JLabel labelForHorizontalVelocity = new JLabel("Horizontal velocity");
+                JTextField textFieldForHorizontalVelocity = new JTextField("0", 1);
+                JCheckBox checkBoxForHorizontalVelocity = new JCheckBox("Changing");
+                dialogForLongLIPType2.add(labelForHorizontalVelocity);
+                dialogForLongLIPType2.add(textFieldForHorizontalVelocity);
+                dialogForLongLIPType2.add(checkBoxForHorizontalVelocity);
+
+                JLabel labelForDirectionOfTravelExtended = new JLabel("Direction of travel extended");
+                JTextField textFieldForDirectionOfTravelExtended = new JTextField("0", 1);
+                JCheckBox checkBoxForDirectionOfTravelExtended = new JCheckBox("Changing");
+                dialogForLongLIPType2.add(labelForDirectionOfTravelExtended);
+                dialogForLongLIPType2.add(textFieldForDirectionOfTravelExtended);
+                dialogForLongLIPType2.add(checkBoxForDirectionOfTravelExtended);
+
+                JLabel labelForTypeOfAdditionalData = new JLabel("Type of additional data");
+                JTextField textFieldForTypeOfAdditionalData = new JTextField("0", 1);
+                JCheckBox checkBoxForTypeOfAdditionalData = new JCheckBox("Changing");
+                dialogForLongLIPType2.add(labelForTypeOfAdditionalData);
+                dialogForLongLIPType2.add(textFieldForTypeOfAdditionalData);
+                dialogForLongLIPType2.add(checkBoxForTypeOfAdditionalData);
+
+                JLabel labelForReasonForSending = new JLabel("Reason for sending");
+                JTextField textFieldForReasonForSending = new JTextField("129", 1);
+                JCheckBox checkBoxForReasonForSending = new JCheckBox("Changing");
+                dialogForLongLIPType2.add(labelForReasonForSending);
+                dialogForLongLIPType2.add(textFieldForReasonForSending);
+                dialogForLongLIPType2.add(checkBoxForReasonForSending);
+
+                JButton buttonToAddShortLip = new JButton("Add long LIP type 3");
+                dialogForLongLIPType2.add(buttonToAddShortLip);
+
+                buttonToAddShortLip.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        dialogForLongLIPType2.dispose();
+                    }
+                });
+
+                dialogForLongLIPType2.setVisible(true);
+            }
+        });
+        buttonAddLongLipType3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JDialog dialogForLongLIPType3 = createDialog("Input data for long LIP type 3", true, 600, 500, 16, 3);
+
+                JLabel labelForSSI = new JLabel("SSI");
+                JTextField textFieldForSSI = new JTextField("7031", 1);
+                JCheckBox checkBoxForSSI = new JCheckBox("Changing");
+                dialogForLongLIPType3.add(labelForSSI);
+                dialogForLongLIPType3.add(textFieldForSSI);
+                dialogForLongLIPType3.add(checkBoxForSSI);
+
+                JLabel labelForPDUType = new JLabel("PDU Type");
+                JTextField textFieldFoForPDUType = new JTextField("1", 1);
+                textFieldFoForPDUType.setEditable(false);
+                JCheckBox checkBoxForForPDUType = new JCheckBox("Changing");
+                checkBoxForForPDUType.setEnabled(false);
+                dialogForLongLIPType3.add(labelForPDUType);
+                dialogForLongLIPType3.add(textFieldFoForPDUType);
+                dialogForLongLIPType3.add(checkBoxForForPDUType);
+
+                JLabel labelForPDUTypeExtension = new JLabel("PDU Type extension");
+                JTextField textFieldForPDUTypeExtension = new JTextField("3", 1);
+                textFieldForPDUTypeExtension.setEditable(false);
+                JCheckBox checkBoxForPDUTypeExtension = new JCheckBox("Changing");
+                checkBoxForPDUTypeExtension.setEnabled(false);
+                dialogForLongLIPType3.add(labelForPDUTypeExtension);
+                dialogForLongLIPType3.add(textFieldForPDUTypeExtension);
+                dialogForLongLIPType3.add(checkBoxForPDUTypeExtension);
+
+                JLabel labelForTimeData = new JLabel("Time data");
+                JTextField textFieldFoTimeData = new JTextField("2", 1);
+                textFieldFoTimeData.setEditable(false);
+                JCheckBox checkBoxForForTimeData = new JCheckBox("Changing");
+                checkBoxForForPDUType.setEnabled(false);
+                dialogForLongLIPType3.add(labelForTimeData);
+                dialogForLongLIPType3.add(textFieldFoTimeData);
+                dialogForLongLIPType3.add(checkBoxForForTimeData);
+
+
+                JLabel labelForTimeOfPosition = new JLabel("Time of position");
+                JTextField textFieldForTimeOfPosition = new JTextField("1 day, 23 hours, 59 min, 0 sec", 1);
+                textFieldForTimeOfPosition.setEditable(false);
+                JCheckBox checkBoxForTimeOfPosition = new JCheckBox("Changing");
+                checkBoxForTimeOfPosition.setEnabled(false);
+                dialogForLongLIPType3.add(labelForTimeOfPosition);
+                dialogForLongLIPType3.add(textFieldForTimeOfPosition);
+                dialogForLongLIPType3.add(checkBoxForTimeOfPosition);
+
+                JLabel labelForLocationShape = new JLabel("Location shape");
+                JTextField textFieldForLocationShape = new JTextField("5", 1);
+                textFieldForLocationShape.setEditable(false);
+                JCheckBox checkBoxForLocationShape = new JCheckBox("Changing");
+                checkBoxForLocationShape.setEnabled(false);
+                dialogForLongLIPType3.add(labelForLocationShape);
+                dialogForLongLIPType3.add(textFieldForLocationShape);
+                dialogForLongLIPType3.add(checkBoxForLocationShape);
+
+                JLabel labelForLongitude = new JLabel("Longitude");
+                JTextField textFieldForLongitude = new JTextField("37.66000628471", 1);
+                JCheckBox checkBoxForLongitude = new JCheckBox("Changing");
+                dialogForLongLIPType3.add(labelForLongitude);
+                dialogForLongLIPType3.add(textFieldForLongitude);
+                dialogForLongLIPType3.add(checkBoxForLongitude);
+
+                JLabel labelForLatitude = new JLabel("Latitude");
+                JTextField textFieldForLatitude = new JTextField("55.7839286", 1);
+                JCheckBox checkBoxForLatitude = new JCheckBox("Changing");
+                dialogForLongLIPType3.add(labelForLatitude);
+                dialogForLongLIPType3.add(textFieldForLatitude);
+                dialogForLongLIPType3.add(checkBoxForLatitude);
+
+                JLabel labelForHorizontalPositionUncertainty = new JLabel("Horizontal position uncertainty");
+                JTextField textFieldForHorizontalPositionUncertainty = new JTextField("0", 1);
+                JCheckBox checkBoxForHorizontalPositionUncertainty = new JCheckBox("Changing");
+                dialogForLongLIPType3.add(labelForHorizontalPositionUncertainty);
+                dialogForLongLIPType3.add(textFieldForHorizontalPositionUncertainty);
+                dialogForLongLIPType3.add(checkBoxForHorizontalPositionUncertainty);
+
+                JLabel labelForLocationAltitude = new JLabel("Location altitude");
+                JTextField textFieldForLocationAltitude = new JTextField("0", 1);
+                JCheckBox checkBoxForLocationAltitude = new JCheckBox("Changing");
+                dialogForLongLIPType3.add(labelForLocationAltitude);
+                dialogForLongLIPType3.add(textFieldForLocationAltitude);
+                dialogForLongLIPType3.add(checkBoxForLocationAltitude);
+
+                JLabel labelForVelocityType = new JLabel("Velocity type");
+                JTextField textFieldForVelocityType = new JTextField("5", 1);
+                textFieldForVelocityType.setEditable(false);
+                JCheckBox checkBoxForVelocityType = new JCheckBox("Changing");
+                checkBoxForVelocityType.setEnabled(false);
+                dialogForLongLIPType3.add(labelForVelocityType);
+                dialogForLongLIPType3.add(textFieldForVelocityType);
+                dialogForLongLIPType3.add(checkBoxForVelocityType);
+
+                JLabel labelForHorizontalVelocity = new JLabel("Horizontal velocity");
+                JTextField textFieldForHorizontalVelocity = new JTextField("0", 1);
+                JCheckBox checkBoxForHorizontalVelocity = new JCheckBox("Changing");
+                dialogForLongLIPType3.add(labelForHorizontalVelocity);
+                dialogForLongLIPType3.add(textFieldForHorizontalVelocity);
+                dialogForLongLIPType3.add(checkBoxForHorizontalVelocity);
+
+                JLabel labelForDirectionOfTravelExtended = new JLabel("Direction of travel extended");
+                JTextField textFieldForDirectionOfTravelExtended = new JTextField("0", 1);
+                JCheckBox checkBoxForDirectionOfTravelExtended = new JCheckBox("Changing");
+                dialogForLongLIPType3.add(labelForDirectionOfTravelExtended);
+                dialogForLongLIPType3.add(textFieldForDirectionOfTravelExtended);
+                dialogForLongLIPType3.add(checkBoxForDirectionOfTravelExtended);
+
+                JLabel labelForTypeOfAdditionalData = new JLabel("Type of additional data");
+                JTextField textFieldForTypeOfAdditionalData = new JTextField("0", 1);
+                JCheckBox checkBoxForTypeOfAdditionalData = new JCheckBox("Changing");
+                dialogForLongLIPType3.add(labelForTypeOfAdditionalData);
+                dialogForLongLIPType3.add(textFieldForTypeOfAdditionalData);
+                dialogForLongLIPType3.add(checkBoxForTypeOfAdditionalData);
+
+                JLabel labelForReasonForSending = new JLabel("Reason for sending");
+                JTextField textFieldForReasonForSending = new JTextField("129", 1);
+                JCheckBox checkBoxForReasonForSending = new JCheckBox("Changing");
+                dialogForLongLIPType3.add(labelForReasonForSending);
+                dialogForLongLIPType3.add(textFieldForReasonForSending);
+                dialogForLongLIPType3.add(checkBoxForReasonForSending);
+
+                JButton buttonToAddShortLip = new JButton("Add long LIP type 3");
+                dialogForLongLIPType3.add(buttonToAddShortLip);
+
+                buttonToAddShortLip.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        dialogForLongLIPType3.dispose();
+                    }
+                });
+
+                dialogForLongLIPType3.setVisible(true);
+            }
+        });
+        buttonSetUDPOptions.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JDialog dialogForUDPOptions = createDialog("Input options for UDP messages", true, 400, 200, 5, 2);
+
+                JLabel labelForIpDestination = new JLabel("Input destination IP");
+                JTextField textFieldForIpDestination = new JTextField("192.168.1.82", 1);
+                dialogForUDPOptions.add(labelForIpDestination);
+                dialogForUDPOptions.add(textFieldForIpDestination);
+
+                JLabel labelForPortDestination = new JLabel("Input destination port");
+                JTextField textFieldForPortDestination = new JTextField("11372", 1);
+                dialogForUDPOptions.add(labelForPortDestination);
+                dialogForUDPOptions.add(textFieldForPortDestination);
+
+                JLabel labelForPortSource = new JLabel("Input source port");
+                JTextField textFieldForPortSource = new JTextField("9999", 1);
+                dialogForUDPOptions.add(labelForPortSource);
+                dialogForUDPOptions.add(textFieldForPortSource);
+
+                JLabel labelForIntervalOfTimeSendingUDP = new JLabel("Input interval sending UDP, msec");
+                JTextField textFieldForIntervalOfTimeSendingUDP = new JTextField("1000", 1);
+                dialogForUDPOptions.add(labelForIntervalOfTimeSendingUDP);
+                dialogForUDPOptions.add(textFieldForIntervalOfTimeSendingUDP);
+
+
+                JButton buttonToSetUDPOptions = new JButton("Set UDP options");
+                dialogForUDPOptions.add(buttonToSetUDPOptions);
+
+                buttonToSetUDPOptions.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        dialogForUDPOptions.dispose();
+                    }
+                });
+
+                dialogForUDPOptions.setVisible(true);
+            }
+        });
+    }
+
+
+    private JDialog createDialog(String title, boolean modal, int width, int height, int columns, int rows) {
+        JDialog dialog = new JDialog(this, title, modal);
+        dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        dialog.setSize(width, height);
+        dialog.setLayout(new GridLayout(columns, rows));
+        return dialog;
+    }
+
+    public static void main(String[] args) {
+        new UI();
+    }
+}
