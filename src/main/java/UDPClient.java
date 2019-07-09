@@ -7,7 +7,7 @@ import java.net.InetAddress;
 import java.util.Timer;
 import java.util.TimerTask;
 
-class UDPClient extends TimerTask {
+public class UDPClient extends TimerTask {
 
     private int portDst;
     private int intervalForSendingMessageUdp;
@@ -22,7 +22,7 @@ class UDPClient extends TimerTask {
 
     private byte[] messageForUDP;
 
-    void initUDPConnection(String host, String portDst, String portSrc, String intervalForSendingMessageUdp) {
+    public void initUDPConnection(String host, String portDst, String portSrc, String intervalForSendingMessageUdp) {
 
 
         try {
@@ -41,12 +41,12 @@ class UDPClient extends TimerTask {
 
     }
 
-    void startSendingMessageUdp() {
+    public void startSendingMessageUdp() {
         sendingUDPLIPMessage = true;
         timer.scheduleAtFixedRate(this, 0, intervalForSendingMessageUdp);
     }
 
-    void continueSendingUdpLipMessage() {
+    public void continueSendingUdpLipMessage() {
         sendingUDPLIPMessage = true;
     }
 
@@ -54,35 +54,35 @@ class UDPClient extends TimerTask {
     public void run() {
         try {
 
-            if (sendingUDPLIPMessage) {
+   //         if (sendingUDPLIPMessage) {
                 messageForUDP = shortLipMessage.getUdpMessage();
                 DatagramPacket packet = new DatagramPacket(messageForUDP, messageForUDP.length, address, portDst);
                 socket.send(packet);
                 System.out.println("Lip");
 
 
-            }
+   //         }
             ++counterSendingPackets;
-            if (counterSendingPackets >= numberSendingPacketsBeforeAliveMessage) {
+  /*          if (counterSendingPackets >= numberSendingPacketsBeforeAliveMessage) {
                 messageForUDP = shortLipMessage.getUdpAliveMessage();
                 DatagramPacket packetAlive = new DatagramPacket(messageForUDP, messageForUDP.length, address, portDst);
                 socket.send(packetAlive);
                 counterSendingPackets = 0;
                 System.out.println("Alive");
-                       }
+                       }*/
            } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    void stopSendingMessageUdp() {
+   public void stopSendingMessageUdp() {
         if (sendingUDPLIPMessage) {
             sendingUDPLIPMessage = false;
         }
     }
 
 
-    UDPClient withShortLipMessage(ShortLipMessage shortLipMessage) {
+    public UDPClient withShortLipMessage(ShortLipMessage shortLipMessage) {
         this.shortLipMessage = shortLipMessage;
         return this;
     }

@@ -55,6 +55,7 @@ public class GUIForm extends JFrame {
     private JLabel labelForPDUTypeExtention;
     private JLabel labelForTimeData;
     private JLabel labelForTimeElapsed;
+    private JTextArea textArea1;
     private UDPClient udpClientForLipMessages = new UDPClient();
     private boolean firstStart = true;
     private Map<Integer, Boolean> changeMap;

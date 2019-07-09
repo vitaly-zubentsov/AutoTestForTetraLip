@@ -1,35 +1,76 @@
 
+import model.ShortLipMessage;
+import model.UDPMessage;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class UI extends JFrame {
     private static final long serialVersionUID = 1L;
+
+    private UDPClient udpClientForLipMessages = new UDPClient();
+    private Map<Integer, Boolean> changeMap;
+    ShortLipMessage shortLipMessage = new ShortLipMessage();
+    List<UDPMessage> listOfUDPMessages = new ArrayList<UDPMessage>();
+    UDPClient udpClient = new UDPClient();
+    //AliveMessage aliveMessage = new AliveMessage();
+    JPanel contents = new JPanel(new VerticalLayout());
 
 
     public UI() {
 
         super("DialogWindows");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-
+        //  listOfUDPMessages.add(aliveMessage);
 
         JButton buttonSetUDPOptions = new JButton("Set UDP options");
         JButton buttonAddShortLip = new JButton("Add short LIP");
         JButton buttonAddLongLipType1 = new JButton("Add long LIP type 1");
         JButton buttonAddLongLipType2 = new JButton("Add long LIP type 2");
         JButton buttonAddLongLipType3 = new JButton("Add long LIP type 3");
+        JButton buttonToStartSendingUDPMessage = new JButton("Add LIP with telemetry data");
+
+        JTextArea jTextAreaForUsersInputDATA = new JTextArea();
+        Dimension s = new Dimension(200, 200);
+        jTextAreaForUsersInputDATA.setPreferredSize(s);
+        jTextAreaForUsersInputDATA.setText("This field show \n input data for UDP messages \n \n \n \n \n \n \n");
+
+        JButton buttonStartSendingUDPMessage = new JButton("Stop sending UDP message");
+        JButton buttonStopSendingUPDMessage = new JButton("Stop sending UDP message");
+        JButton buttonContinueSendingUPDMessage = new JButton("Continue sending UDP message");
+
+
         // Создание панели содержимого с размещением кнопок
-        JPanel contents = new JPanel();
+
+        contents.add(buttonSetUDPOptions);
         contents.add(buttonAddShortLip);
         contents.add(buttonAddLongLipType1);
         contents.add(buttonAddLongLipType2);
         contents.add(buttonAddLongLipType3);
-        contents.add(buttonSetUDPOptions);
+        contents.add(buttonToStartSendingUDPMessage);
+        contents.add(jTextAreaForUsersInputDATA);
+        contents.add(buttonStartSendingUDPMessage);
+        contents.add(buttonStopSendingUPDMessage);
+        contents.add(buttonContinueSendingUPDMessage);
         setContentPane(contents);
         // Определение размера и открытие окна
-        setSize(350, 100);
+        setSize(250, 500);
+        setLocationRelativeTo(null);
         setVisible(true);
+
+        buttonToStartSendingUDPMessage.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                udpClientForLipMessages.withShortLipMessage(shortLipMessage).startSendingMessageUdp();
+            }
+        });
 
         buttonAddShortLip.addActionListener(new ActionListener() {
             @Override
@@ -114,7 +155,65 @@ public class UI extends JFrame {
                 buttonToAddShortLip.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+
+                        try {
+                            checkIntValueFromString(textFieldForSSI.getText(), 0, 16777215, "SSI");
+                            checkIntValueFromString(textFieldForTimeElapsed.getText(), 0, 3, "TimeElapsed");
+                            checkDoubleValueFromString(textFieldForLongitude.getText(), -180.0, 179.0, "Longitude");
+                            checkDoubleValueFromString(textFieldForLatitude.getText(), -90.0, 89.0, "Latitude");
+                            checkIntValueFromString(textFieldForPositionError.getText(), 0, 7, "PositionError");
+                            checkIntValueFromString(textFieldForHorizontalVelocity.getText(), 0, 127, "HorizontalVelocity");
+                            checkIntValueFromString(textFieldForDirectionOfTravel.getText(), 0, 15, "DirectionOfTravel");
+                            checkIntValueFromString(textFieldForReasonForSending.getText(), 0, 255, "ReasonForSending");
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+
+                        Map<Integer, Boolean> changeMap = new HashMap<Integer, Boolean>();
+                        for (int i = 0; i < 8; i++) {
+                            changeMap.put(i, false);
+                        }
+                        if (checkBoxForSSI.isSelected()) {
+                            changeMap.replace(0, true);
+                        }
+                        if (checkBoxForTimeElapsed.isSelected()) {
+                            changeMap.replace(1, true);
+                        }
+                        if (checkBoxForLongitude.isSelected()) {
+                            changeMap.replace(2, true);
+                        }
+                        if (checkBoxForLatitude.isSelected()) {
+                            changeMap.replace(3, true);
+                        }
+                        if (checkBoxForPositionError.isSelected()) {
+                            changeMap.replace(4, true);
+                        }
+                        if (checkBoxForHorizontalVelocity.isSelected()) {
+                            changeMap.replace(5, true);
+                        }
+                        if (checkBoxForDirectionOfTravel.isSelected()) {
+                            changeMap.replace(6, true);
+                        }
+                        if (checkBoxForReasonForSending.isSelected()) {
+                            changeMap.replace(7, true);
+                        }
+
+                        ShortLipMessage shortLipMessage = new ShortLipMessage();
+                        shortLipMessage.withSSI(textFieldForSSI.getText())
+                                .withTimeElapsed(textFieldForTimeElapsed.getText())
+                                .withLongitude(textFieldForLongitude.getText())
+                                .withLatitude(textFieldForLatitude.getText())
+                                .withPositionError(textFieldForPositionError.getText())
+                                .withHorizontalVelocity(textFieldForHorizontalVelocity.getText())
+                                .withDirectionOfTravel(textFieldForDirectionOfTravel.getText())
+                                .withReasonForSending(textFieldForReasonForSending.getText())
+                                .withChangeMap(changeMap)
+                                .initValuesFromUI();
+
+                        listOfUDPMessages.add(shortLipMessage);
+                        udpClient.withShortLipMessage(shortLipMessage).startSendingMessageUdp();
                         dialogForShortLIP.dispose();
+
                     }
                 });
 
@@ -548,7 +647,22 @@ public class UI extends JFrame {
                 buttonToSetUDPOptions.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+
+                        udpClient.initUDPConnection(
+                                textFieldForIpDestination.getText(),
+                                textFieldForPortDestination.getText(),
+                                textFieldForPortSource.getText(),
+                                textFieldForIntervalOfTimeSendingUDP.getText());
                         dialogForUDPOptions.dispose();
+
+                        jTextAreaForUsersInputDATA.setText(
+                                        "Ip dst   = " + textFieldForIpDestination.getText() + "\n" +
+                                        "Port dst = " + textFieldForPortDestination.getText() + "\n" +
+                                        "Port src = " + textFieldForPortSource.getText() + "\n" +
+                                        "Interval = " + textFieldForIntervalOfTimeSendingUDP.getText() + "\n" +
+                                        "UDP messages : \n" +
+                                        "Alive message, int = 25000 ms"
+                        );
                     }
                 });
 
@@ -557,12 +671,59 @@ public class UI extends JFrame {
         });
     }
 
+    private void checkIntValueFromString(String checkString, int beginRange, int endRange, String nameOfField) throws Exception {
+        try {
+            int checkNumber = Integer.parseInt(checkString);
+
+            if ((checkNumber < beginRange) || (checkNumber > endRange)) {
+                String warning = nameOfField + " = " + checkNumber + " cannot be out of range [" + beginRange + ".." + endRange + "]";
+                JDialog dialog = createWarningDialog(warning);
+                dialog.setVisible(true);
+                throw new Exception(warning);
+            }
+        } catch (Exception ex) {
+            JDialog dialog = createWarningDialog("Wrong type Of value for " + nameOfField);
+            dialog.setVisible(true);
+            throw new Exception(nameOfField + " should be int");
+        }
+
+    }
+
+    private void checkDoubleValueFromString(String checkString, double beginRange, double endRange, String nameOfField) throws Exception {
+        try {
+            double checkNumber = Double.parseDouble(checkString);
+            if ((checkNumber < beginRange) || (checkNumber > endRange)) {
+                String warning = nameOfField + " = " + checkNumber + " cannot be out of range [" + beginRange + ".." + endRange + "]";
+                JDialog dialog = createWarningDialog(warning);
+                dialog.setVisible(true);
+                throw new Exception(checkNumber + "cannot be out of range [" + beginRange + ".." + endRange + "]");
+            }
+        } catch (Exception ex) {
+            JDialog dialog = createWarningDialog("Wrong type value for " + nameOfField);
+            dialog.setVisible(true);
+            throw new Exception(nameOfField + " should be double");
+        }
+    }
+
 
     private JDialog createDialog(String title, boolean modal, int width, int height, int columns, int rows) {
         JDialog dialog = new JDialog(this, title, modal);
         dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         dialog.setSize(width, height);
         dialog.setLayout(new GridLayout(columns, rows));
+        //Помещаем поцентру относительно главного фрейма contents
+        dialog.setLocationRelativeTo(contents);
+        return dialog;
+    }
+
+    private JDialog createWarningDialog(String messageInDialog) {
+        JDialog dialog = new JDialog(this, "Ошибка", true);
+        JLabel dialogLabel = new JLabel(messageInDialog);
+        dialog.add(dialogLabel);
+        dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        dialog.setSize(500, 90);
+        //Помещаем поцентру относительно главного фрейма contents
+        dialog.setLocationRelativeTo(contents);
         return dialog;
     }
 

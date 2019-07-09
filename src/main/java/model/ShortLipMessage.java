@@ -2,14 +2,10 @@ package model;
 
 import java.util.Map;
 
-import static java.lang.Integer.parseInt;
+public class ShortLipMessage extends UDPMessage {
 
-public class ShortLipMessage {
 
-    private String packet_counter = "00000000000000000000000000000001";
     private String ssi;
-    private static String LENGTH_IN_BITS = "00000000000000000000000001011101";  //сделать счетчик количества бит, хотя по факту он всегда будет определён.
-    private static String PDU_HEADERS = "00001010";
     private static String PDU_TYPE = "00";
     private String time_elapsed;
     private String longitude;
@@ -66,136 +62,6 @@ public class ShortLipMessage {
         return convertBinStringToByteArray(udpMessage);
     }
 
-    private void changeValuesOfElementsLipMessage() {
-        if (changeMap.get(0)) {
-            binSSI = addTheNumberToBinStringForSSI(binSSI, 1, 8000);
-            System.out.println(convertBinStringToDecNumber(binSSI));
-        }
-        if (changeMap.get(1)) {
-            binTimeElapsed = addTheNumberToBinString(binTimeElapsed, 1, 3);
-        }
-        if (changeMap.get(2)) {
-            binLongitude = addTheNumberToBinString(binLongitude, 10, 33554431);
-        }
-        if (changeMap.get(3)) {
-            binLatitude = addTheNumberToBinString(binLatitude, 10, 16777215);
-        }
-        if (changeMap.get(4)) {
-            binPositionError = addTheNumberToBinString(binPositionError, 1, 7);
-        }
-        if (changeMap.get(5)) {
-            binHorizontalVelocity = addTheNumberToBinString(binHorizontalVelocity, 1, 127);
-        }
-        if (changeMap.get(6)) {
-            binDirectionOfTravel = addTheNumberToBinString(binDirectionOfTravel, 1, 15);
-        }
-        if (changeMap.get(7)) {
-            binReasonForSending = addTheNumberToBinString(binReasonForSending, 1, 255);
-        }
-        packet_counter = addTheNumberToBinString(packet_counter,1,1294967295);
-        System.out.println(binLatitude);
-        System.out.println(binTimeElapsed);
-    }
-
-
-    public byte[] getUdpAliveMessage() {
-        String udpAliveMessage = packet_counter + "00000000000000000000000000000000";
-        addTheNumberToBinString(packet_counter, 1, 1294967295);
-        return convertBinStringToByteArray(udpAliveMessage);
-    }
-
-
-    private String addTheNumberToBinString(String binString, long number, long maxValue) {
-
-        long numberFromBinString = convertBinStringToDecNumber(binString);
-        if ((numberFromBinString + number) >= maxValue) {
-            return convertDecStringNumberToBinStringNumber(0, binString.length());
-        } else {
-            return convertDecStringNumberToBinStringNumber(numberFromBinString + number, binString.length());
-        }
-
-    }
-    private String addTheNumberToBinStringForSSI(String binString, long number, long maxValue) {
-
-        long numberFromBinString = convertBinStringToDecNumber(binString);
-        if ((numberFromBinString + number) >= maxValue) {
-            return convertDecStringNumberToBinStringNumber(7000, binString.length());
-        } else {
-            return convertDecStringNumberToBinStringNumber(numberFromBinString + number, binString.length());
-        }
-
-    }
-
-    private String convertDecStringNumberToBinStringNumber(long number, int lengthOfBinString) {
-
-        StringBuilder binString = new StringBuilder(Long.toBinaryString(number));
-        while (binString.length() < lengthOfBinString) {
-            binString.insert(0, "0");
-        }
-        return binString.toString();
-    }
-
-    private int convertBinStringToDecNumber(String binString) {
-        return Integer.parseInt(binString, 2);
-    }
-
-    private byte[] convertBinStringToByteArray(String binString) {
-
-        float numberOfDecNumbersFromBinString = binString.length() / 8;
-        int lengthOfByteArrayFromBinString = (int) Math.ceil(numberOfDecNumbersFromBinString);
-        byte[] byteArray = new byte[lengthOfByteArrayFromBinString];
-        for (int i = 0; i < lengthOfByteArrayFromBinString; ++i) {
-            int numberFromBinString = Integer.parseInt(binString.substring(0, 8), 2);
-            if (numberFromBinString < 128) {
-                byteArray[i] = (byte) numberFromBinString;
-            } else {
-                byteArray[i] = (byte) (numberFromBinString - 256);
-            }
-            binString = binString.substring(8);
-        }
-        return byteArray;
-    }
-
-    private String convertDecStringNumberToBinStringNumber(String decNumber, int bitInBinNumber) {
-
-        String x = Integer.toBinaryString(Integer.parseInt(decNumber));
-        StringBuilder binString = new StringBuilder(x);
-        while (binString.length() < bitInBinNumber) {
-            binString.insert(0, "0");
-        }
-        return binString.toString();
-    }
-
-
-    private String convertBinStringToHexString(String binString) {
-
-
-        StringBuilder hexString = new StringBuilder();
-
-        while (binString.length() > 3) {
-            hexString.append(Integer.toHexString(parseInt(binString.substring(0, 4), 2)));
-            binString = binString.substring(4);
-        }
-        // hexString += Integer.toHexString(Integer.parseInt(binString.substring(0,3), 2));
-        return hexString.toString();
-    }
-
-    private String calculateLipLatitudeFromDecLatitude(String latitude) {
-        double decLatitude = Double.parseDouble(latitude);
-        double x = 180.000000000 / 16777216.000000000;
-        long decLipLatitude = Math.round(decLatitude / x);
-        String f = Long.toString(decLipLatitude);
-        return convertDecStringNumberToBinStringNumber(Long.toString(decLipLatitude), 24);
-    }
-
-    private String calculateLipLongitudeFromDecLongitude(String longitude) {
-        double decLatitude = Double.parseDouble(longitude);
-        double x = 180.000000000 / 16777216.000000000;
-        long decLipLatitude = Math.round(decLatitude / x);
-        String f = Long.toString(decLipLatitude);
-        return convertDecStringNumberToBinStringNumber(Long.toString(decLipLatitude), 25);
-    }
-
 
     public ShortLipMessage withSSI(String ssi) {
         this.ssi = ssi;
@@ -243,4 +109,33 @@ public class ShortLipMessage {
         return this;
     }
 
+    protected void changeValuesOfElementsLipMessage() {
+        if (changeMap.get(0)) {
+            binSSI = addTheNumberToBinStringForSSI(binSSI, 1, 8000);
+        }
+        if (changeMap.get(1)) {
+            binTimeElapsed = addTheNumberToBinString(binTimeElapsed, 1, 3);
+        }
+        if (changeMap.get(2)) {
+            binLongitude = addTheNumberToBinString(binLongitude, 10, 33554431);
+        }
+        if (changeMap.get(3)) {
+            binLatitude = addTheNumberToBinString(binLatitude, 10, 16777215);
+        }
+        if (changeMap.get(4)) {
+            binPositionError = addTheNumberToBinString(binPositionError, 1, 7);
+        }
+        if (changeMap.get(5)) {
+            binHorizontalVelocity = addTheNumberToBinString(binHorizontalVelocity, 1, 127);
+        }
+        if (changeMap.get(6)) {
+            binDirectionOfTravel = addTheNumberToBinString(binDirectionOfTravel, 1, 15);
+        }
+        if (changeMap.get(7)) {
+            binReasonForSending = addTheNumberToBinString(binReasonForSending, 1, 255);
+        }
+        packet_counter = addTheNumberToBinString(packet_counter, 1, 1294967295);
+        System.out.println(binLatitude);
+        System.out.println(binTimeElapsed);
+    }
 }
