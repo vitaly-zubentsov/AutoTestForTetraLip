@@ -10,7 +10,7 @@ public class LongLipType3Message implements UDPMessage {
     private String SSI;
     private static String LONGITUDE_FROM_SERVER_OV = "00000000000000000000000000000000";
     private static String LATITUDE_FROM_SERVER_OV = "00000000000000000000000000000000";
-    private static String LENGTH_IN_BITS = "00000000000000000000000010001111"; //в лонг лип типе 3 = 143 бит
+    private static String LENGTH_IN_BITS = "00000000000000000000000010001010"; //в лонг лип типе 3 = 143 бит
     private static String PDU_HEADERS = "00001010";
     private static String PDU_TYPE = "01";
     private static String PDU_TYPE_EXTENSIONS = "0011";
@@ -21,9 +21,10 @@ public class LongLipType3Message implements UDPMessage {
     private String latitude;
     private String horizontal_position_uncertainty;
     private String location_altitude;
-    private static String VELOCITY_TYPE = "0101";
+    private static String VELOCITY_TYPE = "101";
     private String horizontal_velocity;
     private String direction_of_travel_extended;
+    private String ACKNOWLEDGEMENT_REQUEST = "0";
     private static String TYPE_OF_Additional_DATA = "0";
     private String reason_for_sending;
 
@@ -70,6 +71,7 @@ public class LongLipType3Message implements UDPMessage {
                 VELOCITY_TYPE +
                 binHorizontalVelocity +
                 binDirectionOfTravelExtended +
+                ACKNOWLEDGEMENT_REQUEST +
                 TYPE_OF_Additional_DATA +
                 binReasonForSending +
                 PDU_TAIL;

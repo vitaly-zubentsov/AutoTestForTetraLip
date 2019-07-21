@@ -128,6 +128,7 @@ public class UI extends JFrame {
                         buttonAddLongLipType2.setEnabled(true);
                         buttonAddLongLipType3.setEnabled(true);
                         buttonAddTelemetryData.setEnabled(true);
+                        buttonStartSendingUDPMessage.setEnabled(true);
 
                     }
                 });
@@ -278,7 +279,6 @@ public class UI extends JFrame {
                         listOfUDPMessages.add(shortLipMessage);
                         dialogForShortLIP.dispose();
 
-                        buttonStartSendingUDPMessage.setEnabled(true);
 
                         jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\n Short Lip ");
 
@@ -294,7 +294,7 @@ public class UI extends JFrame {
         buttonAddLongLipType1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JDialog dialogForLongLIPType1 = createDialog("Input data for long LIP type 1", true, 600, 500, 15, 3);
+                JDialog dialogForLongLIPType1 = createDialog("Input data for long LIP type 1", true, 600, 500, 16, 3);
 
                 JLabel labelForSSI = new JLabel("SSI");
                 JTextField textFieldForSSI = new JTextField("7031", 1);
@@ -390,6 +390,15 @@ public class UI extends JFrame {
                 dialogForLongLIPType1.add(textFieldForDirectionOfTravelExtended);
                 dialogForLongLIPType1.add(checkBoxForDirectionOfTravelExtended);
 
+                JLabel labelForAcknowledgementRequest = new JLabel("Acknowledgement request");
+                JTextField textFieldForAcknowledgementRequest = new JTextField("0", 1);
+                textFieldForAcknowledgementRequest.setEditable(false);
+                JCheckBox checkBoxForForAcknowledgementRequest = new JCheckBox("Changing");
+                checkBoxForForAcknowledgementRequest.setEnabled(false);
+                dialogForLongLIPType1.add(labelForAcknowledgementRequest);
+                dialogForLongLIPType1.add(textFieldForAcknowledgementRequest);
+                dialogForLongLIPType1.add(checkBoxForForAcknowledgementRequest);
+
                 JLabel labelForTypeOfAdditionalData = new JLabel("Type of additional data");
                 JTextField textFieldForTypeOfAdditionalData = new JTextField("0", 1);
                 JCheckBox checkBoxForTypeOfAdditionalData = new JCheckBox("Changing");
@@ -411,7 +420,6 @@ public class UI extends JFrame {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         dialogForLongLIPType1.dispose();
-                        buttonStartSendingUDPMessage.setEnabled(true);
                         jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\n Long Lip type 1 ");
                     }
                 });
@@ -422,7 +430,7 @@ public class UI extends JFrame {
         buttonAddLongLipType2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JDialog dialogForLongLIPType2 = createDialog("Input data for long LIP type 2", true, 600, 500, 16, 3);
+                JDialog dialogForLongLIPType2 = createDialog("Input data for long LIP type 2", true, 600, 500, 17, 3);
 
                 JLabel labelForSSI = new JLabel("SSI");
                 JTextField textFieldForSSI = new JTextField("7031", 1);
@@ -525,6 +533,15 @@ public class UI extends JFrame {
                 dialogForLongLIPType2.add(textFieldForDirectionOfTravelExtended);
                 dialogForLongLIPType2.add(checkBoxForDirectionOfTravelExtended);
 
+                JLabel labelForAcknowledgementRequest = new JLabel("Acknowledgement request");
+                JTextField textFieldForAcknowledgementRequest = new JTextField("0", 1);
+                textFieldForAcknowledgementRequest.setEditable(false);
+                JCheckBox checkBoxForForAcknowledgementRequest = new JCheckBox("Changing");
+                checkBoxForForAcknowledgementRequest.setEnabled(false);
+                dialogForLongLIPType2.add(labelForAcknowledgementRequest);
+                dialogForLongLIPType2.add(textFieldForAcknowledgementRequest);
+                dialogForLongLIPType2.add(checkBoxForForAcknowledgementRequest);
+
                 JLabel labelForTypeOfAdditionalData = new JLabel("Type of additional data");
                 JTextField textFieldForTypeOfAdditionalData = new JTextField("0", 1);
                 JCheckBox checkBoxForTypeOfAdditionalData = new JCheckBox("Changing");
@@ -546,7 +563,7 @@ public class UI extends JFrame {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         dialogForLongLIPType2.dispose();
-                        buttonStartSendingUDPMessage.setEnabled(true);
+
                         jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\n Long Lip type 2");
                     }
                 });
@@ -557,7 +574,7 @@ public class UI extends JFrame {
         buttonAddLongLipType3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JDialog dialogForLongLIPType3 = createDialog("Input data for long LIP type 3", true, 600, 500, 16, 3);
+                JDialog dialogForLongLIPType3 = createDialog("Input data for long LIP type 3", true, 600, 500, 17, 3);
 
                 JLabel labelForSSI = new JLabel("SSI");
                 JTextField textFieldForSSI = new JTextField("7031", 1);
@@ -663,6 +680,15 @@ public class UI extends JFrame {
                 dialogForLongLIPType3.add(textFieldForDirectionOfTravelExtended);
                 dialogForLongLIPType3.add(checkBoxForDirectionOfTravelExtended);
 
+                JLabel labelForAcknowledgementRequest = new JLabel("Acknowledgement request");
+                JTextField textFieldForAcknowledgementRequest = new JTextField("0", 1);
+                textFieldForAcknowledgementRequest.setEditable(false);
+                JCheckBox checkBoxForForAcknowledgementRequest = new JCheckBox("Changing");
+                checkBoxForForAcknowledgementRequest.setEnabled(false);
+                dialogForLongLIPType3.add(labelForAcknowledgementRequest);
+                dialogForLongLIPType3.add(textFieldForAcknowledgementRequest);
+                dialogForLongLIPType3.add(checkBoxForForAcknowledgementRequest);
+
                 JLabel labelForTypeOfAdditionalData = new JLabel("Type of additional data");
                 JTextField textFieldForTypeOfAdditionalData = new JTextField("0", 1);
                 JCheckBox checkBoxForTypeOfAdditionalData = new JCheckBox("Changing");
@@ -740,7 +766,6 @@ public class UI extends JFrame {
                         listOfUDPMessages.add(longLipType3Message);
 
                         dialogForLongLIPType3.dispose();
-                        buttonStartSendingUDPMessage.setEnabled(true);
                         jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\n Long Lip type 3");
                     }
                 });
