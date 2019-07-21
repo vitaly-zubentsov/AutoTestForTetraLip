@@ -2,18 +2,22 @@ package model;
 
 import java.util.Map;
 
-public class ShortLipMessage extends UDPMessage {
+public class ShortLipMessage implements UDPMessage {
 
+    private Map<Integer, Boolean> changeMap;
+    private UDPMessageHelper udpMessageHelper = new UDPMessageHelper();
 
     private String ssi;
+    private static String LENGTH_IN_BITS = "00000000000000000000000001011101";  //в short lip равно 93 битам
+    private static String PDU_HEADERS = "00001010";
     private static String PDU_TYPE = "00";
     private String time_elapsed;
     private String longitude;
     private String latitude;
-    private String position_error; // в клиенте не отображается, есть смысл сделать входным
-    private String horizontal_velocity; //  надо исследовать, если отображается в клиенте
-    private String direction_of_travel; //  надо исследовать, если отображается в клиенте
-    private static String TYPE_OF_Additional_DATA = "0"; // в short lip на данный момент других решений не планируется.
+    private String position_error;
+    private String horizontal_velocity;
+    private String direction_of_travel;
+    private static String TYPE_OF_Additional_DATA = "0";
     private String reason_for_sending;
     private String pdu_tail = "000001111"; //этот хвостик появляется только для short lip, какая то ошибка в сервере ОВ
 
@@ -26,22 +30,19 @@ public class ShortLipMessage extends UDPMessage {
     private String binDirectionOfTravel;
     private String binReasonForSending;
 
-    private Map<Integer, Boolean> changeMap;
-
     public void initValuesFromUI() {
-        binSSI = convertDecStringNumberToBinStringNumber(ssi, 32);
-        binTimeElapsed = convertDecStringNumberToBinStringNumber(time_elapsed, 2);
-        binLongitude = calculateLipLongitudeFromDecLongitude(longitude);
-        binLatitude = calculateLipLatitudeFromDecLatitude(latitude);
-        binPositionError = convertDecStringNumberToBinStringNumber(position_error, 3);
-        binHorizontalVelocity = convertDecStringNumberToBinStringNumber(horizontal_velocity, 7);
-        binDirectionOfTravel = convertDecStringNumberToBinStringNumber(direction_of_travel, 4);
-        binReasonForSending = convertDecStringNumberToBinStringNumber(reason_for_sending, 8);
-
+        binSSI = udpMessageHelper.convertDecStringNumberToBinStringNumber(ssi, 32);
+        binTimeElapsed = udpMessageHelper.convertDecStringNumberToBinStringNumber(time_elapsed, 2);
+        binLongitude = udpMessageHelper.calculateLipLongitudeFromDecLongitude(longitude);
+        binLatitude = udpMessageHelper.calculateLipLatitudeFromDecLatitude(latitude);
+        binPositionError = udpMessageHelper.convertDecStringNumberToBinStringNumber(position_error, 3);
+        binHorizontalVelocity = udpMessageHelper.convertDecStringNumberToBinStringNumber(horizontal_velocity, 7);
+        binDirectionOfTravel = udpMessageHelper.convertDecStringNumberToBinStringNumber(direction_of_travel, 4);
+        binReasonForSending = udpMessageHelper.convertDecStringNumberToBinStringNumber(reason_for_sending, 8);
     }
 
     public byte[] getUdpMessage() {
-        String udpMessage = packet_counter +
+        String udpMessage = udpPacketsCounter.getPacket_counter() +
                 binSSI +
                 "0000000" + binLongitude +
                 "00000000" + binLatitude +
@@ -59,15 +60,44 @@ public class ShortLipMessage extends UDPMessage {
                 pdu_tail +
                 "000"; // без этого хвостика почему то сервер не может распарсить сообщение
         changeValuesOfElementsLipMessage();
-        return convertBinStringToByteArray(udpMessage);
+        System.out.println(udpPacketsCounter.getPacket_counter());
+        return udpMessageHelper.convertBinStringToByteArray(udpMessage);
     }
 
+
+    public void changeValuesOfElementsLipMessage() {
+        if (changeMap.get(0)) {
+            binSSI = udpMessageHelper.addTheNumberToBinStringForSSI(binSSI, 1, 8000);
+        }
+        if (changeMap.get(1)) {
+            binTimeElapsed = udpMessageHelper.addTheNumberToBinString(binTimeElapsed, 1, 3);
+        }
+        if (changeMap.get(2)) {
+            binLongitude = udpMessageHelper.addTheNumberToBinString(binLongitude, 10, 33554431);
+        }
+        if (changeMap.get(3)) {
+            binLatitude = udpMessageHelper.addTheNumberToBinString(binLatitude, 10, 16777215);
+        }
+        if (changeMap.get(4)) {
+            binPositionError = udpMessageHelper.addTheNumberToBinString(binPositionError, 1, 7);
+        }
+        if (changeMap.get(5)) {
+            binHorizontalVelocity = udpMessageHelper.addTheNumberToBinString(binHorizontalVelocity, 1, 127);
+        }
+        if (changeMap.get(6)) {
+            binDirectionOfTravel = udpMessageHelper.addTheNumberToBinString(binDirectionOfTravel, 1, 15);
+        }
+        if (changeMap.get(7)) {
+            binReasonForSending = udpMessageHelper.addTheNumberToBinString(binReasonForSending, 1, 255);
+        }
+        udpPacketsCounter.setPacket_counter(udpMessageHelper.addTheNumberToBinString(udpPacketsCounter.getPacket_counter(), 1, 1294967295));
+
+    }
 
     public ShortLipMessage withSSI(String ssi) {
         this.ssi = ssi;
         return this;
     }
-
 
     public ShortLipMessage withTimeElapsed(String time_elapsed) {
         this.time_elapsed = time_elapsed;
@@ -109,33 +139,5 @@ public class ShortLipMessage extends UDPMessage {
         return this;
     }
 
-    protected void changeValuesOfElementsLipMessage() {
-        if (changeMap.get(0)) {
-            binSSI = addTheNumberToBinStringForSSI(binSSI, 1, 8000);
-        }
-        if (changeMap.get(1)) {
-            binTimeElapsed = addTheNumberToBinString(binTimeElapsed, 1, 3);
-        }
-        if (changeMap.get(2)) {
-            binLongitude = addTheNumberToBinString(binLongitude, 10, 33554431);
-        }
-        if (changeMap.get(3)) {
-            binLatitude = addTheNumberToBinString(binLatitude, 10, 16777215);
-        }
-        if (changeMap.get(4)) {
-            binPositionError = addTheNumberToBinString(binPositionError, 1, 7);
-        }
-        if (changeMap.get(5)) {
-            binHorizontalVelocity = addTheNumberToBinString(binHorizontalVelocity, 1, 127);
-        }
-        if (changeMap.get(6)) {
-            binDirectionOfTravel = addTheNumberToBinString(binDirectionOfTravel, 1, 15);
-        }
-        if (changeMap.get(7)) {
-            binReasonForSending = addTheNumberToBinString(binReasonForSending, 1, 255);
-        }
-        packet_counter = addTheNumberToBinString(packet_counter, 1, 1294967295);
-        System.out.println(binLatitude);
-        System.out.println(binTimeElapsed);
-    }
+
 }

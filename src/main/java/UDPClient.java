@@ -1,9 +1,10 @@
-import model.ShortLipMessage;
+import model.UDPMessage;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -16,11 +17,11 @@ public class UDPClient extends TimerTask {
     private DatagramSocket socket;
     private int numberSendingPacketsBeforeAliveMessage;
     private int counterSendingPackets;
-    private ShortLipMessage shortLipMessage;
     private boolean sendingUDPLIPMessage = false;
     private InetAddress address;
 
     private byte[] messageForUDP;
+    private List<UDPMessage> listOfUDPMessages;
 
     public void initUDPConnection(String host, String portDst, String portSrc, String intervalForSendingMessageUdp) {
 
@@ -54,38 +55,36 @@ public class UDPClient extends TimerTask {
     public void run() {
         try {
 
-   //         if (sendingUDPLIPMessage) {
-                messageForUDP = shortLipMessage.getUdpMessage();
-                DatagramPacket packet = new DatagramPacket(messageForUDP, messageForUDP.length, address, portDst);
-                socket.send(packet);
-                System.out.println("Lip");
+            if (sendingUDPLIPMessage) {
 
-
-   //         }
+                for (int i = 1; i < listOfUDPMessages.size(); i++) {
+                    messageForUDP = listOfUDPMessages.get(i).getUdpMessage();
+                    DatagramPacket packet = new DatagramPacket(messageForUDP, messageForUDP.length, address, portDst);
+                    socket.send(packet);
+                }
+            }
             ++counterSendingPackets;
-  /*          if (counterSendingPackets >= numberSendingPacketsBeforeAliveMessage) {
-                messageForUDP = shortLipMessage.getUdpAliveMessage();
+            if (counterSendingPackets >= numberSendingPacketsBeforeAliveMessage) {
+                messageForUDP = listOfUDPMessages.get(0).getUdpMessage();
                 DatagramPacket packetAlive = new DatagramPacket(messageForUDP, messageForUDP.length, address, portDst);
                 socket.send(packetAlive);
                 counterSendingPackets = 0;
                 System.out.println("Alive");
-                       }*/
-           } catch (IOException e) {
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-   public void stopSendingMessageUdp() {
+    public void stopSendingMessageUdp() {
         if (sendingUDPLIPMessage) {
             sendingUDPLIPMessage = false;
         }
     }
 
 
-    public UDPClient withShortLipMessage(ShortLipMessage shortLipMessage) {
-        this.shortLipMessage = shortLipMessage;
+    public UDPClient withListOFUDPMessage(List<UDPMessage> listOfUDPMessages) {
+        this.listOfUDPMessages = listOfUDPMessages;
         return this;
     }
-
-
 }

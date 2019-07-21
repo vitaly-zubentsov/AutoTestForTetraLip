@@ -1,4 +1,6 @@
 
+import model.AliveMessage;
+import model.LongLipType3Message;
 import model.ShortLipMessage;
 import model.UDPMessage;
 
@@ -14,12 +16,10 @@ import java.util.Map;
 public class UI extends JFrame {
     private static final long serialVersionUID = 1L;
 
-    private UDPClient udpClientForLipMessages = new UDPClient();
     private Map<Integer, Boolean> changeMap;
-    ShortLipMessage shortLipMessage = new ShortLipMessage();
     List<UDPMessage> listOfUDPMessages = new ArrayList<UDPMessage>();
     UDPClient udpClient = new UDPClient();
-    //AliveMessage aliveMessage = new AliveMessage();
+    AliveMessage aliveMessage = new AliveMessage();
     JPanel contents = new JPanel(new VerticalLayout());
 
 
@@ -27,23 +27,31 @@ public class UI extends JFrame {
 
         super("DialogWindows");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        //  listOfUDPMessages.add(aliveMessage);
+        listOfUDPMessages.add(aliveMessage);
 
         JButton buttonSetUDPOptions = new JButton("Set UDP options");
         JButton buttonAddShortLip = new JButton("Add short LIP");
+        buttonAddShortLip.setEnabled(false);
         JButton buttonAddLongLipType1 = new JButton("Add long LIP type 1");
+        buttonAddLongLipType1.setEnabled(false);
         JButton buttonAddLongLipType2 = new JButton("Add long LIP type 2");
+        buttonAddLongLipType2.setEnabled(false);
         JButton buttonAddLongLipType3 = new JButton("Add long LIP type 3");
-        JButton buttonToStartSendingUDPMessage = new JButton("Add LIP with telemetry data");
+        buttonAddLongLipType3.setEnabled(false);
+        JButton buttonAddTelemetryData = new JButton("Add LIP with telemetry data");
+        buttonAddTelemetryData.setEnabled(false);
 
         JTextArea jTextAreaForUsersInputDATA = new JTextArea();
-        Dimension s = new Dimension(200, 200);
+        Dimension s = new Dimension(200, 250);
         jTextAreaForUsersInputDATA.setPreferredSize(s);
         jTextAreaForUsersInputDATA.setText("This field show \n input data for UDP messages \n \n \n \n \n \n \n");
 
-        JButton buttonStartSendingUDPMessage = new JButton("Stop sending UDP message");
+        JButton buttonStartSendingUDPMessage = new JButton("Start sending UDP message");
+        buttonStartSendingUDPMessage.setEnabled(false);
         JButton buttonStopSendingUPDMessage = new JButton("Stop sending UDP message");
+        buttonStopSendingUPDMessage.setEnabled(false);
         JButton buttonContinueSendingUPDMessage = new JButton("Continue sending UDP message");
+        buttonContinueSendingUPDMessage.setEnabled(false);
 
 
         // Создание панели содержимого с размещением кнопок
@@ -53,24 +61,81 @@ public class UI extends JFrame {
         contents.add(buttonAddLongLipType1);
         contents.add(buttonAddLongLipType2);
         contents.add(buttonAddLongLipType3);
-        contents.add(buttonToStartSendingUDPMessage);
+        contents.add(buttonAddTelemetryData);
+
         contents.add(jTextAreaForUsersInputDATA);
+
         contents.add(buttonStartSendingUDPMessage);
         contents.add(buttonStopSendingUPDMessage);
         contents.add(buttonContinueSendingUPDMessage);
         setContentPane(contents);
         // Определение размера и открытие окна
-        setSize(250, 500);
+        setSize(250, 600);
         setLocationRelativeTo(null);
-        setVisible(true);
 
-        buttonToStartSendingUDPMessage.addActionListener(new ActionListener() {
+
+        buttonSetUDPOptions.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                JDialog dialogForUDPOptions = createDialog("Input options for UDP messages", true, 400, 200, 5, 2);
 
-                udpClientForLipMessages.withShortLipMessage(shortLipMessage).startSendingMessageUdp();
+                JLabel labelForIpDestination = new JLabel("Input destination IP");
+                JTextField textFieldForIpDestination = new JTextField("192.168.1.82", 1);
+                dialogForUDPOptions.add(labelForIpDestination);
+                dialogForUDPOptions.add(textFieldForIpDestination);
+
+                JLabel labelForPortDestination = new JLabel("Input destination port");
+                JTextField textFieldForPortDestination = new JTextField("11372", 1);
+                dialogForUDPOptions.add(labelForPortDestination);
+                dialogForUDPOptions.add(textFieldForPortDestination);
+
+                JLabel labelForPortSource = new JLabel("Input source port");
+                JTextField textFieldForPortSource = new JTextField("9999", 1);
+                dialogForUDPOptions.add(labelForPortSource);
+                dialogForUDPOptions.add(textFieldForPortSource);
+
+                JLabel labelForIntervalOfTimeSendingUDP = new JLabel("Input interval sending UDP, msec");
+                JTextField textFieldForIntervalOfTimeSendingUDP = new JTextField("1000", 1);
+                dialogForUDPOptions.add(labelForIntervalOfTimeSendingUDP);
+                dialogForUDPOptions.add(textFieldForIntervalOfTimeSendingUDP);
+
+
+                JButton buttonToSetUDPOptions = new JButton("Set UDP options");
+                dialogForUDPOptions.add(buttonToSetUDPOptions);
+
+                buttonToSetUDPOptions.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+
+                        udpClient.initUDPConnection(
+                                textFieldForIpDestination.getText(),
+                                textFieldForPortDestination.getText(),
+                                textFieldForPortSource.getText(),
+                                textFieldForIntervalOfTimeSendingUDP.getText());
+                        dialogForUDPOptions.dispose();
+
+                        jTextAreaForUsersInputDATA.setText(
+                                "Ip dst   = " + textFieldForIpDestination.getText() + "\n" +
+                                        "Port dst = " + textFieldForPortDestination.getText() + "\n" +
+                                        "Port src = " + textFieldForPortSource.getText() + "\n" +
+                                        "Interval = " + textFieldForIntervalOfTimeSendingUDP.getText() + "\n" +
+                                        "UDP messages : \n" +
+                                        "Alive message, int = 25000 ms"
+                        );
+                        buttonSetUDPOptions.setEnabled(false);
+                        buttonAddShortLip.setEnabled(true);
+                        buttonAddLongLipType1.setEnabled(true);
+                        buttonAddLongLipType2.setEnabled(true);
+                        buttonAddLongLipType3.setEnabled(true);
+                        buttonAddTelemetryData.setEnabled(true);
+
+                    }
+                });
+
+                dialogForUDPOptions.setVisible(true);
             }
         });
+
 
         buttonAddShortLip.addActionListener(new ActionListener() {
             @Override
@@ -211,10 +276,16 @@ public class UI extends JFrame {
                                 .initValuesFromUI();
 
                         listOfUDPMessages.add(shortLipMessage);
-                        udpClient.withShortLipMessage(shortLipMessage).startSendingMessageUdp();
                         dialogForShortLIP.dispose();
 
+                        buttonStartSendingUDPMessage.setEnabled(true);
+
+                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\n Short Lip ");
+
+
                     }
+
+
                 });
 
                 dialogForShortLIP.setVisible(true);
@@ -340,6 +411,8 @@ public class UI extends JFrame {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         dialogForLongLIPType1.dispose();
+                        buttonStartSendingUDPMessage.setEnabled(true);
+                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\n Long Lip type 1 ");
                     }
                 });
 
@@ -473,6 +546,8 @@ public class UI extends JFrame {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         dialogForLongLIPType2.dispose();
+                        buttonStartSendingUDPMessage.setEnabled(true);
+                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\n Long Lip type 2");
                     }
                 });
 
@@ -608,67 +683,114 @@ public class UI extends JFrame {
                 buttonToAddShortLip.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        try {
+                            checkIntValueFromString(textFieldForSSI.getText(), 0, 16777215, "SSI");
+                            checkDoubleValueFromString(textFieldForLongitude.getText(), -180.0, 179.0, "Longitude");
+                            checkDoubleValueFromString(textFieldForLatitude.getText(), -90.0, 89.0, "Latitude");
+                            checkIntValueFromString(textFieldForHorizontalPositionUncertainty.getText(), 0, 63, "Horizontal position uncertainty");
+                            checkIntValueFromString(textFieldForLocationAltitude.getText(), 0, 2047, "Location altitude");
+                            checkIntValueFromString(textFieldForHorizontalVelocity.getText(), 0, 127, "Horizontal velocity");
+                            checkIntValueFromString(textFieldForDirectionOfTravelExtended.getText(), 0, 255, "Direction Of travel extended");
+                            checkIntValueFromString(textFieldForReasonForSending.getText(), 0, 255, "Reason for sending");
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+
+                        Map<Integer, Boolean> changeMap = new HashMap<Integer, Boolean>();
+                        for (int i = 0; i < 8; i++) {
+                            changeMap.put(i, false);
+                        }
+                        if (checkBoxForSSI.isSelected()) {
+                            changeMap.replace(0, true);
+                        }
+                        if (checkBoxForLongitude.isSelected()) {
+                            changeMap.replace(1, true);
+                        }
+                        if (checkBoxForLatitude.isSelected()) {
+                            changeMap.replace(2, true);
+                        }
+                        if (checkBoxForHorizontalPositionUncertainty.isSelected()) {
+                            changeMap.replace(3, true);
+                        }
+                        if (checkBoxForLocationAltitude.isSelected()) {
+                            changeMap.replace(4, true);
+                        }
+                        if (checkBoxForHorizontalVelocity.isSelected()) {
+                            changeMap.replace(5, true);
+                        }
+                        if (checkBoxForDirectionOfTravelExtended.isSelected()) {
+                            changeMap.replace(6, true);
+                        }
+                        if (checkBoxForReasonForSending.isSelected()) {
+                            changeMap.replace(7, true);
+                        }
+
+                        LongLipType3Message longLipType3Message = new LongLipType3Message();
+                        longLipType3Message.withSSI(textFieldForSSI.getText())
+                                .withLongitude(textFieldForLongitude.getText())
+                                .withLatitude(textFieldForLatitude.getText())
+                                .withHorizontal_position_uncertainty(textFieldForHorizontalPositionUncertainty.getText())
+                                .withLocation_altitude(textFieldForLocationAltitude.getText())
+                                .withHorizontal_velocity(textFieldForHorizontalVelocity.getText())
+                                .withDirection_of_travel_extended(textFieldForDirectionOfTravelExtended.getText())
+                                .withReason_for_sending(textFieldForReasonForSending.getText())
+                                .withChangeMap(changeMap)
+                                .initValuesFromUI();
+
+                        listOfUDPMessages.add(longLipType3Message);
+
                         dialogForLongLIPType3.dispose();
+                        buttonStartSendingUDPMessage.setEnabled(true);
+                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\n Long Lip type 3");
                     }
                 });
 
                 dialogForLongLIPType3.setVisible(true);
             }
         });
-        buttonSetUDPOptions.addActionListener(new ActionListener() {
+
+
+        buttonStartSendingUDPMessage.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JDialog dialogForUDPOptions = createDialog("Input options for UDP messages", true, 400, 200, 5, 2);
-
-                JLabel labelForIpDestination = new JLabel("Input destination IP");
-                JTextField textFieldForIpDestination = new JTextField("192.168.1.82", 1);
-                dialogForUDPOptions.add(labelForIpDestination);
-                dialogForUDPOptions.add(textFieldForIpDestination);
-
-                JLabel labelForPortDestination = new JLabel("Input destination port");
-                JTextField textFieldForPortDestination = new JTextField("11372", 1);
-                dialogForUDPOptions.add(labelForPortDestination);
-                dialogForUDPOptions.add(textFieldForPortDestination);
-
-                JLabel labelForPortSource = new JLabel("Input source port");
-                JTextField textFieldForPortSource = new JTextField("9999", 1);
-                dialogForUDPOptions.add(labelForPortSource);
-                dialogForUDPOptions.add(textFieldForPortSource);
-
-                JLabel labelForIntervalOfTimeSendingUDP = new JLabel("Input interval sending UDP, msec");
-                JTextField textFieldForIntervalOfTimeSendingUDP = new JTextField("1000", 1);
-                dialogForUDPOptions.add(labelForIntervalOfTimeSendingUDP);
-                dialogForUDPOptions.add(textFieldForIntervalOfTimeSendingUDP);
-
-
-                JButton buttonToSetUDPOptions = new JButton("Set UDP options");
-                dialogForUDPOptions.add(buttonToSetUDPOptions);
-
-                buttonToSetUDPOptions.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-
-                        udpClient.initUDPConnection(
-                                textFieldForIpDestination.getText(),
-                                textFieldForPortDestination.getText(),
-                                textFieldForPortSource.getText(),
-                                textFieldForIntervalOfTimeSendingUDP.getText());
-                        dialogForUDPOptions.dispose();
-
-                        jTextAreaForUsersInputDATA.setText(
-                                        "Ip dst   = " + textFieldForIpDestination.getText() + "\n" +
-                                        "Port dst = " + textFieldForPortDestination.getText() + "\n" +
-                                        "Port src = " + textFieldForPortSource.getText() + "\n" +
-                                        "Interval = " + textFieldForIntervalOfTimeSendingUDP.getText() + "\n" +
-                                        "UDP messages : \n" +
-                                        "Alive message, int = 25000 ms"
-                        );
-                    }
-                });
-
-                dialogForUDPOptions.setVisible(true);
+                udpClient.withListOFUDPMessage(listOfUDPMessages).startSendingMessageUdp();
+                buttonStopSendingUPDMessage.setEnabled(true);
+                buttonStartSendingUDPMessage.setEnabled(false);
+                buttonAddShortLip.setEnabled(false);
+                buttonAddLongLipType1.setEnabled(false);
+                buttonAddLongLipType2.setEnabled(false);
+                buttonAddLongLipType3.setEnabled(false);
+                buttonAddTelemetryData.setEnabled(false);
             }
         });
+
+        buttonStopSendingUPDMessage.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                udpClient.stopSendingMessageUdp();
+                buttonContinueSendingUPDMessage.setEnabled(true);
+                buttonStopSendingUPDMessage.setEnabled(false);
+                buttonAddShortLip.setEnabled(true);
+                buttonAddLongLipType1.setEnabled(true);
+                buttonAddLongLipType2.setEnabled(true);
+                buttonAddLongLipType3.setEnabled(true);
+                buttonAddTelemetryData.setEnabled(true);
+            }
+        });
+        buttonContinueSendingUPDMessage.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                udpClient.continueSendingUdpLipMessage();
+                buttonStopSendingUPDMessage.setEnabled(true);
+                buttonContinueSendingUPDMessage.setEnabled(false);
+                buttonAddShortLip.setEnabled(false);
+                buttonAddLongLipType1.setEnabled(false);
+                buttonAddLongLipType2.setEnabled(false);
+                buttonAddLongLipType3.setEnabled(false);
+                buttonAddTelemetryData.setEnabled(false);
+            }
+        });
+
     }
 
     private void checkIntValueFromString(String checkString, int beginRange, int endRange, String nameOfField) throws Exception {

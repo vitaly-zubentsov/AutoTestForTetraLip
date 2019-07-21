@@ -7,7 +7,7 @@ public class AutoTestForTetraLip {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                GUIForm guiForTest = new GUIForm();
+                UI guiForTest = new UI();
                 guiForTest.setVisible(true);
             }
         });

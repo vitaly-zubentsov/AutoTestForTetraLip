@@ -1,10 +1,13 @@
 package model;
 
-public class AliveMessage extends UDPMessage{
+public class AliveMessage implements UDPMessage{
 
-    public byte[] getUdpAliveMessage() {
-        String udpAliveMessage = packet_counter + "00000000000000000000000000000000";
-        addTheNumberToBinString(packet_counter, 1, 1294967295);
-        return convertBinStringToByteArray(udpAliveMessage);
+
+    private UDPMessageHelper udpMessageHelper = new UDPMessageHelper();
+
+    public byte[] getUdpMessage() {
+        String udpAliveMessage = udpPacketsCounter.getPacket_counter() + "00000000000000000000000000000000";
+        udpPacketsCounter.setPacket_counter(udpMessageHelper.addTheNumberToBinString(udpPacketsCounter.getPacket_counter(), 1, 1294967295));
+        return udpMessageHelper.convertBinStringToByteArray(udpAliveMessage);
     }
 }
