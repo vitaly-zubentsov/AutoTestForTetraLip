@@ -16,7 +16,7 @@ public interface UDPMessage {
     public static synchronized UDPPacketsCounter getUDPPacketsCounter() {
         if (udpPacketsCounter == null)
             udpPacketsCounter = new UDPPacketsCounter();
-            udpPacketsCounter.packet_counter = "00000000000000000000000000000001";
+            udpPacketsCounter.packet_counter = "00000000000000000100000000000001";
         return udpPacketsCounter;
     }
 

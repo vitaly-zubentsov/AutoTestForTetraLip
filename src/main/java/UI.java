@@ -1,8 +1,5 @@
 
-import model.AliveMessage;
-import model.LongLipType3Message;
-import model.ShortLipMessage;
-import model.UDPMessage;
+import model.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -325,7 +322,7 @@ public class UI extends JFrame {
                 JTextField textFieldFoTimeData = new JTextField("0", 1);
                 textFieldFoTimeData.setEditable(false);
                 JCheckBox checkBoxForForTimeData = new JCheckBox("Changing");
-                checkBoxForForPDUType.setEnabled(false);
+                checkBoxForForTimeData.setEnabled(false);
                 dialogForLongLIPType1.add(labelForTimeData);
                 dialogForLongLIPType1.add(textFieldFoTimeData);
                 dialogForLongLIPType1.add(checkBoxForForTimeData);
@@ -413,12 +410,68 @@ public class UI extends JFrame {
                 dialogForLongLIPType1.add(textFieldForReasonForSending);
                 dialogForLongLIPType1.add(checkBoxForReasonForSending);
 
-                JButton buttonToAddShortLip = new JButton("Add long LIP type 3");
-                dialogForLongLIPType1.add(buttonToAddShortLip);
+                JButton buttonToAddLongLipType1 = new JButton("Add long LIP type 1");
+                dialogForLongLIPType1.add(buttonToAddLongLipType1);
 
-                buttonToAddShortLip.addActionListener(new ActionListener() {
+                buttonToAddLongLipType1.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        try {
+                            checkIntValueFromString(textFieldForSSI.getText(), 0, 16777215, "SSI");
+                            checkDoubleValueFromString(textFieldForLongitude.getText(), -180.0, 179.0, "Longitude");
+                            checkDoubleValueFromString(textFieldForLatitude.getText(), -90.0, 89.0, "Latitude");
+                            checkIntValueFromString(textFieldForHorizontalPositionUncertainty.getText(), 0, 63, "Horizontal position uncertainty");
+                            checkIntValueFromString(textFieldForLocationAltitude.getText(), 0, 2047, "Location altitude");
+                            checkIntValueFromString(textFieldForHorizontalVelocity.getText(), 0, 127, "Horizontal velocity");
+                            checkIntValueFromString(textFieldForDirectionOfTravelExtended.getText(), 0, 255, "Direction Of travel extended");
+                            checkIntValueFromString(textFieldForReasonForSending.getText(), 0, 255, "Reason for sending");
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+
+                        Map<Integer, Boolean> changeMap = new HashMap<Integer, Boolean>();
+                        for (int i = 0; i < 8; i++) {
+                            changeMap.put(i, false);
+                        }
+                        if (checkBoxForSSI.isSelected()) {
+                            changeMap.replace(0, true);
+                        }
+                        if (checkBoxForLongitude.isSelected()) {
+                            changeMap.replace(1, true);
+                        }
+                        if (checkBoxForLatitude.isSelected()) {
+                            changeMap.replace(2, true);
+                        }
+                        if (checkBoxForHorizontalPositionUncertainty.isSelected()) {
+                            changeMap.replace(3, true);
+                        }
+                        if (checkBoxForLocationAltitude.isSelected()) {
+                            changeMap.replace(4, true);
+                        }
+                        if (checkBoxForHorizontalVelocity.isSelected()) {
+                            changeMap.replace(5, true);
+                        }
+                        if (checkBoxForDirectionOfTravelExtended.isSelected()) {
+                            changeMap.replace(6, true);
+                        }
+                        if (checkBoxForReasonForSending.isSelected()) {
+                            changeMap.replace(7, true);
+                        }
+
+                        LongLipType1Message longLipType1Message = new LongLipType1Message();
+                        longLipType1Message.withSSI(textFieldForSSI.getText())
+                                .withLongitude(textFieldForLongitude.getText())
+                                .withLatitude(textFieldForLatitude.getText())
+                                .withHorizontal_position_uncertainty(textFieldForHorizontalPositionUncertainty.getText())
+                                .withLocation_altitude(textFieldForLocationAltitude.getText())
+                                .withHorizontal_velocity(textFieldForHorizontalVelocity.getText())
+                                .withDirection_of_travel_extended(textFieldForDirectionOfTravelExtended.getText())
+                                .withReason_for_sending(textFieldForReasonForSending.getText())
+                                .withChangeMap(changeMap)
+                                .initValuesFromUI();
+
+                        listOfUDPMessages.add(longLipType1Message);
+
                         dialogForLongLIPType1.dispose();
                         jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\n Long Lip type 1 ");
                     }
