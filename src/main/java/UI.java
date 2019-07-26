@@ -200,7 +200,9 @@ public class UI extends JFrame {
 
                 JLabel labelForTypeOfAdditionalData = new JLabel("Type of additional data");
                 JTextField textFieldForTypeOfAdditionalData = new JTextField("0", 1);
+                textFieldForTypeOfAdditionalData.setEditable(false);
                 JCheckBox checkBoxForTypeOfAdditionalData = new JCheckBox("Changing");
+                checkBoxForTypeOfAdditionalData.setEnabled(false);
                 dialogForShortLIP.add(labelForTypeOfAdditionalData);
                 dialogForShortLIP.add(textFieldForTypeOfAdditionalData);
                 dialogForShortLIP.add(checkBoxForTypeOfAdditionalData);
@@ -398,7 +400,9 @@ public class UI extends JFrame {
 
                 JLabel labelForTypeOfAdditionalData = new JLabel("Type of additional data");
                 JTextField textFieldForTypeOfAdditionalData = new JTextField("0", 1);
+                textFieldForTypeOfAdditionalData.setEditable(false);
                 JCheckBox checkBoxForTypeOfAdditionalData = new JCheckBox("Changing");
+                checkBoxForTypeOfAdditionalData.setEnabled(false);
                 dialogForLongLIPType1.add(labelForTypeOfAdditionalData);
                 dialogForLongLIPType1.add(textFieldForTypeOfAdditionalData);
                 dialogForLongLIPType1.add(checkBoxForTypeOfAdditionalData);
@@ -436,6 +440,7 @@ public class UI extends JFrame {
                         if (checkBoxForSSI.isSelected()) {
                             changeMap.replace(0, true);
                         }
+
                         if (checkBoxForLongitude.isSelected()) {
                             changeMap.replace(1, true);
                         }
@@ -597,7 +602,9 @@ public class UI extends JFrame {
 
                 JLabel labelForTypeOfAdditionalData = new JLabel("Type of additional data");
                 JTextField textFieldForTypeOfAdditionalData = new JTextField("0", 1);
+                textFieldForTypeOfAdditionalData.setEditable(false);
                 JCheckBox checkBoxForTypeOfAdditionalData = new JCheckBox("Changing");
+                checkBoxForTypeOfAdditionalData.setEnabled(false);
                 dialogForLongLIPType2.add(labelForTypeOfAdditionalData);
                 dialogForLongLIPType2.add(textFieldForTypeOfAdditionalData);
                 dialogForLongLIPType2.add(checkBoxForTypeOfAdditionalData);
@@ -609,12 +616,73 @@ public class UI extends JFrame {
                 dialogForLongLIPType2.add(textFieldForReasonForSending);
                 dialogForLongLIPType2.add(checkBoxForReasonForSending);
 
-                JButton buttonToAddShortLip = new JButton("Add long LIP type 3");
-                dialogForLongLIPType2.add(buttonToAddShortLip);
+                JButton buttonToAddLongLipType2 = new JButton("Add long LIP type 2");
+                dialogForLongLIPType2.add(buttonToAddLongLipType2);
 
-                buttonToAddShortLip.addActionListener(new ActionListener() {
+                buttonToAddLongLipType2.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        try {
+                            checkIntValueFromString(textFieldForSSI.getText(), 0, 16777215, "SSI");
+                            checkIntValueFromString(textFieldForTimeElapsed.getText(),0,3,"Time elapsed");
+                            checkDoubleValueFromString(textFieldForLongitude.getText(), -180.0, 179.0, "Longitude");
+                            checkDoubleValueFromString(textFieldForLatitude.getText(), -90.0, 89.0, "Latitude");
+                            checkIntValueFromString(textFieldForHorizontalPositionUncertainty.getText(), 0, 63, "Horizontal position uncertainty");
+                            checkIntValueFromString(textFieldForLocationAltitude.getText(), 0, 2047, "Location altitude");
+                            checkIntValueFromString(textFieldForHorizontalVelocity.getText(), 0, 127, "Horizontal velocity");
+                            checkIntValueFromString(textFieldForDirectionOfTravelExtended.getText(), 0, 255, "Direction Of travel extended");
+                            checkIntValueFromString(textFieldForReasonForSending.getText(), 0, 255, "Reason for sending");
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+
+                        Map<Integer, Boolean> changeMap = new HashMap<Integer, Boolean>();
+                        for (int i = 0; i < 9; i++) {
+                            changeMap.put(i, false);
+                        }
+                        if (checkBoxForSSI.isSelected()) {
+                            changeMap.replace(0, true);
+                        }
+                        if (checkBoxForTimeElapsed.isSelected()) {
+                            changeMap.replace(1, true);
+                        }
+                        if (checkBoxForLongitude.isSelected()) {
+                            changeMap.replace(2, true);
+                        }
+                        if (checkBoxForLatitude.isSelected()) {
+                            changeMap.replace(3, true);
+                        }
+                        if (checkBoxForHorizontalPositionUncertainty.isSelected()) {
+                            changeMap.replace(4, true);
+                        }
+                        if (checkBoxForLocationAltitude.isSelected()) {
+                            changeMap.replace(5, true);
+                        }
+                        if (checkBoxForHorizontalVelocity.isSelected()) {
+                            changeMap.replace(6, true);
+                        }
+                        if (checkBoxForDirectionOfTravelExtended.isSelected()) {
+                            changeMap.replace(7, true);
+                        }
+                        if (checkBoxForReasonForSending.isSelected()) {
+                            changeMap.replace(8, true);
+                        }
+
+                        LongLipType2Message longLipType2Message = new LongLipType2Message();
+                        longLipType2Message.withSSI(textFieldForSSI.getText())
+                                .withTimeElapsed(textFieldForTimeElapsed.getText())
+                                .withLongitude(textFieldForLongitude.getText())
+                                .withLatitude(textFieldForLatitude.getText())
+                                .withHorizontal_position_uncertainty(textFieldForHorizontalPositionUncertainty.getText())
+                                .withLocation_altitude(textFieldForLocationAltitude.getText())
+                                .withHorizontal_velocity(textFieldForHorizontalVelocity.getText())
+                                .withDirection_of_travel_extended(textFieldForDirectionOfTravelExtended.getText())
+                                .withReason_for_sending(textFieldForReasonForSending.getText())
+                                .withChangeMap(changeMap)
+                                .initValuesFromUI();
+
+                        listOfUDPMessages.add(longLipType2Message);
+
                         dialogForLongLIPType2.dispose();
 
                         jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\n Long Lip type 2");
@@ -744,7 +812,9 @@ public class UI extends JFrame {
 
                 JLabel labelForTypeOfAdditionalData = new JLabel("Type of additional data");
                 JTextField textFieldForTypeOfAdditionalData = new JTextField("0", 1);
+                textFieldForTypeOfAdditionalData.setEditable(false);
                 JCheckBox checkBoxForTypeOfAdditionalData = new JCheckBox("Changing");
+                checkBoxForTypeOfAdditionalData.setEnabled(false);
                 dialogForLongLIPType3.add(labelForTypeOfAdditionalData);
                 dialogForLongLIPType3.add(textFieldForTypeOfAdditionalData);
                 dialogForLongLIPType3.add(checkBoxForTypeOfAdditionalData);
@@ -756,10 +826,10 @@ public class UI extends JFrame {
                 dialogForLongLIPType3.add(textFieldForReasonForSending);
                 dialogForLongLIPType3.add(checkBoxForReasonForSending);
 
-                JButton buttonToAddShortLip = new JButton("Add long LIP type 3");
-                dialogForLongLIPType3.add(buttonToAddShortLip);
+                JButton buttonToAddLongLipType3 = new JButton("Add long LIP type 3");
+                dialogForLongLIPType3.add(buttonToAddLongLipType3);
 
-                buttonToAddShortLip.addActionListener(new ActionListener() {
+                buttonToAddLongLipType3.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         try {
