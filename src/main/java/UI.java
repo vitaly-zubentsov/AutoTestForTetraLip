@@ -17,7 +17,7 @@ public class UI extends JFrame {
     List<UDPMessage> listOfUDPMessages = new ArrayList<UDPMessage>();
     UDPClient udpClient = new UDPClient();
     AliveMessage aliveMessage = new AliveMessage();
-    JPanel contents = new JPanel(new VerticalLayout());
+    private JPanel contents;
 
 
     public UI() {
@@ -25,6 +25,8 @@ public class UI extends JFrame {
         super("DialogWindows");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         listOfUDPMessages.add(aliveMessage);
+
+
 
         JButton buttonSetUDPOptions = new JButton("Set UDP options");
         JButton buttonAddShortLip = new JButton("Add short LIP");
@@ -35,8 +37,10 @@ public class UI extends JFrame {
         buttonAddLongLipType2.setEnabled(false);
         JButton buttonAddLongLipType3 = new JButton("Add long LIP type 3");
         buttonAddLongLipType3.setEnabled(false);
-        JButton buttonAddTelemetryData = new JButton("Add LIP with telemetry data");
-        buttonAddTelemetryData.setEnabled(false);
+        JButton buttonAddTelemetryOfDeviceData = new JButton("Add LIP with telemetry of device data");
+        buttonAddTelemetryOfDeviceData.setEnabled(false);
+        JButton buttonAddTelemetryWithReceiveLevel = new JButton("Add LIP telemetry data of receive level");
+        buttonAddTelemetryWithReceiveLevel.setEnabled(false);
 
         JTextArea jTextAreaForUsersInputDATA = new JTextArea();
         Dimension s = new Dimension(200, 250);
@@ -52,22 +56,26 @@ public class UI extends JFrame {
 
 
         // Создание панели содержимого с размещением кнопок
+        GridBagLayout layout = new GridBagLayout();
+        GridBagConstraints gridBagConstraints = new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 20, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0);
+        contents = new JPanel(layout);
 
-        contents.add(buttonSetUDPOptions);
-        contents.add(buttonAddShortLip);
-        contents.add(buttonAddLongLipType1);
-        contents.add(buttonAddLongLipType2);
-        contents.add(buttonAddLongLipType3);
-        contents.add(buttonAddTelemetryData);
+        contents.add(buttonSetUDPOptions,gridBagConstraints);
+        contents.add(buttonAddShortLip,gridBagConstraints);
+        contents.add(buttonAddLongLipType1,gridBagConstraints);
+        contents.add(buttonAddLongLipType2,gridBagConstraints);
+        contents.add(buttonAddLongLipType3,gridBagConstraints);
+        contents.add(buttonAddTelemetryOfDeviceData,gridBagConstraints);
+        contents.add(buttonAddTelemetryWithReceiveLevel,gridBagConstraints);
 
-        contents.add(jTextAreaForUsersInputDATA);
+        contents.add(jTextAreaForUsersInputDATA,gridBagConstraints);
 
-        contents.add(buttonStartSendingUDPMessage);
-        contents.add(buttonStopSendingUPDMessage);
-        contents.add(buttonContinueSendingUPDMessage);
+        contents.add(buttonStartSendingUDPMessage,gridBagConstraints);
+        contents.add(buttonStopSendingUPDMessage,gridBagConstraints);
+        contents.add(buttonContinueSendingUPDMessage,gridBagConstraints);
         setContentPane(contents);
         // Определение размера и открытие окна
-        setSize(250, 600);
+        setSize(300, 600);
         setLocationRelativeTo(null);
 
 
@@ -124,7 +132,8 @@ public class UI extends JFrame {
                         buttonAddLongLipType1.setEnabled(true);
                         buttonAddLongLipType2.setEnabled(true);
                         buttonAddLongLipType3.setEnabled(true);
-                        buttonAddTelemetryData.setEnabled(true);
+                        buttonAddTelemetryOfDeviceData.setEnabled(true);
+                        buttonAddTelemetryWithReceiveLevel.setEnabled(true);
                         buttonStartSendingUDPMessage.setEnabled(true);
 
                     }
@@ -624,7 +633,7 @@ public class UI extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         try {
                             checkIntValueFromString(textFieldForSSI.getText(), 0, 16777215, "SSI");
-                            checkIntValueFromString(textFieldForTimeElapsed.getText(),0,3,"Time elapsed");
+                            checkIntValueFromString(textFieldForTimeElapsed.getText(), 0, 3, "Time elapsed");
                             checkDoubleValueFromString(textFieldForLongitude.getText(), -180.0, 179.0, "Longitude");
                             checkDoubleValueFromString(textFieldForLatitude.getText(), -90.0, 89.0, "Latitude");
                             checkIntValueFromString(textFieldForHorizontalPositionUncertainty.getText(), 0, 63, "Horizontal position uncertainty");
@@ -908,7 +917,8 @@ public class UI extends JFrame {
                 buttonAddLongLipType1.setEnabled(false);
                 buttonAddLongLipType2.setEnabled(false);
                 buttonAddLongLipType3.setEnabled(false);
-                buttonAddTelemetryData.setEnabled(false);
+                buttonAddTelemetryOfDeviceData.setEnabled(false);
+                buttonAddTelemetryWithReceiveLevel.setEnabled(false);
             }
         });
 
@@ -922,7 +932,8 @@ public class UI extends JFrame {
                 buttonAddLongLipType1.setEnabled(true);
                 buttonAddLongLipType2.setEnabled(true);
                 buttonAddLongLipType3.setEnabled(true);
-                buttonAddTelemetryData.setEnabled(true);
+                buttonAddTelemetryOfDeviceData.setEnabled(true);
+                buttonAddTelemetryWithReceiveLevel.setEnabled(true);
             }
         });
         buttonContinueSendingUPDMessage.addActionListener(new ActionListener() {
@@ -935,7 +946,8 @@ public class UI extends JFrame {
                 buttonAddLongLipType1.setEnabled(false);
                 buttonAddLongLipType2.setEnabled(false);
                 buttonAddLongLipType3.setEnabled(false);
-                buttonAddTelemetryData.setEnabled(false);
+                buttonAddTelemetryOfDeviceData.setEnabled(false);
+                buttonAddTelemetryWithReceiveLevel.setEnabled(false);
             }
         });
 
