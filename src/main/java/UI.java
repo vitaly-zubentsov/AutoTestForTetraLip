@@ -27,7 +27,6 @@ public class UI extends JFrame {
         listOfUDPMessages.add(aliveMessage);
 
 
-
         JButton buttonSetUDPOptions = new JButton("Set UDP options");
         JButton buttonAddShortLip = new JButton("Add short LIP");
         buttonAddShortLip.setEnabled(false);
@@ -60,19 +59,19 @@ public class UI extends JFrame {
         GridBagConstraints gridBagConstraints = new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 20, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0);
         contents = new JPanel(layout);
 
-        contents.add(buttonSetUDPOptions,gridBagConstraints);
-        contents.add(buttonAddShortLip,gridBagConstraints);
-        contents.add(buttonAddLongLipType1,gridBagConstraints);
-        contents.add(buttonAddLongLipType2,gridBagConstraints);
-        contents.add(buttonAddLongLipType3,gridBagConstraints);
-        contents.add(buttonAddTelemetryOfDeviceData,gridBagConstraints);
-        contents.add(buttonAddTelemetryWithReceiveLevel,gridBagConstraints);
+        contents.add(buttonSetUDPOptions, gridBagConstraints);
+        contents.add(buttonAddShortLip, gridBagConstraints);
+        contents.add(buttonAddLongLipType1, gridBagConstraints);
+        contents.add(buttonAddLongLipType2, gridBagConstraints);
+        contents.add(buttonAddLongLipType3, gridBagConstraints);
+        contents.add(buttonAddTelemetryOfDeviceData, gridBagConstraints);
+        contents.add(buttonAddTelemetryWithReceiveLevel, gridBagConstraints);
 
-        contents.add(jTextAreaForUsersInputDATA,gridBagConstraints);
+        contents.add(jTextAreaForUsersInputDATA, gridBagConstraints);
 
-        contents.add(buttonStartSendingUDPMessage,gridBagConstraints);
-        contents.add(buttonStopSendingUPDMessage,gridBagConstraints);
-        contents.add(buttonContinueSendingUPDMessage,gridBagConstraints);
+        contents.add(buttonStartSendingUDPMessage, gridBagConstraints);
+        contents.add(buttonStopSendingUPDMessage, gridBagConstraints);
+        contents.add(buttonContinueSendingUPDMessage, gridBagConstraints);
         setContentPane(contents);
         // Определение размера и открытие окна
         setSize(300, 600);
@@ -903,6 +902,378 @@ public class UI extends JFrame {
                 });
 
                 dialogForLongLIPType3.setVisible(true);
+            }
+        });
+
+        buttonAddTelemetryOfDeviceData.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JDialog dialogForLongLIPWithTelemetryOfDeviceData = createDialog("Input data for long LIP type 1 with telemetry data", true, 700, 700, 37, 3);
+
+                JLabel labelForSSI = new JLabel("SSI");
+                JTextField textFieldForSSI = new JTextField("7031", 1);
+                JCheckBox checkBoxForSSI = new JCheckBox("Changing");
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForSSI);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForSSI);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForSSI);
+
+                JLabel labelForPDUType = new JLabel("PDU Type");
+                JTextField textFieldFoForPDUType = new JTextField("1", 1);
+                textFieldFoForPDUType.setEditable(false);
+                JCheckBox checkBoxForForPDUType = new JCheckBox("Changing");
+                checkBoxForForPDUType.setEnabled(false);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForPDUType);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldFoForPDUType);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForForPDUType);
+
+                JLabel labelForPDUTypeExtension = new JLabel("PDU Type extension");
+                JTextField textFieldForPDUTypeExtension = new JTextField("3", 1);
+                textFieldForPDUTypeExtension.setEditable(false);
+                JCheckBox checkBoxForPDUTypeExtension = new JCheckBox("Changing");
+                checkBoxForPDUTypeExtension.setEnabled(false);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForPDUTypeExtension);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForPDUTypeExtension);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForPDUTypeExtension);
+
+                JLabel labelForTimeData = new JLabel("Time data");
+                JTextField textFieldFoTimeData = new JTextField("0", 1);
+                textFieldFoTimeData.setEditable(false);
+                JCheckBox checkBoxForForTimeData = new JCheckBox("Changing");
+                checkBoxForForTimeData.setEnabled(false);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForTimeData);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldFoTimeData);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForForTimeData);
+
+                JLabel labelForLocationShape = new JLabel("Location shape");
+                JTextField textFieldForLocationShape = new JTextField("5", 1);
+                textFieldForLocationShape.setEditable(false);
+                JCheckBox checkBoxForLocationShape = new JCheckBox("Changing");
+                checkBoxForLocationShape.setEnabled(false);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForLocationShape);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForLocationShape);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForLocationShape);
+
+                JLabel labelForLongitude = new JLabel("Longitude");
+                JTextField textFieldForLongitude = new JTextField("37.66000628471", 1);
+                JCheckBox checkBoxForLongitude = new JCheckBox("Changing");
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForLongitude);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForLongitude);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForLongitude);
+
+                JLabel labelForLatitude = new JLabel("Latitude");
+                JTextField textFieldForLatitude = new JTextField("55.7839286", 1);
+                JCheckBox checkBoxForLatitude = new JCheckBox("Changing");
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForLatitude);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForLatitude);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForLatitude);
+
+                JLabel labelForHorizontalPositionUncertainty = new JLabel("Horizontal position uncertainty");
+                JTextField textFieldForHorizontalPositionUncertainty = new JTextField("0", 1);
+                JCheckBox checkBoxForHorizontalPositionUncertainty = new JCheckBox("Changing");
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForHorizontalPositionUncertainty);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForHorizontalPositionUncertainty);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForHorizontalPositionUncertainty);
+
+                JLabel labelForLocationAltitude = new JLabel("Location altitude");
+                JTextField textFieldForLocationAltitude = new JTextField("0", 1);
+                JCheckBox checkBoxForLocationAltitude = new JCheckBox("Changing");
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForLocationAltitude);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForLocationAltitude);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForLocationAltitude);
+
+                JLabel labelForVelocityType = new JLabel("Velocity type");
+                JTextField textFieldForVelocityType = new JTextField("5", 1);
+                textFieldForVelocityType.setEditable(false);
+                JCheckBox checkBoxForVelocityType = new JCheckBox("Changing");
+                checkBoxForVelocityType.setEnabled(false);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForVelocityType);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForVelocityType);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForVelocityType);
+
+                JLabel labelForHorizontalVelocity = new JLabel("Horizontal velocity");
+                JTextField textFieldForHorizontalVelocity = new JTextField("0", 1);
+                JCheckBox checkBoxForHorizontalVelocity = new JCheckBox("Changing");
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForHorizontalVelocity);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForHorizontalVelocity);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForHorizontalVelocity);
+
+                JLabel labelForDirectionOfTravelExtended = new JLabel("Direction of travel extended");
+                JTextField textFieldForDirectionOfTravelExtended = new JTextField("0", 1);
+                JCheckBox checkBoxForDirectionOfTravelExtended = new JCheckBox("Changing");
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForDirectionOfTravelExtended);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForDirectionOfTravelExtended);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForDirectionOfTravelExtended);
+
+                JLabel labelForAcknowledgementRequest = new JLabel("Acknowledgement request");
+                JTextField textFieldForAcknowledgementRequest = new JTextField("0", 1);
+                textFieldForAcknowledgementRequest.setEditable(false);
+                JCheckBox checkBoxForForAcknowledgementRequest = new JCheckBox("Changing");
+                checkBoxForForAcknowledgementRequest.setEnabled(false);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForAcknowledgementRequest);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForAcknowledgementRequest);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForForAcknowledgementRequest);
+
+                JLabel labelForTypeOfAdditionalData = new JLabel("Type of additional data");
+                JTextField textFieldForTypeOfAdditionalData = new JTextField("0", 1);
+                textFieldForTypeOfAdditionalData.setEditable(false);
+                JCheckBox checkBoxForTypeOfAdditionalData = new JCheckBox("Changing");
+                checkBoxForTypeOfAdditionalData.setEnabled(false);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForTypeOfAdditionalData);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForTypeOfAdditionalData);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForTypeOfAdditionalData);
+
+                JLabel labelForReasonForSending = new JLabel("Reason for sending");
+                JTextField textFieldForReasonForSending = new JTextField("129", 1);
+                JCheckBox checkBoxForReasonForSending = new JCheckBox("Changing");
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForReasonForSending);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForReasonForSending);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForReasonForSending);
+
+                JLabel labelForType5ElementIdentifier = new JLabel("Type 5 element identifier");
+                JTextField textFieldForType5ElementIdentifier = new JTextField("1", 1);
+                textFieldForType5ElementIdentifier.setEditable(false);
+                JCheckBox checkBoxForType5ElementIdentifier = new JCheckBox("Changing");
+                checkBoxForTypeOfAdditionalData.setEnabled(false);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForType5ElementIdentifier);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForType5ElementIdentifier);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForType5ElementIdentifier);
+
+                JLabel labelForType5ElementLength = new JLabel("Type 5 element length");
+                JTextField textFieldForType5Type5ElementLength = new JTextField("0", 1);
+                textFieldForType5Type5ElementLength.setEditable(false);
+                JCheckBox checkBoxForType5ElementLength = new JCheckBox("Changing");
+                checkBoxForType5ElementLength.setEnabled(false);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForType5ElementLength);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForType5Type5ElementLength);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForType5ElementLength);
+
+                JLabel labelForType5ElementLengthExtension = new JLabel("Type 5 element length extension");
+                JTextField textFieldForType5ElementLengthExtension = new JTextField("9", 1);
+                textFieldForType5ElementLengthExtension.setEditable(false);
+                JCheckBox checkBoxForType5ElementLengthExtension = new JCheckBox("Changing");
+                checkBoxForType5ElementLengthExtension.setEnabled(false);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForType5ElementLengthExtension);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForType5ElementLengthExtension);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForType5ElementLengthExtension);
+
+                JLabel labelForTypeOfMessageFromDevice = new JLabel("Type of message from device");
+                JTextField textFieldForTypeOfMessageFromDevice = new JTextField("1", 1);
+                textFieldForTypeOfMessageFromDevice.setEditable(false);
+                JCheckBox checkBoxForTypeOfMessageFromDevice = new JCheckBox("Changing");
+                checkBoxForTypeOfMessageFromDevice.setEnabled(false);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForTypeOfMessageFromDevice);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForTypeOfMessageFromDevice);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForTypeOfMessageFromDevice);
+
+                JLabel labelForTypeOfDevice = new JLabel("Type of device");
+                JTextField textFieldForTypeOfDevice = new JTextField("0", 1);
+                JCheckBox checkBoxForTypeOfDevice = new JCheckBox("Changing");
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForTypeOfDevice);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForTypeOfDevice);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForTypeOfDevice);
+
+                JLabel labelForPowerSupplyVoltageAtTheInputBPP = new JLabel("Power supply voltage at the input BPP");
+                JTextField textFieldForPowerSupplyVoltageAtTheInputBPP = new JTextField("100", 1);
+                JCheckBox checkBoxForPowerSupplyVoltageAtTheInputBPP = new JCheckBox("Changing");
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForPowerSupplyVoltageAtTheInputBPP);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForPowerSupplyVoltageAtTheInputBPP);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForPowerSupplyVoltageAtTheInputBPP);
+
+                JLabel labelForPowerSupplyVoltageAtTheControlConsoleInput = new JLabel("Power supply voltage at the control console input");
+                JTextField textFieldForPowerSupplyVoltageAtTheControlConsoleInput = new JTextField("105", 1);
+                JCheckBox checkBoxForPowerSupplyVoltageAtTheControlConsoleInput = new JCheckBox("Changing");
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForPowerSupplyVoltageAtTheControlConsoleInput);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForPowerSupplyVoltageAtTheControlConsoleInput);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForPowerSupplyVoltageAtTheControlConsoleInput);
+
+                JLabel labelForPowerSupplyOfTheTransmitterOutputAmplifierDuringTransmission = new JLabel("Power supply of the transmitter output amplifier during transmission");
+                JTextField textFieldForPowerSupplyOfTheTransmitterOutputAmplifierDuringTransmission = new JTextField("48", 1);
+                JCheckBox checkBoxForPowerSupplyOfTheTransmitterOutputAmplifierDuringTransmission = new JCheckBox("Changing");
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForPowerSupplyOfTheTransmitterOutputAmplifierDuringTransmission);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForPowerSupplyOfTheTransmitterOutputAmplifierDuringTransmission);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForPowerSupplyOfTheTransmitterOutputAmplifierDuringTransmission);
+
+                JLabel labelForTargetTransmitterPower = new JLabel("Target transmitter power");
+                JTextField textFieldForTargetTransmitterPower = new JTextField("1", 1);
+                JCheckBox checkBoxForTargetTransmitterPower = new JCheckBox("Changing");
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForTargetTransmitterPower);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForTargetTransmitterPower);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForTargetTransmitterPower);
+
+                JLabel labelForTransmitterAmplifierOutputTemperature = new JLabel("Transmitter amplifier output temperature");
+                JTextField textFieldForTransmitterAmplifierOutputTemperature = new JTextField("148", 1);
+                JCheckBox checkBoxForTransmitterAmplifierOutputTemperature = new JCheckBox("Changing");
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForTransmitterAmplifierOutputTemperature);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForTransmitterAmplifierOutputTemperature);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForTransmitterAmplifierOutputTemperature);
+
+                JLabel labelForSWROfTheConnectedAntennaAtTheOperatingFrequency = new JLabel("SWR of the connected antenna at the operating frequency");
+                JTextField textFieldForSWROfTheConnectedAntennaAtTheOperatingFrequency = new JTextField("25", 1);
+                JCheckBox checkBoxForSWROfTheConnectedAntennaAtTheOperatingFrequency = new JCheckBox("Changing");
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForSWROfTheConnectedAntennaAtTheOperatingFrequency);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForSWROfTheConnectedAntennaAtTheOperatingFrequency);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForSWROfTheConnectedAntennaAtTheOperatingFrequency);
+
+                JLabel labelForConditionHFTract = new JLabel("Condition HF tract");
+                JTextField textFieldForConditionHFTract = new JTextField("1", 1);
+                JCheckBox checkBoxForConditionHFTract = new JCheckBox("Changing");
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForConditionHFTract);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForConditionHFTract);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForConditionHFTract);
+
+                JLabel labelForAudioOutputStatus = new JLabel("Audio Output Status");
+                JTextField textFieldForAudioOutputStatus = new JTextField("1", 1);
+                JCheckBox checkBoxForAudioOutputStatus = new JCheckBox("Changing");
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForAudioOutputStatus);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForAudioOutputStatus);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForAudioOutputStatus);
+
+                JLabel labelForStatusOfTheNavigationModule = new JLabel("Status of the navigation module");
+                JTextField textFieldForStatusOfTheNavigationModule = new JTextField("1", 1);
+                JCheckBox checkBoxForStatusOfTheNavigationModule = new JCheckBox("Changing");
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForStatusOfTheNavigationModule);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForStatusOfTheNavigationModule);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForStatusOfTheNavigationModule);
+
+                JLabel labelForDryContactStatus = new JLabel("Dry contact status");
+                JTextField textFieldForDryContactStatus = new JTextField("3", 1);
+                JCheckBox checkBoxForDryContactStatus = new JCheckBox("Changing");
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForDryContactStatus);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForDryContactStatus);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForDryContactStatus);
+
+                JLabel labelForTotalWorkingTimeOfDevice = new JLabel("Total working time of device");
+                JTextField textFieldForTotalWorkingTimeOfDevice = new JTextField("159", 1);
+                JCheckBox checkBoxForTotalWorkingTimeOfDevice = new JCheckBox("Changing");
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForTotalWorkingTimeOfDevice);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForTotalWorkingTimeOfDevice);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForTotalWorkingTimeOfDevice);
+
+                JLabel labelForTotalNumberOfDeviceReloads = new JLabel("Total number of device reloads");
+                JTextField textFieldForTotalNumberOfDeviceReloads = new JTextField("852", 1);
+                JCheckBox checkBoxForTotalNumberOfDeviceReloads = new JCheckBox("Changing");
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForTotalNumberOfDeviceReloads);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForTotalNumberOfDeviceReloads);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForTotalNumberOfDeviceReloads);
+
+                JLabel labelForNumberOfRegularDeviceReloads = new JLabel("Number of regular device reloads");
+                JTextField textFieldForNumberOfRegularDeviceReloads = new JTextField("741", 1);
+                JCheckBox checkBoxForNumberOfRegularDeviceReloads = new JCheckBox("Changing");
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForNumberOfRegularDeviceReloads);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForNumberOfRegularDeviceReloads);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForNumberOfRegularDeviceReloads);
+
+                JLabel labelForOperatingTimeAfterTheLastPowerUp = new JLabel("Operating time after the last power up");
+                JTextField textFieldForOperatingTimeAfterTheLastPowerUp = new JTextField("48", 1);
+                JCheckBox checkBoxForOperatingTimeAfterTheLastPowerUp = new JCheckBox("Changing");
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForOperatingTimeAfterTheLastPowerUp);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForOperatingTimeAfterTheLastPowerUp);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForOperatingTimeAfterTheLastPowerUp);
+
+                JLabel labelForSoftwareVersionNumber = new JLabel("Software version number");
+                JTextField textFieldForSoftwareVersionNumber = new JTextField("11", 1);
+                JCheckBox checkBoxForSoftwareVersionNumber = new JCheckBox("Changing");
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForSoftwareVersionNumber);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForSoftwareVersionNumber);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForSoftwareVersionNumber);
+
+                JLabel labelForPCBVersionNumber = new JLabel("PCB version number");
+                JTextField textFieldForPCBVersionNumber = new JTextField("10", 1);
+                JCheckBox checkBoxForPCBVersionNumber = new JCheckBox("Changing");
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForPCBVersionNumber);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForPCBVersionNumber);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForPCBVersionNumber);
+
+
+                JButton buttonToAddLongLipType1 = new JButton("Add long LIP type 1 with telemetry data");
+                dialogForLongLIPWithTelemetryOfDeviceData.add(buttonToAddLongLipType1);
+
+                buttonToAddLongLipType1.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            checkIntValueFromString(textFieldForSSI.getText(), 0, 16777215, "SSI");
+                            checkDoubleValueFromString(textFieldForLongitude.getText(), -180.0, 179.0, "Longitude");
+                            checkDoubleValueFromString(textFieldForLatitude.getText(), -90.0, 89.0, "Latitude");
+                            checkIntValueFromString(textFieldForHorizontalPositionUncertainty.getText(), 0, 63, "Horizontal position uncertainty");
+                            checkIntValueFromString(textFieldForLocationAltitude.getText(), 0, 2047, "Location altitude");
+                            checkIntValueFromString(textFieldForHorizontalVelocity.getText(), 0, 127, "Horizontal velocity");
+                            checkIntValueFromString(textFieldForDirectionOfTravelExtended.getText(), 0, 255, "Direction Of travel extended");
+                            checkIntValueFromString(textFieldForReasonForSending.getText(), 0, 255, "Reason for sending");
+
+                            checkIntValueFromString(textFieldForTypeOfDevice.getText(), 0, 7, "Type of device");
+                            checkIntValueFromString(textFieldForPowerSupplyVoltageAtTheInputBPP.getText(), 0, 127, "Power supply voltage at the input BPP");
+                            checkIntValueFromString(textFieldForPowerSupplyVoltageAtTheControlConsoleInput.getText(), 0, 127, "Power supply voltage at the control console input");
+                            checkIntValueFromString(textFieldForPowerSupplyOfTheTransmitterOutputAmplifierDuringTransmission.getText(), 0, 127, "Power supply of the transmitter output amplifier during transmission");
+                            checkIntValueFromString(textFieldForTargetTransmitterPower.getText(), 0, 7, "Target transmitter power");
+                            checkIntValueFromString(textFieldForTransmitterAmplifierOutputTemperature.getText(), 0, 255, "Transmitter amplifier output temperature");
+                            checkIntValueFromString(textFieldForSWROfTheConnectedAntennaAtTheOperatingFrequency.getText(), 0, 31, "SWR of the connected antenna at the operating frequency");
+                            checkIntValueFromString(textFieldForConditionHFTract.getText(), 0, 1, "Condition HF tract");
+                            checkIntValueFromString(textFieldForAudioOutputStatus.getText(), 0, 1, "Audio Output Status");
+                            checkIntValueFromString(textFieldForStatusOfTheNavigationModule.getText(), 0, 1, "Status of the navigation module");
+                            checkIntValueFromString(textFieldForDryContactStatus.getText(), 0, 255, "Dry contact status");
+                            checkIntValueFromString(textFieldForTotalWorkingTimeOfDevice.getText(), 0, 65535, "Total working time of device");
+                            checkIntValueFromString(textFieldForTotalNumberOfDeviceReloads.getText(), 0, 4095, "Total number of device reloads");
+                            checkIntValueFromString(textFieldForNumberOfRegularDeviceReloads.getText(), 0, 4095, "Number of regular device reloads");
+                            checkIntValueFromString(textFieldForOperatingTimeAfterTheLastPowerUp.getText(), 0, 65535, "Operating time after the last power up");
+                            checkIntValueFromString(textFieldForSoftwareVersionNumber.getText(), 0, 127, "Software version number");
+                            checkIntValueFromString(textFieldForPCBVersionNumber.getText(), 0, 127, "PCB version number");
+
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+
+                        Map<Integer, Boolean> changeMap = new HashMap<Integer, Boolean>();
+                        for (int i = 0; i < 8; i++) {
+                            changeMap.put(i, false);
+                        }
+                        if (checkBoxForSSI.isSelected()) {
+                            changeMap.replace(0, true);
+                        }
+
+                        if (checkBoxForLongitude.isSelected()) {
+                            changeMap.replace(1, true);
+                        }
+                        if (checkBoxForLatitude.isSelected()) {
+                            changeMap.replace(2, true);
+                        }
+                        if (checkBoxForHorizontalPositionUncertainty.isSelected()) {
+                            changeMap.replace(3, true);
+                        }
+                        if (checkBoxForLocationAltitude.isSelected()) {
+                            changeMap.replace(4, true);
+                        }
+                        if (checkBoxForHorizontalVelocity.isSelected()) {
+                            changeMap.replace(5, true);
+                        }
+                        if (checkBoxForDirectionOfTravelExtended.isSelected()) {
+                            changeMap.replace(6, true);
+                        }
+                        if (checkBoxForReasonForSending.isSelected()) {
+                            changeMap.replace(7, true);
+                        }
+
+                        LongLipType1Message longLipType1Message = new LongLipType1Message();
+                        longLipType1Message.withSSI(textFieldForSSI.getText())
+                                .withLongitude(textFieldForLongitude.getText())
+                                .withLatitude(textFieldForLatitude.getText())
+                                .withHorizontal_position_uncertainty(textFieldForHorizontalPositionUncertainty.getText())
+                                .withLocation_altitude(textFieldForLocationAltitude.getText())
+                                .withHorizontal_velocity(textFieldForHorizontalVelocity.getText())
+                                .withDirection_of_travel_extended(textFieldForDirectionOfTravelExtended.getText())
+                                .withReason_for_sending(textFieldForReasonForSending.getText())
+                                .withChangeMap(changeMap)
+                                .initValuesFromUI();
+
+                        listOfUDPMessages.add(longLipType1Message);
+
+                        dialogForLongLIPWithTelemetryOfDeviceData.dispose();
+                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\n Long Lip type 1 with telemetry data");
+                    }
+                });
+
+                dialogForLongLIPWithTelemetryOfDeviceData.setVisible(true);
+
             }
         });
 
