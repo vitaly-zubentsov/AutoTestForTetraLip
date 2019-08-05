@@ -13,7 +13,7 @@ public class UDPMessageHelper {
     public String addTheNumberToBinString(String binString, long number, long maxValue) {
 
         long numberFromBinString = convertBinStringToDecNumber(binString);
-        if ((numberFromBinString + number) >= maxValue) {
+        if ((numberFromBinString + number) > maxValue) {
             return convertDecStringNumberToBinStringNumber(0, binString.length());
         } else {
             return convertDecStringNumberToBinStringNumber(numberFromBinString + number, binString.length());
@@ -48,6 +48,7 @@ public class UDPMessageHelper {
     protected byte[] convertBinStringToByteArray(String binString) {
 
         float numberOfDecNumbersFromBinString = binString.length() / 8;
+        float numberOfDecNumbersFromBinString2 = (float) (binString.length() / 8.0);
         int lengthOfByteArrayFromBinString = (int) Math.ceil(numberOfDecNumbersFromBinString);
         byte[] byteArray = new byte[lengthOfByteArrayFromBinString];
         for (int i = 0; i < lengthOfByteArrayFromBinString; ++i) {

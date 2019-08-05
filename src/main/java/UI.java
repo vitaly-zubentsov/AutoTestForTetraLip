@@ -287,7 +287,7 @@ public class UI extends JFrame {
                         dialogForShortLIP.dispose();
 
 
-                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\n Short Lip ");
+                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\nShort Lip ");
 
 
                     }
@@ -486,7 +486,7 @@ public class UI extends JFrame {
                         listOfUDPMessages.add(longLipType1Message);
 
                         dialogForLongLIPType1.dispose();
-                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\n Long Lip type 1 ");
+                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\nLong Lip type 1 ");
                     }
                 });
 
@@ -693,7 +693,7 @@ public class UI extends JFrame {
 
                         dialogForLongLIPType2.dispose();
 
-                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\n Long Lip type 2");
+                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\nLong Lip type 2");
                     }
                 });
 
@@ -897,7 +897,7 @@ public class UI extends JFrame {
                         listOfUDPMessages.add(longLipType3Message);
 
                         dialogForLongLIPType3.dispose();
-                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\n Long Lip type 3");
+                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\nLong Lip type 3");
                     }
                 });
 
@@ -1224,7 +1224,7 @@ public class UI extends JFrame {
                         }
 
                         Map<Integer, Boolean> changeMap = new HashMap<Integer, Boolean>();
-                        for (int i = 0; i < 8; i++) {
+                        for (int i = 0; i < 25; i++) {
                             changeMap.put(i, false);
                         }
                         if (checkBoxForSSI.isSelected()) {
@@ -1253,8 +1253,76 @@ public class UI extends JFrame {
                             changeMap.replace(7, true);
                         }
 
-                        LongLipType1Message longLipType1Message = new LongLipType1Message();
-                        longLipType1Message.withSSI(textFieldForSSI.getText())
+                        if (checkBoxForTypeOfDevice.isSelected()) {
+                            changeMap.replace(8, true);
+                        }
+
+                        if (checkBoxForPowerSupplyVoltageAtTheInputBPP.isSelected()) {
+                            changeMap.replace(9, true);
+                        }
+
+                        if (checkBoxForPowerSupplyVoltageAtTheControlConsoleInput.isSelected()) {
+                            changeMap.replace(10, true);
+                        }
+
+                        if (checkBoxForPowerSupplyOfTheTransmitterOutputAmplifierDuringTransmission.isSelected()) {
+                            changeMap.replace(11, true);
+                        }
+
+                        if (checkBoxForTargetTransmitterPower.isSelected()) {
+                            changeMap.replace(12, true);
+                        }
+
+                        if (checkBoxForTransmitterAmplifierOutputTemperature.isSelected()) {
+                            changeMap.replace(13, true);
+                        }
+
+                        if (checkBoxForSWROfTheConnectedAntennaAtTheOperatingFrequency.isSelected()) {
+                            changeMap.replace(14, true);
+                        }
+
+                        if (checkBoxForConditionHFTract.isSelected()) {
+                            changeMap.replace(15, true);
+                        }
+
+                        if (checkBoxForAudioOutputStatus.isSelected()) {
+                            changeMap.replace(16, true);
+                        }
+
+                        if (checkBoxForStatusOfTheNavigationModule.isSelected()) {
+                            changeMap.replace(17, true);
+                        }
+
+                        if (checkBoxForDryContactStatus.isSelected()) {
+                            changeMap.replace(18, true);
+                        }
+
+                        if (checkBoxForTotalWorkingTimeOfDevice.isSelected()) {
+                            changeMap.replace(19, true);
+                        }
+
+                        if (checkBoxForTotalNumberOfDeviceReloads.isSelected()) {
+                            changeMap.replace(20, true);
+                        }
+
+                        if (checkBoxForNumberOfRegularDeviceReloads.isSelected()) {
+                            changeMap.replace(21, true);
+                        }
+
+                        if (checkBoxForOperatingTimeAfterTheLastPowerUp.isSelected()) {
+                            changeMap.replace(22, true);
+                        }
+
+                        if (checkBoxForSoftwareVersionNumber.isSelected()) {
+                            changeMap.replace(23, true);
+                        }
+
+                        if (checkBoxForPCBVersionNumber.isSelected()) {
+                            changeMap.replace(24, true);
+                        }
+
+                        LongLipType1WithTelemetryDataMessage longLipType1WithTelemetryDataMessage= new LongLipType1WithTelemetryDataMessage();
+                        longLipType1WithTelemetryDataMessage.withSSI(textFieldForSSI.getText())
                                 .withLongitude(textFieldForLongitude.getText())
                                 .withLatitude(textFieldForLatitude.getText())
                                 .withHorizontal_position_uncertainty(textFieldForHorizontalPositionUncertainty.getText())
@@ -1262,13 +1330,30 @@ public class UI extends JFrame {
                                 .withHorizontal_velocity(textFieldForHorizontalVelocity.getText())
                                 .withDirection_of_travel_extended(textFieldForDirectionOfTravelExtended.getText())
                                 .withReason_for_sending(textFieldForReasonForSending.getText())
+                                .withType_of_device(textFieldForTypeOfDevice.getText())
+                                .withPower_supply_voltage_at_the_input_bpp(textFieldForPowerSupplyVoltageAtTheInputBPP.getText())
+                                .withPower_supply_voltage_at_the_control_console_input(textFieldForPowerSupplyVoltageAtTheControlConsoleInput.getText())
+                                .withPower_supply_of_the_transmitter_output_amplifier_during_transmission(textFieldForPowerSupplyOfTheTransmitterOutputAmplifierDuringTransmission.getText())
+                                .withTarget_transmitter_power(textFieldForTargetTransmitterPower.getText())
+                                .withTransmitter_amplifier_output_temperature(textFieldForTransmitterAmplifierOutputTemperature.getText())
+                                .withSwr_of_the_connected_antenna_at_the_operating_frequency(textFieldForSWROfTheConnectedAntennaAtTheOperatingFrequency.getText())
+                                .withCondition_hf_tract(textFieldForConditionHFTract.getText())
+                                .withAudio_output_status(textFieldForAudioOutputStatus.getText())
+                                .withStatus_of_the_navigation_module(textFieldForStatusOfTheNavigationModule.getText())
+                                .withDry_contact_status(textFieldForDryContactStatus.getText())
+                                .withTotal_working_time_of_device(textFieldForTotalWorkingTimeOfDevice.getText())
+                                .withTotal_number_of_device_reloads(textFieldForTotalNumberOfDeviceReloads.getText())
+                                .withNumber_of_regular_device_reloads(textFieldForNumberOfRegularDeviceReloads.getText())
+                                .withOperating_time_after_the_last_power_up(textFieldForOperatingTimeAfterTheLastPowerUp.getText())
+                                .withSoftware_version_number(textFieldForSoftwareVersionNumber.getText())
+                                .withPcb_version_number(textFieldForPCBVersionNumber.getText())
                                 .withChangeMap(changeMap)
                                 .initValuesFromUI();
 
-                        listOfUDPMessages.add(longLipType1Message);
+                        listOfUDPMessages.add(longLipType1WithTelemetryDataMessage);
 
                         dialogForLongLIPWithTelemetryOfDeviceData.dispose();
-                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\n Long Lip type 1 with telemetry data");
+                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\nLong Lip type 1 with telemetry data");
                     }
                 });
 
