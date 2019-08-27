@@ -84,12 +84,12 @@ public class UI extends JFrame {
                 JDialog dialogForUDPOptions = createDialog("Input options for UDP messages", true, 400, 200, 5, 2);
 
                 JLabel labelForIpDestination = new JLabel("Input destination IP");
-                JTextField textFieldForIpDestination = new JTextField("192.168.1.82", 1);
+                JTextField textFieldForIpDestination = new JTextField("10.10.222.51", 1);
                 dialogForUDPOptions.add(labelForIpDestination);
                 dialogForUDPOptions.add(textFieldForIpDestination);
 
                 JLabel labelForPortDestination = new JLabel("Input destination port");
-                JTextField textFieldForPortDestination = new JTextField("11372", 1);
+                JTextField textFieldForPortDestination = new JTextField("11373", 1);
                 dialogForUDPOptions.add(labelForPortDestination);
                 dialogForUDPOptions.add(textFieldForPortDestination);
 

@@ -10,7 +10,7 @@ public class LongLipType1WithTelemetryDataMessage implements UDPMessage {
     private String SSI;
     private static String LONGITUDE_FROM_SERVER_OV = "00000000000000000000000000000000";
     private static String LATITUDE_FROM_SERVER_OV = "00000000000000000000000000000000";
-    private static String LENGTH_IN_BITS = "00000000000000000000000010110000"; //в лонг лип типе 1 с данными телеметрии = 176 бит
+    private static String LENGTH_IN_BITS = "00000000000000000000000100000000"; //в лонг лип типе 1 с данными телеметрии = 176 бит
     private static String PDU_HEADERS = "00001010";
     private static String PDU_TYPE = "01";
     private static String PDU_TYPE_EXTENSIONS = "0011";
@@ -49,7 +49,7 @@ public class LongLipType1WithTelemetryDataMessage implements UDPMessage {
     private String operating_time_after_the_last_power_up;
     private String software_version_number;
     private String pcb_version_number;
-  //  private static String PDU_TAIL = "11"; // В дополнительном сообщении заполнение осуществляется единицами
+    //private static String PDU_TAIL = "11"; // В дополнительном сообщении заполнение осуществляется единицами
 
     private String binSSI;
 
