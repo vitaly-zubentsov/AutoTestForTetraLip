@@ -49,7 +49,7 @@ public class LongLipType1WithTelemetryDataMessage implements UDPMessage {
     private String operating_time_after_the_last_power_up;
     private String software_version_number;
     private String pcb_version_number;
-    //private static String PDU_TAIL = "11"; // В дополнительном сообщении заполнение осуществляется единицами
+    //private static String PDU_TAIL = "11"; // В дополнительном сообщении заполнение осуществляется единицами, в данной версии заполнение не требуется
 
     private String binSSI;
 
@@ -150,8 +150,7 @@ public class LongLipType1WithTelemetryDataMessage implements UDPMessage {
                 binNumberOfRegularDeviceReloads +
                 binOperatingTimeAfterTheLastPowerUp +
                 binSoftwareVersionNumber +
-                binPCBVersionNumber/* +
-                PDU_TAIL*/;
+                binPCBVersionNumber;
         changeValuesOfElementsLipMessage();
         return udpMessageHelper.convertBinStringToByteArray(udpMessage);
     }
@@ -186,7 +185,6 @@ public class LongLipType1WithTelemetryDataMessage implements UDPMessage {
         if (changeMap.get(8)) {
             binTypeOfDevice = udpMessageHelper.addTheNumberToBinString(binTypeOfDevice, 1, 7);
         }
-        System.out.println(binTypeOfDevice);
         if (changeMap.get(9)) {
             binPowerSupplyVoltageAtTheInputBPP = udpMessageHelper.addTheNumberToBinString(binPowerSupplyVoltageAtTheInputBPP, 1, 127);
         }

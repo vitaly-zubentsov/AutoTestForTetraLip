@@ -69,7 +69,6 @@ public class UDPClient extends TimerTask {
                 DatagramPacket packetAlive = new DatagramPacket(messageForUDP, messageForUDP.length, address, portDst);
                 socket.send(packetAlive);
                 counterSendingPackets = 0;
-                System.out.println("Alive");
             }
         } catch (IOException e) {
             e.printStackTrace();
