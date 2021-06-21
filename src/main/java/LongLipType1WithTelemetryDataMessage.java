@@ -1,5 +1,3 @@
-package model;
-
 import java.util.Map;
 
 public class LongLipType1WithTelemetryDataMessage implements UDPMessage {
@@ -8,6 +6,7 @@ public class LongLipType1WithTelemetryDataMessage implements UDPMessage {
     private UDPMessageHelper udpMessageHelper = new UDPMessageHelper();
 
     private String SSI;
+    private static String BASE_STATION_NUMBER = "00000000000000000000000000001010";
     private static String LONGITUDE_FROM_SERVER_OV = "00000000000000000000000000000000";
     private static String LATITUDE_FROM_SERVER_OV = "00000000000000000000000000000000";
     private static String LENGTH_IN_BITS = "00000000000000000000000100000000"; //в лонг лип типе 1 с данными телеметрии = 176 бит
@@ -112,6 +111,7 @@ public class LongLipType1WithTelemetryDataMessage implements UDPMessage {
     public byte[] getUdpMessage() {
         String udpMessage = udpPacketsCounter.getPacket_counter() +
                 binSSI +
+                BASE_STATION_NUMBER +
                 LONGITUDE_FROM_SERVER_OV +
                 LATITUDE_FROM_SERVER_OV +
                 LENGTH_IN_BITS +

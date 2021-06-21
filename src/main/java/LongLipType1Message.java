@@ -1,21 +1,19 @@
-package model;
-
 import java.util.Map;
 
-public class LongLipType3Message implements UDPMessage {
+public class LongLipType1Message implements UDPMessage {
 
     private Map<Integer, Boolean> changeMap;
     private UDPMessageHelper udpMessageHelper = new UDPMessageHelper();
 
     private String SSI;
+    private static String BASE_STATION_NUMBER = "00000000000000000000000000001010";
     private static String LONGITUDE_FROM_SERVER_OV = "00000000000000000000000000000000";
     private static String LATITUDE_FROM_SERVER_OV = "00000000000000000000000000000000";
-    private static String LENGTH_IN_BITS = "00000000000000000000000010001010"; //в лонг лип типе 3 = 143 бит
+    private static String LENGTH_IN_BITS = "00000000000000000000000001110100"; //в лонг лип типе 1 = 116 бит
     private static String PDU_HEADERS = "00001010";
     private static String PDU_TYPE = "01";
     private static String PDU_TYPE_EXTENSIONS = "0011";
-    private static String TIME_DATA = "10";
-    private static String TIME_OF_POSITION = "0000110111111011000000"; // в данной версии константа(1 число, 23 часа,59 минут, 0 секунд)
+    private static String TIME_DATA = "00";
     private static String LOCATION_SHAPE = "0101";
     private String longitude;
     private String latitude;
@@ -28,7 +26,7 @@ public class LongLipType3Message implements UDPMessage {
     private static String TYPE_OF_Additional_DATA = "0";
     private String reason_for_sending;
 
-    private static String PDU_TAIL = "0000000";
+    private static String PDU_TAIL = "00000";
 
     private String binSSI;
 
@@ -55,6 +53,7 @@ public class LongLipType3Message implements UDPMessage {
     public byte[] getUdpMessage() {
         String udpMessage = udpPacketsCounter.getPacket_counter() +
                 binSSI +
+                BASE_STATION_NUMBER +
                 LONGITUDE_FROM_SERVER_OV +
                 LATITUDE_FROM_SERVER_OV +
                 LENGTH_IN_BITS +
@@ -62,7 +61,6 @@ public class LongLipType3Message implements UDPMessage {
                 PDU_TYPE +
                 PDU_TYPE_EXTENSIONS +
                 TIME_DATA +
-                TIME_OF_POSITION +
                 LOCATION_SHAPE +
                 binLongitude +
                 binLatitude +
@@ -110,47 +108,47 @@ public class LongLipType3Message implements UDPMessage {
     }
 
 
-    public  LongLipType3Message withChangeMap(Map<Integer, Boolean> changeMap) {
+    public LongLipType1Message withChangeMap(Map<Integer, Boolean> changeMap) {
         this.changeMap = changeMap;
         return this;
     }
 
-    public LongLipType3Message withSSI(String SSI) {
+    public LongLipType1Message withSSI(String SSI) {
         this.SSI = SSI;
         return this;
     }
 
-    public LongLipType3Message withLongitude(String longitude) {
+    public LongLipType1Message withLongitude(String longitude) {
         this.longitude = longitude;
         return this;
     }
 
-    public LongLipType3Message withLatitude(String latitude) {
+    public LongLipType1Message withLatitude(String latitude) {
         this.latitude = latitude;
         return this;
     }
 
-    public LongLipType3Message withHorizontal_position_uncertainty(String horizontal_position_uncertainty) {
+    public LongLipType1Message withHorizontal_position_uncertainty(String horizontal_position_uncertainty) {
         this.horizontal_position_uncertainty = horizontal_position_uncertainty;
         return this;
     }
 
-    public LongLipType3Message withLocation_altitude(String location_altitude) {
+    public LongLipType1Message withLocation_altitude(String location_altitude) {
         this.location_altitude = location_altitude;
         return this;
     }
 
-    public LongLipType3Message withHorizontal_velocity(String horizontal_velocity) {
+    public LongLipType1Message withHorizontal_velocity(String horizontal_velocity) {
         this.horizontal_velocity = horizontal_velocity;
         return this;
     }
 
-    public LongLipType3Message withDirection_of_travel_extended(String direction_of_travel_extended) {
+    public LongLipType1Message withDirection_of_travel_extended(String direction_of_travel_extended) {
         this.direction_of_travel_extended = direction_of_travel_extended;
         return this;
     }
 
-    public LongLipType3Message withReason_for_sending(String reason_for_sending) {
+    public LongLipType1Message withReason_for_sending(String reason_for_sending) {
         this.reason_for_sending = reason_for_sending;
         return this;
     }

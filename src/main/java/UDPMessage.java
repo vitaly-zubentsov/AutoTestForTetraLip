@@ -1,6 +1,3 @@
-package model;
-
-
 public interface UDPMessage {
 
     UDPPacketsCounter udpPacketsCounter = UDPPacketsCounter.getUDPPacketsCounter();

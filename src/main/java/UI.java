@@ -1,6 +1,3 @@
-
-import model.*;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -84,12 +81,12 @@ public class UI extends JFrame {
                 JDialog dialogForUDPOptions = createDialog("Input options for UDP messages", true, 400, 200, 5, 2);
 
                 JLabel labelForIpDestination = new JLabel("Input destination IP");
-                JTextField textFieldForIpDestination = new JTextField("10.10.222.51", 1);
+                JTextField textFieldForIpDestination = new JTextField("10.10.126.151", 1);
                 dialogForUDPOptions.add(labelForIpDestination);
                 dialogForUDPOptions.add(textFieldForIpDestination);
 
                 JLabel labelForPortDestination = new JLabel("Input destination port");
-                JTextField textFieldForPortDestination = new JTextField("11373", 1);
+                JTextField textFieldForPortDestination = new JTextField("11372", 1);
                 dialogForUDPOptions.add(labelForPortDestination);
                 dialogForUDPOptions.add(textFieldForPortDestination);
 
@@ -1715,9 +1712,7 @@ public class UI extends JFrame {
 
             if ((checkNumber < beginRange) || (checkNumber > endRange)) {
                 String warning = nameOfField + " = " + checkNumber + " cannot be out of range [" + beginRange + ".." + endRange + "]";
-                JDialog dialog = createWarningDialog(warning);
-                dialog.setVisible(true);
-                throw new Exception(warning);
+              throw new Exception(warning);
             }
         } catch (Exception ex) {
             JDialog dialog = createWarningDialog("Wrong type Of value for " + nameOfField);

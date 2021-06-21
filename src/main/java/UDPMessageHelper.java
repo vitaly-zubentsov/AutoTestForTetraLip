@@ -1,5 +1,3 @@
-package model;
-
 import static java.lang.Integer.parseInt;
 
 public class UDPMessageHelper {

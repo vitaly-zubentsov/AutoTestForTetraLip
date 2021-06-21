@@ -1,6 +1,5 @@
-package model;
-
 import java.util.Map;
+
 
 public class ShortLipMessage implements UDPMessage {
 
@@ -8,6 +7,7 @@ public class ShortLipMessage implements UDPMessage {
     private UDPMessageHelper udpMessageHelper = new UDPMessageHelper();
 
     private String ssi;
+    private static String BASE_STATION_NUMBER = "00000000000000000000000000001010";
     private static String LENGTH_IN_BITS = "00000000000000000000000001011101";  //в short lip равно 93 битам
     private static String PDU_HEADERS = "00001010";
     private static String PDU_TYPE = "00";
@@ -19,7 +19,7 @@ public class ShortLipMessage implements UDPMessage {
     private String direction_of_travel;
     private static String TYPE_OF_Additional_DATA = "0";
     private String reason_for_sending;
-    private String pdu_tail = "000001111"; //этот хвостик появляется только для short lip, какая то ошибка в сервере ОВ
+    private String pdu_tail = "0000";
 
     private String binSSI;
     private String binTimeElapsed;
@@ -44,6 +44,7 @@ public class ShortLipMessage implements UDPMessage {
     public byte[] getUdpMessage() {
         String udpMessage = udpPacketsCounter.getPacket_counter() +
                 binSSI +
+                BASE_STATION_NUMBER +
                 "0000000" + binLongitude +
                 "00000000" + binLatitude +
                 LENGTH_IN_BITS +
@@ -57,8 +58,9 @@ public class ShortLipMessage implements UDPMessage {
                 binDirectionOfTravel +
                 TYPE_OF_Additional_DATA +
                 binReasonForSending +
-                pdu_tail +
-                "000"; // без этого хвостика почему то сервер не может распарсить сообщение
+                pdu_tail;
+
+
         changeValuesOfElementsLipMessage();
         System.out.println(udpPacketsCounter.getPacket_counter());
         return udpMessageHelper.convertBinStringToByteArray(udpMessage);

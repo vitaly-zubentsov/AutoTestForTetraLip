@@ -1,5 +1,3 @@
-import model.UDPMessage;
-
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -37,7 +35,6 @@ public class UDPClient extends TimerTask {
         this.intervalForSendingMessageUdp = Integer.parseInt(intervalForSendingMessageUdp);
         numberSendingPacketsBeforeAliveMessage = 25000 / Integer.parseInt(intervalForSendingMessageUdp);
         counterSendingPackets = 0;
-        // запускаем переодическое выполнение (x = x * 1000 миллисекунд)
 
 
     }
