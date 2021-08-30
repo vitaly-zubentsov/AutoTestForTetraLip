@@ -27,9 +27,8 @@ public class LongLipType1WithRecieveLevel implements UDPMessage {
     private static String TYPE_OF_Additional_DATA = "0";
     private String reason_for_sending;
     private static String TYPE_5_ELEMENT_IDENTIFIER = "00001";
-    private static String TYPE_5_ELEMENT_LENGTH = "000000";
-    private static String TYPE_5_ELEMENT_LENGTH_EXTENSION = "0001001";
-    private static String TYPE_OF_MESSAGE_FROM_DEVICE = "01";
+    private static String TYPE_5_ELEMENT_LENGTH = "011100";
+    private static String TYPE_OF_MESSAGE_FROM_DEVICE = "00";
     private String type_of_device;
     private String measurement_frequency;
     private String channel_code;
@@ -97,7 +96,6 @@ public class LongLipType1WithRecieveLevel implements UDPMessage {
                 binReasonForSending +
                 TYPE_5_ELEMENT_IDENTIFIER +
                 TYPE_5_ELEMENT_LENGTH +
-                TYPE_5_ELEMENT_LENGTH_EXTENSION +
                 TYPE_OF_MESSAGE_FROM_DEVICE +
                 binTypeOfDevice +
                 binMeasurementFrequency +
