@@ -8,6 +8,7 @@ public class LongLipType1WithRecieveLevel implements UDPMessage {
     private UDPMessageHelper udpMessageHelper = new UDPMessageHelper();
 
     private String SSI;
+    private String baseStationNumber;
     private static String LONGITUDE_FROM_SERVER_OV = "00000000000000000000000000000000";
     private static String LATITUDE_FROM_SERVER_OV = "00000000000000000000000000000000";
     private static String LENGTH_IN_BITS = "00000000000000000000000010101000"; // равняется 161 бит + 7 бит padding = 168 бит (21 байт)
@@ -38,6 +39,7 @@ public class LongLipType1WithRecieveLevel implements UDPMessage {
     private static String PDU_TAIL = "1111111"; // В дополнительном сообщении заполнение осуществляется единицами
 
     private String binSSI;
+    private String binBaseStationNumber;
 
     private String binLongitude;
 
@@ -57,6 +59,7 @@ public class LongLipType1WithRecieveLevel implements UDPMessage {
 
     public void initValuesFromUI() {
         binSSI = udpMessageHelper.convertDecStringNumberToBinStringNumber(SSI, 32);
+        binBaseStationNumber = udpMessageHelper.convertDecStringNumberToBinStringNumber(baseStationNumber, 32);
         binLongitude = udpMessageHelper.calculateLipLongitudeFromDecLongitude(longitude);
         binLatitude = udpMessageHelper.calculateLipLatitudeFromDecLatitude(latitude);
         binHorizontalPositionUncertainty = udpMessageHelper.convertDecStringNumberToBinStringNumber(horizontal_position_uncertainty, 6);
@@ -76,6 +79,7 @@ public class LongLipType1WithRecieveLevel implements UDPMessage {
     public byte[] getUdpMessage() {
         String udpMessage = udpPacketsCounter.getPacket_counter() +
                 binSSI +
+                binBaseStationNumber +
                 LONGITUDE_FROM_SERVER_OV +
                 LATITUDE_FROM_SERVER_OV +
                 LENGTH_IN_BITS +
@@ -219,6 +223,11 @@ public class LongLipType1WithRecieveLevel implements UDPMessage {
 
     public LongLipType1WithRecieveLevel withSignal_reception_level(String signal_reception_level) {
         this.signal_reception_level = signal_reception_level;
+        return this;
+    }
+
+    public LongLipType1WithRecieveLevel withBaseStationNumber(String baseStationNumber) {
+        this.baseStationNumber = baseStationNumber;
         return this;
     }
 }

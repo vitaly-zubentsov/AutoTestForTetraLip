@@ -8,6 +8,7 @@ public class LongLipType1Message implements UDPMessage {
     private UDPMessageHelper udpMessageHelper = new UDPMessageHelper();
 
     private String SSI;
+    private String baseStationNumber;
     private static String LONGITUDE_FROM_SERVER_OV = "00000000000000000000000000000000";
     private static String LATITUDE_FROM_SERVER_OV = "00000000000000000000000000000000";
     private static String LENGTH_IN_BITS = "00000000000000000000000001110100"; //в лонг лип типе 1 = 116 бит
@@ -30,7 +31,7 @@ public class LongLipType1Message implements UDPMessage {
     private static String PDU_TAIL = "00000";
 
     private String binSSI;
-
+    private String binBaseStationNumber;
     private String binLongitude;
     private String binLatitude;
     private String binHorizontalPositionUncertainty;
@@ -42,6 +43,7 @@ public class LongLipType1Message implements UDPMessage {
 
     public void initValuesFromUI() {
         binSSI = udpMessageHelper.convertDecStringNumberToBinStringNumber(SSI, 32);
+        binBaseStationNumber = udpMessageHelper.convertDecStringNumberToBinStringNumber(baseStationNumber, 32);
         binLongitude = udpMessageHelper.calculateLipLongitudeFromDecLongitude(longitude);
         binLatitude = udpMessageHelper.calculateLipLatitudeFromDecLatitude(latitude);
         binHorizontalPositionUncertainty = udpMessageHelper.convertDecStringNumberToBinStringNumber(horizontal_position_uncertainty, 6);
@@ -54,6 +56,7 @@ public class LongLipType1Message implements UDPMessage {
     public byte[] getUdpMessage() {
         String udpMessage = udpPacketsCounter.getPacket_counter() +
                 binSSI +
+                binBaseStationNumber +
                 LONGITUDE_FROM_SERVER_OV +
                 LATITUDE_FROM_SERVER_OV +
                 LENGTH_IN_BITS +
@@ -104,6 +107,7 @@ public class LongLipType1Message implements UDPMessage {
         if (changeMap.get(7)) {
             binReasonForSending = udpMessageHelper.addTheNumberToBinString(binReasonForSending, 1, 255);
         }
+
         udpPacketsCounter.setPacket_counter(udpMessageHelper.addTheNumberToBinString(udpPacketsCounter.getPacket_counter(), 1, 1294967295));
     }
 
@@ -150,6 +154,11 @@ public class LongLipType1Message implements UDPMessage {
 
     public LongLipType1Message withReason_for_sending(String reason_for_sending) {
         this.reason_for_sending = reason_for_sending;
+        return this;
+    }
+
+    public LongLipType1Message withBaseStationNumber(String baseStationNumber) {
+        this.baseStationNumber = baseStationNumber;
         return this;
     }
 }

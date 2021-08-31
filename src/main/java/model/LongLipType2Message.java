@@ -8,6 +8,7 @@ public class LongLipType2Message implements UDPMessage {
     private UDPMessageHelper udpMessageHelper = new UDPMessageHelper();
 
     private String SSI;
+    private String baseStationNumber;
     private static String LONGITUDE_FROM_SERVER_OV = "00000000000000000000000000000000";
     private static String LATITUDE_FROM_SERVER_OV = "00000000000000000000000000000000";
     private static String LENGTH_IN_BITS = "00000000000000000000000001110110"; //в лонг лип типе 2 = 118 бит
@@ -31,7 +32,7 @@ public class LongLipType2Message implements UDPMessage {
     private static String PDU_TAIL = "00000";
 
     private String binSSI;
-
+    private String binBaseStationNumber;
     private String binLongitude;
     private String binLatitude;
     private String binHorizontalPositionUncertainty;
@@ -44,6 +45,7 @@ public class LongLipType2Message implements UDPMessage {
 
     public void initValuesFromUI() {
         binSSI = udpMessageHelper.convertDecStringNumberToBinStringNumber(SSI, 32);
+        binBaseStationNumber = udpMessageHelper.convertDecStringNumberToBinStringNumber(baseStationNumber, 32);
         binTimeElapsed = udpMessageHelper.convertDecStringNumberToBinStringNumber(time_elapsed,2);
         binLongitude = udpMessageHelper.calculateLipLongitudeFromDecLongitude(longitude);
         binLatitude = udpMessageHelper.calculateLipLatitudeFromDecLatitude(latitude);
@@ -58,6 +60,7 @@ public class LongLipType2Message implements UDPMessage {
     public byte[] getUdpMessage() {
         String udpMessage = udpPacketsCounter.getPacket_counter() +
                 binSSI +
+                binBaseStationNumber +
                 LONGITUDE_FROM_SERVER_OV +
                 LATITUDE_FROM_SERVER_OV +
                 LENGTH_IN_BITS +
@@ -163,6 +166,11 @@ public class LongLipType2Message implements UDPMessage {
 
     public LongLipType2Message withReason_for_sending(String reason_for_sending) {
         this.reason_for_sending = reason_for_sending;
+        return this;
+    }
+
+    public LongLipType2Message withBaseStationNumber(String baseStationNumber) {
+        this.baseStationNumber = baseStationNumber;
         return this;
     }
 }

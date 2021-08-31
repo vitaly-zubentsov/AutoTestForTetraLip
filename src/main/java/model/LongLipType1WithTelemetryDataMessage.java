@@ -8,6 +8,7 @@ public class LongLipType1WithTelemetryDataMessage implements UDPMessage {
     private UDPMessageHelper udpMessageHelper = new UDPMessageHelper();
 
     private String SSI;
+    private String baseStationNumber;
     private static String LONGITUDE_FROM_SERVER_OV = "00000000000000000000000000000000";
     private static String LATITUDE_FROM_SERVER_OV = "00000000000000000000000000000000";
     private static String LENGTH_IN_BITS = "00000000000000000000000100000000"; //в лонг лип типе 1 с данными телеметрии = 176 бит
@@ -52,9 +53,8 @@ public class LongLipType1WithTelemetryDataMessage implements UDPMessage {
     //private static String PDU_TAIL = "11"; // В дополнительном сообщении заполнение осуществляется единицами, в данной версии заполнение не требуется
 
     private String binSSI;
-
+    private String binBaseStationNumber;
     private String binLongitude;
-
     private String binLatitude;
     private String binHorizontalPositionUncertainty;
     private String binLocationAltitude;
@@ -82,6 +82,7 @@ public class LongLipType1WithTelemetryDataMessage implements UDPMessage {
 
     public void initValuesFromUI() {
         binSSI = udpMessageHelper.convertDecStringNumberToBinStringNumber(SSI, 32);
+        binBaseStationNumber = udpMessageHelper.convertDecStringNumberToBinStringNumber(baseStationNumber, 32);
         binLongitude = udpMessageHelper.calculateLipLongitudeFromDecLongitude(longitude);
         binLatitude = udpMessageHelper.calculateLipLatitudeFromDecLatitude(latitude);
         binHorizontalPositionUncertainty = udpMessageHelper.convertDecStringNumberToBinStringNumber(horizontal_position_uncertainty, 6);
@@ -112,6 +113,7 @@ public class LongLipType1WithTelemetryDataMessage implements UDPMessage {
     public byte[] getUdpMessage() {
         String udpMessage = udpPacketsCounter.getPacket_counter() +
                 binSSI +
+                binBaseStationNumber +
                 LONGITUDE_FROM_SERVER_OV +
                 LATITUDE_FROM_SERVER_OV +
                 LENGTH_IN_BITS +
@@ -365,6 +367,11 @@ public class LongLipType1WithTelemetryDataMessage implements UDPMessage {
 
     public LongLipType1WithTelemetryDataMessage withPcb_version_number(String pcb_version_number) {
         this.pcb_version_number = pcb_version_number;
+        return this;
+    }
+
+    public LongLipType1WithTelemetryDataMessage withBaseStationNumber(String baseStationNumber) {
+        this.baseStationNumber = baseStationNumber;
         return this;
     }
 }

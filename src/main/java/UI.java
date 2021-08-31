@@ -84,17 +84,17 @@ public class UI extends JFrame {
                 JDialog dialogForUDPOptions = createDialog("Input options for UDP messages", true, 400, 200, 5, 2);
 
                 JLabel labelForIpDestination = new JLabel("Input destination IP");
-                JTextField textFieldForIpDestination = new JTextField("10.10.222.51", 1);
+                JTextField textFieldForIpDestination = new JTextField("192.168.252.146", 1);
                 dialogForUDPOptions.add(labelForIpDestination);
                 dialogForUDPOptions.add(textFieldForIpDestination);
 
                 JLabel labelForPortDestination = new JLabel("Input destination port");
-                JTextField textFieldForPortDestination = new JTextField("11373", 1);
+                JTextField textFieldForPortDestination = new JTextField("11372", 1);
                 dialogForUDPOptions.add(labelForPortDestination);
                 dialogForUDPOptions.add(textFieldForPortDestination);
 
                 JLabel labelForPortSource = new JLabel("Input source port");
-                JTextField textFieldForPortSource = new JTextField("9999", 1);
+                JTextField textFieldForPortSource = new JTextField("7733", 1);
                 dialogForUDPOptions.add(labelForPortSource);
                 dialogForUDPOptions.add(textFieldForPortSource);
 
@@ -146,7 +146,7 @@ public class UI extends JFrame {
         buttonAddShortLip.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JDialog dialogForShortLIP = createDialog("Input data for short LIP", true, 600, 350, 11, 3);
+                JDialog dialogForShortLIP = createDialog("Input data for short LIP", true, 600, 350, 12, 3);
 
                 JLabel labelForSSI = new JLabel("SSI");
                 JTextField textFieldForSSI = new JTextField("7031", 1);
@@ -154,6 +154,14 @@ public class UI extends JFrame {
                 dialogForShortLIP.add(labelForSSI);
                 dialogForShortLIP.add(textFieldForSSI);
                 dialogForShortLIP.add(checkBoxForSSI);
+
+                JLabel labelForBaseStationNumber = new JLabel("BSNumber");
+                JTextField textFieldForBaseStationNumber = new JTextField("10", 1);
+                JCheckBox checkBoxForBaseStationNumber = new JCheckBox("Changing");
+                checkBoxForBaseStationNumber.setEnabled(false);
+                dialogForShortLIP.add(labelForBaseStationNumber);
+                dialogForShortLIP.add(textFieldForBaseStationNumber);
+                dialogForShortLIP.add(checkBoxForBaseStationNumber);
 
                 JLabel labelForPDUType = new JLabel("PDU Type");
                 JTextField textFieldFoForPDUType = new JTextField("0", 1);
@@ -231,6 +239,7 @@ public class UI extends JFrame {
 
                         try {
                             checkIntValueFromString(textFieldForSSI.getText(), 0, 16777215, "SSI");
+                            checkIntValueFromString(textFieldForBaseStationNumber.getText(),1,130,"BaseStationNumber");
                             checkIntValueFromString(textFieldForTimeElapsed.getText(), 0, 3, "TimeElapsed");
                             checkDoubleValueFromString(textFieldForLongitude.getText(), -180.0, 179.0, "Longitude");
                             checkDoubleValueFromString(textFieldForLatitude.getText(), -90.0, 89.0, "Latitude");
@@ -271,6 +280,7 @@ public class UI extends JFrame {
                             changeMap.replace(7, true);
                         }
 
+
                         ShortLipMessage shortLipMessage = new ShortLipMessage();
                         shortLipMessage.withSSI(textFieldForSSI.getText())
                                 .withTimeElapsed(textFieldForTimeElapsed.getText())
@@ -280,6 +290,7 @@ public class UI extends JFrame {
                                 .withHorizontalVelocity(textFieldForHorizontalVelocity.getText())
                                 .withDirectionOfTravel(textFieldForDirectionOfTravel.getText())
                                 .withReasonForSending(textFieldForReasonForSending.getText())
+                                .withBaseStationNumber(textFieldForBaseStationNumber.getText())
                                 .withChangeMap(changeMap)
                                 .initValuesFromUI();
 
@@ -287,7 +298,7 @@ public class UI extends JFrame {
                         dialogForShortLIP.dispose();
 
 
-                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\nShort Lip ");
+                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\nShort Lip " + textFieldForSSI.getText() + " " + convertChangeMapToString(changeMap));
 
 
                     }
@@ -301,7 +312,7 @@ public class UI extends JFrame {
         buttonAddLongLipType1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JDialog dialogForLongLIPType1 = createDialog("Input data for long LIP type 1", true, 600, 500, 16, 3);
+                JDialog dialogForLongLIPType1 = createDialog("Input data for long LIP type 1", true, 600, 500, 17, 3);
 
                 JLabel labelForSSI = new JLabel("SSI");
                 JTextField textFieldForSSI = new JTextField("7031", 1);
@@ -309,6 +320,14 @@ public class UI extends JFrame {
                 dialogForLongLIPType1.add(labelForSSI);
                 dialogForLongLIPType1.add(textFieldForSSI);
                 dialogForLongLIPType1.add(checkBoxForSSI);
+
+                JLabel labelForBaseStationNumber = new JLabel("BSNumber");
+                JTextField textFieldForBaseStationNumber = new JTextField("10", 1);
+                JCheckBox checkBoxForBaseStationNumber = new JCheckBox("Changing");
+                checkBoxForBaseStationNumber.setEnabled(false);
+                dialogForLongLIPType1.add(labelForBaseStationNumber);
+                dialogForLongLIPType1.add(textFieldForBaseStationNumber);
+                dialogForLongLIPType1.add(checkBoxForBaseStationNumber);
 
                 JLabel labelForPDUType = new JLabel("PDU Type");
                 JTextField textFieldFoForPDUType = new JTextField("1", 1);
@@ -430,6 +449,7 @@ public class UI extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         try {
                             checkIntValueFromString(textFieldForSSI.getText(), 0, 16777215, "SSI");
+                            checkIntValueFromString(textFieldForBaseStationNumber.getText(),1,130,"BaseStationNumber");
                             checkDoubleValueFromString(textFieldForLongitude.getText(), -180.0, 179.0, "Longitude");
                             checkDoubleValueFromString(textFieldForLatitude.getText(), -90.0, 89.0, "Latitude");
                             checkIntValueFromString(textFieldForHorizontalPositionUncertainty.getText(), 0, 63, "Horizontal position uncertainty");
@@ -480,13 +500,14 @@ public class UI extends JFrame {
                                 .withHorizontal_velocity(textFieldForHorizontalVelocity.getText())
                                 .withDirection_of_travel_extended(textFieldForDirectionOfTravelExtended.getText())
                                 .withReason_for_sending(textFieldForReasonForSending.getText())
+                                .withBaseStationNumber(textFieldForBaseStationNumber.getText())
                                 .withChangeMap(changeMap)
                                 .initValuesFromUI();
 
                         listOfUDPMessages.add(longLipType1Message);
 
                         dialogForLongLIPType1.dispose();
-                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\nLong Lip type 1 ");
+                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\nLong Lip type 1 " + textFieldForSSI.getText() + " " + convertChangeMapToString(changeMap));
                     }
                 });
 
@@ -496,7 +517,7 @@ public class UI extends JFrame {
         buttonAddLongLipType2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JDialog dialogForLongLIPType2 = createDialog("Input data for long LIP type 2", true, 600, 500, 17, 3);
+                JDialog dialogForLongLIPType2 = createDialog("Input data for long LIP type 2", true, 600, 500, 19, 3);
 
                 JLabel labelForSSI = new JLabel("SSI");
                 JTextField textFieldForSSI = new JTextField("7031", 1);
@@ -504,6 +525,14 @@ public class UI extends JFrame {
                 dialogForLongLIPType2.add(labelForSSI);
                 dialogForLongLIPType2.add(textFieldForSSI);
                 dialogForLongLIPType2.add(checkBoxForSSI);
+
+                JLabel labelForBaseStationNumber = new JLabel("BSNumber");
+                JTextField textFieldForBaseStationNumber = new JTextField("10", 1);
+                JCheckBox checkBoxForBaseStationNumber = new JCheckBox("Changing");
+                checkBoxForBaseStationNumber.setEnabled(false);
+                dialogForLongLIPType2.add(labelForBaseStationNumber);
+                dialogForLongLIPType2.add(textFieldForBaseStationNumber);
+                dialogForLongLIPType2.add(checkBoxForBaseStationNumber);
 
                 JLabel labelForPDUType = new JLabel("PDU Type");
                 JTextField textFieldFoForPDUType = new JTextField("1", 1);
@@ -632,6 +661,7 @@ public class UI extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         try {
                             checkIntValueFromString(textFieldForSSI.getText(), 0, 16777215, "SSI");
+                            checkIntValueFromString(textFieldForBaseStationNumber.getText(),1,130,"BaseStationNumber");
                             checkIntValueFromString(textFieldForTimeElapsed.getText(), 0, 3, "Time elapsed");
                             checkDoubleValueFromString(textFieldForLongitude.getText(), -180.0, 179.0, "Longitude");
                             checkDoubleValueFromString(textFieldForLatitude.getText(), -90.0, 89.0, "Latitude");
@@ -686,6 +716,7 @@ public class UI extends JFrame {
                                 .withHorizontal_velocity(textFieldForHorizontalVelocity.getText())
                                 .withDirection_of_travel_extended(textFieldForDirectionOfTravelExtended.getText())
                                 .withReason_for_sending(textFieldForReasonForSending.getText())
+                                .withBaseStationNumber(textFieldForBaseStationNumber.getText())
                                 .withChangeMap(changeMap)
                                 .initValuesFromUI();
 
@@ -693,7 +724,7 @@ public class UI extends JFrame {
 
                         dialogForLongLIPType2.dispose();
 
-                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\nLong Lip type 2");
+                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\nLong Lip type 2 " + textFieldForSSI.getText() + " " + convertChangeMapToString(changeMap));
                     }
                 });
 
@@ -703,7 +734,7 @@ public class UI extends JFrame {
         buttonAddLongLipType3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JDialog dialogForLongLIPType3 = createDialog("Input data for long LIP type 3", true, 600, 500, 17, 3);
+                JDialog dialogForLongLIPType3 = createDialog("Input data for long LIP type 3", true, 600, 500, 18, 3);
 
                 JLabel labelForSSI = new JLabel("SSI");
                 JTextField textFieldForSSI = new JTextField("7031", 1);
@@ -711,6 +742,14 @@ public class UI extends JFrame {
                 dialogForLongLIPType3.add(labelForSSI);
                 dialogForLongLIPType3.add(textFieldForSSI);
                 dialogForLongLIPType3.add(checkBoxForSSI);
+
+                JLabel labelForBaseStationNumber = new JLabel("BSNumber");
+                JTextField textFieldForBaseStationNumber = new JTextField("10", 1);
+                JCheckBox checkBoxForBaseStationNumber = new JCheckBox("Changing");
+                checkBoxForBaseStationNumber.setEnabled(false);
+                dialogForLongLIPType3.add(labelForBaseStationNumber);
+                dialogForLongLIPType3.add(textFieldForBaseStationNumber);
+                dialogForLongLIPType3.add(checkBoxForBaseStationNumber);
 
                 JLabel labelForPDUType = new JLabel("PDU Type");
                 JTextField textFieldFoForPDUType = new JTextField("1", 1);
@@ -842,6 +881,7 @@ public class UI extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         try {
                             checkIntValueFromString(textFieldForSSI.getText(), 0, 16777215, "SSI");
+                            checkIntValueFromString(textFieldForBaseStationNumber.getText(),1,130,"BaseStationNumber");
                             checkDoubleValueFromString(textFieldForLongitude.getText(), -180.0, 179.0, "Longitude");
                             checkDoubleValueFromString(textFieldForLatitude.getText(), -90.0, 89.0, "Latitude");
                             checkIntValueFromString(textFieldForHorizontalPositionUncertainty.getText(), 0, 63, "Horizontal position uncertainty");
@@ -891,13 +931,14 @@ public class UI extends JFrame {
                                 .withHorizontal_velocity(textFieldForHorizontalVelocity.getText())
                                 .withDirection_of_travel_extended(textFieldForDirectionOfTravelExtended.getText())
                                 .withReason_for_sending(textFieldForReasonForSending.getText())
+                                .withBaseStationNumber(textFieldForBaseStationNumber.getText())
                                 .withChangeMap(changeMap)
                                 .initValuesFromUI();
 
                         listOfUDPMessages.add(longLipType3Message);
 
                         dialogForLongLIPType3.dispose();
-                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\nLong Lip type 3");
+                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\nLong Lip type 3 " + textFieldForSSI.getText() + " " + convertChangeMapToString(changeMap));
                     }
                 });
 
@@ -908,7 +949,7 @@ public class UI extends JFrame {
         buttonAddTelemetryOfDeviceData.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JDialog dialogForLongLIPWithTelemetryOfDeviceData = createDialog("Input data for long LIP type 1 with telemetry data", true, 700, 700, 37, 3);
+                JDialog dialogForLongLIPWithTelemetryOfDeviceData = createDialog("Input data for long LIP type 1 with telemetry data", true, 700, 700, 38, 3);
 
                 JLabel labelForSSI = new JLabel("SSI");
                 JTextField textFieldForSSI = new JTextField("7031", 1);
@@ -916,6 +957,14 @@ public class UI extends JFrame {
                 dialogForLongLIPWithTelemetryOfDeviceData.add(labelForSSI);
                 dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForSSI);
                 dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForSSI);
+
+                JLabel labelForBaseStationNumber = new JLabel("BSNumber");
+                JTextField textFieldForBaseStationNumber = new JTextField("10", 1);
+                JCheckBox checkBoxForBaseStationNumber = new JCheckBox("Changing");
+                checkBoxForBaseStationNumber.setEnabled(false);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(labelForBaseStationNumber);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForBaseStationNumber);
+                dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForBaseStationNumber);
 
                 JLabel labelForPDUType = new JLabel("PDU Type");
                 JTextField textFieldFoForPDUType = new JTextField("1", 1);
@@ -1193,6 +1242,7 @@ public class UI extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         try {
                             checkIntValueFromString(textFieldForSSI.getText(), 0, 16777215, "SSI");
+                            checkIntValueFromString(textFieldForBaseStationNumber.getText(),1,130,"BaseStationNumber");
                             checkDoubleValueFromString(textFieldForLongitude.getText(), -180.0, 179.0, "Longitude");
                             checkDoubleValueFromString(textFieldForLatitude.getText(), -90.0, 89.0, "Latitude");
                             checkIntValueFromString(textFieldForHorizontalPositionUncertainty.getText(), 0, 63, "Horizontal position uncertainty");
@@ -1347,13 +1397,14 @@ public class UI extends JFrame {
                                 .withOperating_time_after_the_last_power_up(textFieldForOperatingTimeAfterTheLastPowerUp.getText())
                                 .withSoftware_version_number(textFieldForSoftwareVersionNumber.getText())
                                 .withPcb_version_number(textFieldForPCBVersionNumber.getText())
+                                .withBaseStationNumber(textFieldForBaseStationNumber.getText())
                                 .withChangeMap(changeMap)
                                 .initValuesFromUI();
 
                         listOfUDPMessages.add(longLipType1WithTelemetryDataMessage);
 
                         dialogForLongLIPWithTelemetryOfDeviceData.dispose();
-                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\nLong Lip type 1 with telemetry data");
+                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\nLong Lip type 1 with telemetry data " + textFieldForSSI.getText() + " " + convertChangeMapToString(changeMap));
                     }
                 });
 
@@ -1365,7 +1416,7 @@ public class UI extends JFrame {
         buttonAddTelemetryWithReceiveLevel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JDialog dialogForLongLIPWithReceiveLevel = createDialog("Input data for long LIP type 1 with receive level", true, 700, 700, 25, 3);
+                JDialog dialogForLongLIPWithReceiveLevel = createDialog("Input data for long LIP type 1 with receive level", true, 700, 700, 26, 3);
 
                 JLabel labelForSSI = new JLabel("SSI");
                 JTextField textFieldForSSI = new JTextField("7070", 1);
@@ -1373,6 +1424,14 @@ public class UI extends JFrame {
                 dialogForLongLIPWithReceiveLevel.add(labelForSSI);
                 dialogForLongLIPWithReceiveLevel.add(textFieldForSSI);
                 dialogForLongLIPWithReceiveLevel.add(checkBoxForSSI);
+
+                JLabel labelForBaseStationNumber = new JLabel("BSNumber");
+                JTextField textFieldForBaseStationNumber = new JTextField("10", 1);
+                JCheckBox checkBoxForBaseStationNumber = new JCheckBox("Changing");
+                checkBoxForBaseStationNumber.setEnabled(false);
+                dialogForLongLIPWithReceiveLevel.add(labelForBaseStationNumber);
+                dialogForLongLIPWithReceiveLevel.add(textFieldForBaseStationNumber);
+                dialogForLongLIPWithReceiveLevel.add(checkBoxForBaseStationNumber);
 
                 JLabel labelForPDUType = new JLabel("PDU Type");
                 JTextField textFieldFoForPDUType = new JTextField("1", 1);
@@ -1565,7 +1624,7 @@ public class UI extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         try {
                             checkIntValueFromString(textFieldForSSI.getText(), 0, 16777215, "SSI");
-                            checkDoubleValueFromString(textFieldForLongitude.getText(), -180.0, 179.0, "Longitude");
+                            checkIntValueFromString(textFieldForBaseStationNumber.getText(),1,130,"BaseStationNumber");                            checkDoubleValueFromString(textFieldForLongitude.getText(), -180.0, 179.0, "Longitude");
                             checkDoubleValueFromString(textFieldForLatitude.getText(), -90.0, 89.0, "Latitude");
                             checkIntValueFromString(textFieldForHorizontalPositionUncertainty.getText(), 0, 63, "Horizontal position uncertainty");
                             checkIntValueFromString(textFieldForLocationAltitude.getText(), 0, 2047, "Location altitude");
@@ -1648,13 +1707,14 @@ public class UI extends JFrame {
                                 .withChannel_code(textFieldForChannelCode.getText())
                                 .withFrequency_offset_code(textFieldForFrequencyOffsetCode.getText())
                                 .withSignal_reception_level(textFieldForSignalReceptionLevel.getText())
+                                .withBaseStationNumber(textFieldForBaseStationNumber.getText())
                                 .withChangeMap(changeMap)
                                 .initValuesFromUI();
 
                         listOfUDPMessages.add(longLipType1WithRecieveLevel);
 
                         dialogForLongLIPWithReceiveLevel.dispose();
-                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\nLong Lip type 1 with receive level");
+                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\nLong Lip type 1 with receive level " + textFieldForSSI.getText() + " " + convertChangeMapToString(changeMap));
                     }
                 });
 
@@ -1707,6 +1767,14 @@ public class UI extends JFrame {
             }
         });
 
+    }
+
+    private String convertChangeMapToString(Map<Integer, Boolean> changeMap) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for(int i=0; i<changeMap.size(); i++) {
+            stringBuilder.append(changeMap.get(i) ? 1 : 0);
+        }
+        return stringBuilder.toString();
     }
 
     private void checkIntValueFromString(String checkString, int beginRange, int endRange, String nameOfField) throws Exception {

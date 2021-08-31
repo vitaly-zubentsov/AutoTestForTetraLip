@@ -8,6 +8,7 @@ public class LongLipType3Message implements UDPMessage {
     private UDPMessageHelper udpMessageHelper = new UDPMessageHelper();
 
     private String SSI;
+    private String baseStationNumber;
     private static String LONGITUDE_FROM_SERVER_OV = "00000000000000000000000000000000";
     private static String LATITUDE_FROM_SERVER_OV = "00000000000000000000000000000000";
     private static String LENGTH_IN_BITS = "00000000000000000000000010001010"; //в лонг лип типе 3 = 143 бит
@@ -31,7 +32,7 @@ public class LongLipType3Message implements UDPMessage {
     private static String PDU_TAIL = "0000000";
 
     private String binSSI;
-
+    private String binBaseStationNumber;
     private String binLongitude;
     private String binLatitude;
     private String binHorizontalPositionUncertainty;
@@ -43,6 +44,7 @@ public class LongLipType3Message implements UDPMessage {
 
     public void initValuesFromUI() {
         binSSI = udpMessageHelper.convertDecStringNumberToBinStringNumber(SSI, 32);
+        binBaseStationNumber = udpMessageHelper.convertDecStringNumberToBinStringNumber(baseStationNumber, 32);
         binLongitude = udpMessageHelper.calculateLipLongitudeFromDecLongitude(longitude);
         binLatitude = udpMessageHelper.calculateLipLatitudeFromDecLatitude(latitude);
         binHorizontalPositionUncertainty = udpMessageHelper.convertDecStringNumberToBinStringNumber(horizontal_position_uncertainty, 6);
@@ -152,6 +154,11 @@ public class LongLipType3Message implements UDPMessage {
 
     public LongLipType3Message withReason_for_sending(String reason_for_sending) {
         this.reason_for_sending = reason_for_sending;
+        return this;
+    }
+
+    public LongLipType3Message withBaseStationNumber(String baseStationNumber) {
+        this.baseStationNumber = baseStationNumber;
         return this;
     }
 }

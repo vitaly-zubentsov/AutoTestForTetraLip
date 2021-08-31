@@ -8,6 +8,7 @@ public class ShortLipMessage implements UDPMessage {
     private UDPMessageHelper udpMessageHelper = new UDPMessageHelper();
 
     private String ssi;
+    private String baseStationNumber;
     private static String LENGTH_IN_BITS = "00000000000000000000000001011101";  //в short lip равно 93 битам
     private static String PDU_HEADERS = "00001010";
     private static String PDU_TYPE = "00";
@@ -22,6 +23,7 @@ public class ShortLipMessage implements UDPMessage {
     private String pdu_tail = "000001111"; //этот хвостик появляется только для short lip, какая то ошибка в сервере ОВ
 
     private String binSSI;
+    private String binBaseStationNumber;
     private String binTimeElapsed;
     private String binLongitude;
     private String binLatitude;
@@ -32,6 +34,7 @@ public class ShortLipMessage implements UDPMessage {
 
     public void initValuesFromUI() {
         binSSI = udpMessageHelper.convertDecStringNumberToBinStringNumber(ssi, 32);
+        binBaseStationNumber = udpMessageHelper.convertDecStringNumberToBinStringNumber(baseStationNumber, 32);
         binTimeElapsed = udpMessageHelper.convertDecStringNumberToBinStringNumber(time_elapsed, 2);
         binLongitude = udpMessageHelper.calculateLipLongitudeFromDecLongitude(longitude);
         binLatitude = udpMessageHelper.calculateLipLatitudeFromDecLatitude(latitude);
@@ -136,6 +139,11 @@ public class ShortLipMessage implements UDPMessage {
 
     public ShortLipMessage withChangeMap(Map<Integer, Boolean> changeMap) {
         this.changeMap = changeMap;
+        return this;
+    }
+
+    public ShortLipMessage withBaseStationNumber(String baseStationNumber) {
+        this.baseStationNumber = baseStationNumber;
         return this;
     }
 
