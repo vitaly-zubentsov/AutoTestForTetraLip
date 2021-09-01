@@ -17,7 +17,7 @@ public class UI extends JFrame {
     List<UDPMessage> listOfUDPMessages = new ArrayList<UDPMessage>();
     UDPClient udpClient = new UDPClient();
     AliveMessage aliveMessage = new AliveMessage();
-    private JPanel contents;
+    DefaultListModel listModel = new DefaultListModel();
 
 
     public UI() {
@@ -36,15 +36,21 @@ public class UI extends JFrame {
         buttonAddLongLipType2.setEnabled(false);
         JButton buttonAddLongLipType3 = new JButton("Add long LIP type 3");
         buttonAddLongLipType3.setEnabled(false);
-        JButton buttonAddTelemetryOfDeviceData = new JButton("Add LIP with telemetry of device data");
+        JButton buttonAddTelemetryOfDeviceData = new JButton("Add LIP with telemetry");
         buttonAddTelemetryOfDeviceData.setEnabled(false);
-        JButton buttonAddTelemetryWithReceiveLevel = new JButton("Add LIP telemetry data of receive level");
-        buttonAddTelemetryWithReceiveLevel.setEnabled(false);
+        JButton buttonAddLipWithReceiveLevel = new JButton("Add LIP with receive level");
+        buttonAddLipWithReceiveLevel.setEnabled(false);
 
         JTextArea jTextAreaForUsersInputDATA = new JTextArea();
         Dimension s = new Dimension(200, 250);
         jTextAreaForUsersInputDATA.setPreferredSize(s);
         jTextAreaForUsersInputDATA.setText("This field show \n input data for UDP messages \n \n \n \n \n \n \n");
+
+        JList listToShowMessages = new JList(listModel);
+        listToShowMessages.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        JScrollPane scrollToShowMessages = new JScrollPane(listToShowMessages);
+        listToShowMessages.setLayoutOrientation(JList.VERTICAL);
+
 
         JButton buttonStartSendingUDPMessage = new JButton("Start sending UDP message");
         buttonStartSendingUDPMessage.setEnabled(false);
@@ -55,26 +61,33 @@ public class UI extends JFrame {
 
 
         // Создание панели содержимого с размещением кнопок
-        GridBagLayout layout = new GridBagLayout();
-        GridBagConstraints gridBagConstraints = new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 20, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0);
-        contents = new JPanel(layout);
 
-        contents.add(buttonSetUDPOptions, gridBagConstraints);
-        contents.add(buttonAddShortLip, gridBagConstraints);
-        contents.add(buttonAddLongLipType1, gridBagConstraints);
-        contents.add(buttonAddLongLipType2, gridBagConstraints);
-        contents.add(buttonAddLongLipType3, gridBagConstraints);
-        contents.add(buttonAddTelemetryOfDeviceData, gridBagConstraints);
-        contents.add(buttonAddTelemetryWithReceiveLevel, gridBagConstraints);
+        // Создание панели содержимого с размещением кнопок
+        final JPanel rightSide = new JPanel();
+        rightSide.setLayout(new GridLayout(10, 1, 1, 1));
+        rightSide.add(buttonSetUDPOptions);
+        rightSide.add(buttonAddShortLip);
+        rightSide.add(buttonAddLongLipType1);
+        rightSide.add(buttonAddLongLipType2);
+        rightSide.add(buttonAddLongLipType3);
+        rightSide.add(buttonAddTelemetryOfDeviceData);
+        rightSide.add(buttonAddLipWithReceiveLevel);
+        rightSide.add(buttonStartSendingUDPMessage);
+        rightSide.add(buttonStopSendingUPDMessage);
+        rightSide.add(buttonContinueSendingUPDMessage);
 
-        contents.add(jTextAreaForUsersInputDATA, gridBagConstraints);
 
-        contents.add(buttonStartSendingUDPMessage, gridBagConstraints);
-        contents.add(buttonStopSendingUPDMessage, gridBagConstraints);
-        contents.add(buttonContinueSendingUPDMessage, gridBagConstraints);
-        setContentPane(contents);
+        final JPanel leftSide = new JPanel();
+        leftSide.setLayout(new GridLayout(1, 1, 1, 1));
+        leftSide.add(scrollToShowMessages);
+
+
+        // Добавление панелей на главный слой окна
+        getContentPane().add(leftSide, BorderLayout.CENTER);
+        getContentPane().add(rightSide, BorderLayout.EAST);
+
         // Определение размера и открытие окна
-        setSize(300, 600);
+        setSize(800, 600);
         setLocationRelativeTo(null);
 
 
@@ -118,27 +131,22 @@ public class UI extends JFrame {
                                 textFieldForIntervalOfTimeSendingUDP.getText());
                         dialogForUDPOptions.dispose();
 
-                        jTextAreaForUsersInputDATA.setText(
-                                "Ip dst   = " + textFieldForIpDestination.getText() + "\n" +
-                                        "Port dst = " + textFieldForPortDestination.getText() + "\n" +
-                                        "Port src = " + textFieldForPortSource.getText() + "\n" +
-                                        "Interval = " + textFieldForIntervalOfTimeSendingUDP.getText() + "\n" +
-                                        "UDP messages : \n" +
-                                        "Alive message, int = 25000 ms"
-                        );
                         buttonSetUDPOptions.setEnabled(false);
                         buttonAddShortLip.setEnabled(true);
                         buttonAddLongLipType1.setEnabled(true);
                         buttonAddLongLipType2.setEnabled(true);
                         buttonAddLongLipType3.setEnabled(true);
                         buttonAddTelemetryOfDeviceData.setEnabled(true);
-                        buttonAddTelemetryWithReceiveLevel.setEnabled(true);
+                        buttonAddLipWithReceiveLevel.setEnabled(true);
                         buttonStartSendingUDPMessage.setEnabled(true);
 
                     }
                 });
 
                 dialogForUDPOptions.setVisible(true);
+                String resultTextToAdding =
+                        new StringBuilder().append(textFieldForIpDestination.getText()).append(":").append(textFieldForPortDestination.getText()).append(", ").append(textFieldForPortSource.getText()).append(", ").append(textFieldForIntervalOfTimeSendingUDP.getText()).toString();
+                buttonSetUDPOptions.setText(resultTextToAdding);
             }
         });
 
@@ -239,13 +247,16 @@ public class UI extends JFrame {
 
                         try {
                             checkIntValueFromString(textFieldForSSI.getText(), 0, 16777215, "SSI");
-                            checkIntValueFromString(textFieldForBaseStationNumber.getText(),1,130,"BaseStationNumber");
+                            checkIntValueFromString(textFieldForBaseStationNumber.getText(), 1, 130,
+                                    "BaseStationNumber");
                             checkIntValueFromString(textFieldForTimeElapsed.getText(), 0, 3, "TimeElapsed");
                             checkDoubleValueFromString(textFieldForLongitude.getText(), -180.0, 179.0, "Longitude");
                             checkDoubleValueFromString(textFieldForLatitude.getText(), -90.0, 89.0, "Latitude");
                             checkIntValueFromString(textFieldForPositionError.getText(), 0, 7, "PositionError");
-                            checkIntValueFromString(textFieldForHorizontalVelocity.getText(), 0, 127, "HorizontalVelocity");
-                            checkIntValueFromString(textFieldForDirectionOfTravel.getText(), 0, 15, "DirectionOfTravel");
+                            checkIntValueFromString(textFieldForHorizontalVelocity.getText(), 0, 127,
+                                    "HorizontalVelocity");
+                            checkIntValueFromString(textFieldForDirectionOfTravel.getText(), 0, 15,
+                                    "DirectionOfTravel");
                             checkIntValueFromString(textFieldForReasonForSending.getText(), 0, 255, "ReasonForSending");
                         } catch (Exception ex) {
                             ex.printStackTrace();
@@ -297,9 +308,7 @@ public class UI extends JFrame {
                         listOfUDPMessages.add(shortLipMessage);
                         dialogForShortLIP.dispose();
 
-
-                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\nShort Lip " + textFieldForSSI.getText() + " " + convertChangeMapToString(changeMap));
-
+                        listModel.addElement("Short Lip " + textFieldForSSI.getText() + " " + convertChangeMapToString(changeMap));
 
                     }
 
@@ -449,14 +458,20 @@ public class UI extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         try {
                             checkIntValueFromString(textFieldForSSI.getText(), 0, 16777215, "SSI");
-                            checkIntValueFromString(textFieldForBaseStationNumber.getText(),1,130,"BaseStationNumber");
+                            checkIntValueFromString(textFieldForBaseStationNumber.getText(), 1, 130,
+                                    "BaseStationNumber");
                             checkDoubleValueFromString(textFieldForLongitude.getText(), -180.0, 179.0, "Longitude");
                             checkDoubleValueFromString(textFieldForLatitude.getText(), -90.0, 89.0, "Latitude");
-                            checkIntValueFromString(textFieldForHorizontalPositionUncertainty.getText(), 0, 63, "Horizontal position uncertainty");
-                            checkIntValueFromString(textFieldForLocationAltitude.getText(), 0, 2047, "Location altitude");
-                            checkIntValueFromString(textFieldForHorizontalVelocity.getText(), 0, 127, "Horizontal velocity");
-                            checkIntValueFromString(textFieldForDirectionOfTravelExtended.getText(), 0, 255, "Direction Of travel extended");
-                            checkIntValueFromString(textFieldForReasonForSending.getText(), 0, 255, "Reason for sending");
+                            checkIntValueFromString(textFieldForHorizontalPositionUncertainty.getText(), 0, 63,
+                                    "Horizontal position uncertainty");
+                            checkIntValueFromString(textFieldForLocationAltitude.getText(), 0, 2047, "Location " +
+                                    "altitude");
+                            checkIntValueFromString(textFieldForHorizontalVelocity.getText(), 0, 127, "Horizontal " +
+                                    "velocity");
+                            checkIntValueFromString(textFieldForDirectionOfTravelExtended.getText(), 0, 255,
+                                    "Direction Of travel extended");
+                            checkIntValueFromString(textFieldForReasonForSending.getText(), 0, 255, "Reason for " +
+                                    "sending");
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
@@ -507,7 +522,8 @@ public class UI extends JFrame {
                         listOfUDPMessages.add(longLipType1Message);
 
                         dialogForLongLIPType1.dispose();
-                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\nLong Lip type 1 " + textFieldForSSI.getText() + " " + convertChangeMapToString(changeMap));
+                        jTextAreaForUsersInputDATA.setText("Long Lip type 1 "
+                                + textFieldForSSI.getText() + " " + convertChangeMapToString(changeMap));
                     }
                 });
 
@@ -661,15 +677,21 @@ public class UI extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         try {
                             checkIntValueFromString(textFieldForSSI.getText(), 0, 16777215, "SSI");
-                            checkIntValueFromString(textFieldForBaseStationNumber.getText(),1,130,"BaseStationNumber");
+                            checkIntValueFromString(textFieldForBaseStationNumber.getText(), 1, 130,
+                                    "BaseStationNumber");
                             checkIntValueFromString(textFieldForTimeElapsed.getText(), 0, 3, "Time elapsed");
                             checkDoubleValueFromString(textFieldForLongitude.getText(), -180.0, 179.0, "Longitude");
                             checkDoubleValueFromString(textFieldForLatitude.getText(), -90.0, 89.0, "Latitude");
-                            checkIntValueFromString(textFieldForHorizontalPositionUncertainty.getText(), 0, 63, "Horizontal position uncertainty");
-                            checkIntValueFromString(textFieldForLocationAltitude.getText(), 0, 2047, "Location altitude");
-                            checkIntValueFromString(textFieldForHorizontalVelocity.getText(), 0, 127, "Horizontal velocity");
-                            checkIntValueFromString(textFieldForDirectionOfTravelExtended.getText(), 0, 255, "Direction Of travel extended");
-                            checkIntValueFromString(textFieldForReasonForSending.getText(), 0, 255, "Reason for sending");
+                            checkIntValueFromString(textFieldForHorizontalPositionUncertainty.getText(), 0, 63,
+                                    "Horizontal position uncertainty");
+                            checkIntValueFromString(textFieldForLocationAltitude.getText(), 0, 2047, "Location " +
+                                    "altitude");
+                            checkIntValueFromString(textFieldForHorizontalVelocity.getText(), 0, 127, "Horizontal " +
+                                    "velocity");
+                            checkIntValueFromString(textFieldForDirectionOfTravelExtended.getText(), 0, 255,
+                                    "Direction Of travel extended");
+                            checkIntValueFromString(textFieldForReasonForSending.getText(), 0, 255, "Reason for " +
+                                    "sending");
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
@@ -724,7 +746,7 @@ public class UI extends JFrame {
 
                         dialogForLongLIPType2.dispose();
 
-                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\nLong Lip type 2 " + textFieldForSSI.getText() + " " + convertChangeMapToString(changeMap));
+                        listModel.addElement("Long Lip type 2 " + textFieldForSSI.getText() + " " + convertChangeMapToString(changeMap));
                     }
                 });
 
@@ -881,14 +903,20 @@ public class UI extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         try {
                             checkIntValueFromString(textFieldForSSI.getText(), 0, 16777215, "SSI");
-                            checkIntValueFromString(textFieldForBaseStationNumber.getText(),1,130,"BaseStationNumber");
+                            checkIntValueFromString(textFieldForBaseStationNumber.getText(), 1, 130,
+                                    "BaseStationNumber");
                             checkDoubleValueFromString(textFieldForLongitude.getText(), -180.0, 179.0, "Longitude");
                             checkDoubleValueFromString(textFieldForLatitude.getText(), -90.0, 89.0, "Latitude");
-                            checkIntValueFromString(textFieldForHorizontalPositionUncertainty.getText(), 0, 63, "Horizontal position uncertainty");
-                            checkIntValueFromString(textFieldForLocationAltitude.getText(), 0, 2047, "Location altitude");
-                            checkIntValueFromString(textFieldForHorizontalVelocity.getText(), 0, 127, "Horizontal velocity");
-                            checkIntValueFromString(textFieldForDirectionOfTravelExtended.getText(), 0, 255, "Direction Of travel extended");
-                            checkIntValueFromString(textFieldForReasonForSending.getText(), 0, 255, "Reason for sending");
+                            checkIntValueFromString(textFieldForHorizontalPositionUncertainty.getText(), 0, 63,
+                                    "Horizontal position uncertainty");
+                            checkIntValueFromString(textFieldForLocationAltitude.getText(), 0, 2047, "Location " +
+                                    "altitude");
+                            checkIntValueFromString(textFieldForHorizontalVelocity.getText(), 0, 127, "Horizontal " +
+                                    "velocity");
+                            checkIntValueFromString(textFieldForDirectionOfTravelExtended.getText(), 0, 255,
+                                    "Direction Of travel extended");
+                            checkIntValueFromString(textFieldForReasonForSending.getText(), 0, 255, "Reason for " +
+                                    "sending");
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
@@ -938,7 +966,7 @@ public class UI extends JFrame {
                         listOfUDPMessages.add(longLipType3Message);
 
                         dialogForLongLIPType3.dispose();
-                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\nLong Lip type 3 " + textFieldForSSI.getText() + " " + convertChangeMapToString(changeMap));
+                        listModel.addElement("Long Lip type 3 " + textFieldForSSI.getText() + " " + convertChangeMapToString(changeMap));
                     }
                 });
 
@@ -949,7 +977,8 @@ public class UI extends JFrame {
         buttonAddTelemetryOfDeviceData.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JDialog dialogForLongLIPWithTelemetryOfDeviceData = createDialog("Input data for long LIP type 1 with telemetry data", true, 700, 700, 38, 3);
+                JDialog dialogForLongLIPWithTelemetryOfDeviceData = createDialog("Input Lip with telemetry" +
+                        " telemetry data", true, 700, 700, 38, 3);
 
                 JLabel labelForSSI = new JLabel("SSI");
                 JTextField textFieldForSSI = new JTextField("7031", 1);
@@ -1128,16 +1157,20 @@ public class UI extends JFrame {
                 dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForPowerSupplyVoltageAtTheInputBPP);
                 dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForPowerSupplyVoltageAtTheInputBPP);
 
-                JLabel labelForPowerSupplyVoltageAtTheControlConsoleInput = new JLabel("Power supply voltage at the control console input");
+                JLabel labelForPowerSupplyVoltageAtTheControlConsoleInput = new JLabel("Power supply voltage at the " +
+                        "control console input");
                 JTextField textFieldForPowerSupplyVoltageAtTheControlConsoleInput = new JTextField("105", 1);
                 JCheckBox checkBoxForPowerSupplyVoltageAtTheControlConsoleInput = new JCheckBox("Changing");
                 dialogForLongLIPWithTelemetryOfDeviceData.add(labelForPowerSupplyVoltageAtTheControlConsoleInput);
                 dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForPowerSupplyVoltageAtTheControlConsoleInput);
                 dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForPowerSupplyVoltageAtTheControlConsoleInput);
 
-                JLabel labelForPowerSupplyOfTheTransmitterOutputAmplifierDuringTransmission = new JLabel("Power supply of the transmitter output amplifier during transmission");
-                JTextField textFieldForPowerSupplyOfTheTransmitterOutputAmplifierDuringTransmission = new JTextField("48", 1);
-                JCheckBox checkBoxForPowerSupplyOfTheTransmitterOutputAmplifierDuringTransmission = new JCheckBox("Changing");
+                JLabel labelForPowerSupplyOfTheTransmitterOutputAmplifierDuringTransmission = new JLabel("Power " +
+                        "supply of the transmitter output amplifier during transmission");
+                JTextField textFieldForPowerSupplyOfTheTransmitterOutputAmplifierDuringTransmission = new JTextField(
+                        "48", 1);
+                JCheckBox checkBoxForPowerSupplyOfTheTransmitterOutputAmplifierDuringTransmission = new JCheckBox(
+                        "Changing");
                 dialogForLongLIPWithTelemetryOfDeviceData.add(labelForPowerSupplyOfTheTransmitterOutputAmplifierDuringTransmission);
                 dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForPowerSupplyOfTheTransmitterOutputAmplifierDuringTransmission);
                 dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForPowerSupplyOfTheTransmitterOutputAmplifierDuringTransmission);
@@ -1149,14 +1182,16 @@ public class UI extends JFrame {
                 dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForTargetTransmitterPower);
                 dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForTargetTransmitterPower);
 
-                JLabel labelForTransmitterAmplifierOutputTemperature = new JLabel("Transmitter amplifier output temperature");
+                JLabel labelForTransmitterAmplifierOutputTemperature = new JLabel("Transmitter amplifier output " +
+                        "temperature");
                 JTextField textFieldForTransmitterAmplifierOutputTemperature = new JTextField("148", 1);
                 JCheckBox checkBoxForTransmitterAmplifierOutputTemperature = new JCheckBox("Changing");
                 dialogForLongLIPWithTelemetryOfDeviceData.add(labelForTransmitterAmplifierOutputTemperature);
                 dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForTransmitterAmplifierOutputTemperature);
                 dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForTransmitterAmplifierOutputTemperature);
 
-                JLabel labelForSWROfTheConnectedAntennaAtTheOperatingFrequency = new JLabel("SWR of the connected antenna at the operating frequency");
+                JLabel labelForSWROfTheConnectedAntennaAtTheOperatingFrequency = new JLabel("SWR of the connected " +
+                        "antenna at the operating frequency");
                 JTextField textFieldForSWROfTheConnectedAntennaAtTheOperatingFrequency = new JTextField("25", 1);
                 JCheckBox checkBoxForSWROfTheConnectedAntennaAtTheOperatingFrequency = new JCheckBox("Changing");
                 dialogForLongLIPWithTelemetryOfDeviceData.add(labelForSWROfTheConnectedAntennaAtTheOperatingFrequency);
@@ -1234,7 +1269,7 @@ public class UI extends JFrame {
                 dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForPCBVersionNumber);
 
 
-                JButton buttonToAddLongLipType1 = new JButton("Add long LIP type 1 with telemetry data");
+                JButton buttonToAddLongLipType1 = new JButton("Add Lip with telemetry");
                 dialogForLongLIPWithTelemetryOfDeviceData.add(buttonToAddLongLipType1);
 
                 buttonToAddLongLipType1.addActionListener(new ActionListener() {
@@ -1242,32 +1277,51 @@ public class UI extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         try {
                             checkIntValueFromString(textFieldForSSI.getText(), 0, 16777215, "SSI");
-                            checkIntValueFromString(textFieldForBaseStationNumber.getText(),1,130,"BaseStationNumber");
+                            checkIntValueFromString(textFieldForBaseStationNumber.getText(), 1, 130,
+                                    "BaseStationNumber");
                             checkDoubleValueFromString(textFieldForLongitude.getText(), -180.0, 179.0, "Longitude");
                             checkDoubleValueFromString(textFieldForLatitude.getText(), -90.0, 89.0, "Latitude");
-                            checkIntValueFromString(textFieldForHorizontalPositionUncertainty.getText(), 0, 63, "Horizontal position uncertainty");
-                            checkIntValueFromString(textFieldForLocationAltitude.getText(), 0, 2047, "Location altitude");
-                            checkIntValueFromString(textFieldForHorizontalVelocity.getText(), 0, 127, "Horizontal velocity");
-                            checkIntValueFromString(textFieldForDirectionOfTravelExtended.getText(), 0, 255, "Direction Of travel extended");
-                            checkIntValueFromString(textFieldForReasonForSending.getText(), 0, 255, "Reason for sending");
+                            checkIntValueFromString(textFieldForHorizontalPositionUncertainty.getText(), 0, 63,
+                                    "Horizontal position uncertainty");
+                            checkIntValueFromString(textFieldForLocationAltitude.getText(), 0, 2047, "Location " +
+                                    "altitude");
+                            checkIntValueFromString(textFieldForHorizontalVelocity.getText(), 0, 127, "Horizontal " +
+                                    "velocity");
+                            checkIntValueFromString(textFieldForDirectionOfTravelExtended.getText(), 0, 255,
+                                    "Direction Of travel extended");
+                            checkIntValueFromString(textFieldForReasonForSending.getText(), 0, 255, "Reason for " +
+                                    "sending");
 
                             checkIntValueFromString(textFieldForTypeOfDevice.getText(), 0, 7, "Type of device");
-                            checkIntValueFromString(textFieldForPowerSupplyVoltageAtTheInputBPP.getText(), 0, 127, "Power supply voltage at the input BPP");
-                            checkIntValueFromString(textFieldForPowerSupplyVoltageAtTheControlConsoleInput.getText(), 0, 127, "Power supply voltage at the control console input");
+                            checkIntValueFromString(textFieldForPowerSupplyVoltageAtTheInputBPP.getText(), 0, 127,
+                                    "Power supply voltage at the input BPP");
+                            checkIntValueFromString(textFieldForPowerSupplyVoltageAtTheControlConsoleInput.getText(),
+                                    0, 127, "Power supply voltage at the control console input");
                             checkIntValueFromString(textFieldForPowerSupplyOfTheTransmitterOutputAmplifierDuringTransmission.getText(), 0, 127, "Power supply of the transmitter output amplifier during transmission");
-                            checkIntValueFromString(textFieldForTargetTransmitterPower.getText(), 0, 7, "Target transmitter power");
-                            checkIntValueFromString(textFieldForTransmitterAmplifierOutputTemperature.getText(), 0, 255, "Transmitter amplifier output temperature");
+                            checkIntValueFromString(textFieldForTargetTransmitterPower.getText(), 0, 7, "Target " +
+                                    "transmitter power");
+                            checkIntValueFromString(textFieldForTransmitterAmplifierOutputTemperature.getText(), 0,
+                                    255, "Transmitter amplifier output temperature");
                             checkIntValueFromString(textFieldForSWROfTheConnectedAntennaAtTheOperatingFrequency.getText(), 0, 31, "SWR of the connected antenna at the operating frequency");
                             checkIntValueFromString(textFieldForConditionHFTract.getText(), 0, 1, "Condition HF tract");
-                            checkIntValueFromString(textFieldForAudioOutputStatus.getText(), 0, 1, "Audio Output Status");
-                            checkIntValueFromString(textFieldForStatusOfTheNavigationModule.getText(), 0, 1, "Status of the navigation module");
-                            checkIntValueFromString(textFieldForDryContactStatus.getText(), 0, 255, "Dry contact status");
-                            checkIntValueFromString(textFieldForTotalWorkingTimeOfDevice.getText(), 0, 65535, "Total working time of device");
-                            checkIntValueFromString(textFieldForTotalNumberOfDeviceReloads.getText(), 0, 4095, "Total number of device reloads");
-                            checkIntValueFromString(textFieldForNumberOfRegularDeviceReloads.getText(), 0, 4095, "Number of regular device reloads");
-                            checkIntValueFromString(textFieldForOperatingTimeAfterTheLastPowerUp.getText(), 0, 65535, "Operating time after the last power up");
-                            checkIntValueFromString(textFieldForSoftwareVersionNumber.getText(), 0, 127, "Software version number");
-                            checkIntValueFromString(textFieldForPCBVersionNumber.getText(), 0, 127, "PCB version number");
+                            checkIntValueFromString(textFieldForAudioOutputStatus.getText(), 0, 1, "Audio Output " +
+                                    "Status");
+                            checkIntValueFromString(textFieldForStatusOfTheNavigationModule.getText(), 0, 1, "Status " +
+                                    "of the navigation module");
+                            checkIntValueFromString(textFieldForDryContactStatus.getText(), 0, 255, "Dry contact " +
+                                    "status");
+                            checkIntValueFromString(textFieldForTotalWorkingTimeOfDevice.getText(), 0, 65535, "Total " +
+                                    "working time of device");
+                            checkIntValueFromString(textFieldForTotalNumberOfDeviceReloads.getText(), 0, 4095, "Total" +
+                                    " number of device reloads");
+                            checkIntValueFromString(textFieldForNumberOfRegularDeviceReloads.getText(), 0, 4095,
+                                    "Number of regular device reloads");
+                            checkIntValueFromString(textFieldForOperatingTimeAfterTheLastPowerUp.getText(), 0, 65535,
+                                    "Operating time after the last power up");
+                            checkIntValueFromString(textFieldForSoftwareVersionNumber.getText(), 0, 127, "Software " +
+                                    "version number");
+                            checkIntValueFromString(textFieldForPCBVersionNumber.getText(), 0, 127, "PCB version " +
+                                    "number");
 
                         } catch (Exception ex) {
                             ex.printStackTrace();
@@ -1371,7 +1425,8 @@ public class UI extends JFrame {
                             changeMap.replace(24, true);
                         }
 
-                        LongLipType1WithTelemetryDataMessage longLipType1WithTelemetryDataMessage = new LongLipType1WithTelemetryDataMessage();
+                        LongLipType1WithTelemetryDataMessage longLipType1WithTelemetryDataMessage =
+                                new LongLipType1WithTelemetryDataMessage();
                         longLipType1WithTelemetryDataMessage.withSSI(textFieldForSSI.getText())
                                 .withLongitude(textFieldForLongitude.getText())
                                 .withLatitude(textFieldForLatitude.getText())
@@ -1404,7 +1459,7 @@ public class UI extends JFrame {
                         listOfUDPMessages.add(longLipType1WithTelemetryDataMessage);
 
                         dialogForLongLIPWithTelemetryOfDeviceData.dispose();
-                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\nLong Lip type 1 with telemetry data " + textFieldForSSI.getText() + " " + convertChangeMapToString(changeMap));
+                        listModel.addElement("Lip with telemetry" + textFieldForSSI.getText() + " " + convertChangeMapToString(changeMap));
                     }
                 });
 
@@ -1413,10 +1468,11 @@ public class UI extends JFrame {
             }
         });
 
-        buttonAddTelemetryWithReceiveLevel.addActionListener(new ActionListener() {
+        buttonAddLipWithReceiveLevel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JDialog dialogForLongLIPWithReceiveLevel = createDialog("Input data for long LIP type 1 with receive level", true, 700, 700, 26, 3);
+                JDialog dialogForLongLIPWithReceiveLevel = createDialog("Input data for LIP with receive " +
+                        "level", true, 700, 700, 26, 3);
 
                 JLabel labelForSSI = new JLabel("SSI");
                 JTextField textFieldForSSI = new JTextField("7070", 1);
@@ -1616,7 +1672,7 @@ public class UI extends JFrame {
                 dialogForLongLIPWithReceiveLevel.add(textFieldForSignalReceptionLevel);
                 dialogForLongLIPWithReceiveLevel.add(checkBoxForSignalReceptionLevel);
 
-                JButton buttonToAddLongLipType1WithReceiveLevel = new JButton("Add long LIP type 1 with receive level");
+                JButton buttonToAddLongLipType1WithReceiveLevel = new JButton("LIP with receive level");
                 dialogForLongLIPWithReceiveLevel.add(buttonToAddLongLipType1WithReceiveLevel);
 
                 buttonToAddLongLipType1WithReceiveLevel.addActionListener(new ActionListener() {
@@ -1624,26 +1680,36 @@ public class UI extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         try {
                             checkIntValueFromString(textFieldForSSI.getText(), 0, 16777215, "SSI");
-                            checkIntValueFromString(textFieldForBaseStationNumber.getText(),1,130,"BaseStationNumber");                            checkDoubleValueFromString(textFieldForLongitude.getText(), -180.0, 179.0, "Longitude");
+                            checkIntValueFromString(textFieldForBaseStationNumber.getText(), 1, 130,
+                                    "BaseStationNumber");
+                            checkDoubleValueFromString(textFieldForLongitude.getText(), -180.0, 179.0, "Longitude");
                             checkDoubleValueFromString(textFieldForLatitude.getText(), -90.0, 89.0, "Latitude");
-                            checkIntValueFromString(textFieldForHorizontalPositionUncertainty.getText(), 0, 63, "Horizontal position uncertainty");
-                            checkIntValueFromString(textFieldForLocationAltitude.getText(), 0, 2047, "Location altitude");
-                            checkIntValueFromString(textFieldForHorizontalVelocity.getText(), 0, 127, "Horizontal velocity");
-                            checkIntValueFromString(textFieldForDirectionOfTravelExtended.getText(), 0, 255, "Direction Of travel extended");
-                            checkIntValueFromString(textFieldForReasonForSending.getText(), 0, 255, "Reason for sending");
+                            checkIntValueFromString(textFieldForHorizontalPositionUncertainty.getText(), 0, 63,
+                                    "Horizontal position uncertainty");
+                            checkIntValueFromString(textFieldForLocationAltitude.getText(), 0, 2047, "Location " +
+                                    "altitude");
+                            checkIntValueFromString(textFieldForHorizontalVelocity.getText(), 0, 127, "Horizontal " +
+                                    "velocity");
+                            checkIntValueFromString(textFieldForDirectionOfTravelExtended.getText(), 0, 255,
+                                    "Direction Of travel extended");
+                            checkIntValueFromString(textFieldForReasonForSending.getText(), 0, 255, "Reason for " +
+                                    "sending");
 
                             checkIntValueFromString(textFieldForTypeOfDevice.getText(), 0, 7, "Type of device");
-                            checkIntValueFromString(textFieldForMeasurementFrequency.getText(), 0, 1, "Measurement frequency");
+                            checkIntValueFromString(textFieldForMeasurementFrequency.getText(), 0, 1, "Measurement " +
+                                    "frequency");
                             checkIntValueFromString(textFieldForChannelCode.getText(), 0, 4095, "Channel code");
-                            checkIntValueFromString(textFieldForFrequencyOffsetCode.getText(), 0, 3, "Frequency Offset Code");
-                            checkIntValueFromString(textFieldForSignalReceptionLevel.getText(), 0, 255, "Signal reception level");
+                            checkIntValueFromString(textFieldForFrequencyOffsetCode.getText(), 0, 3, "Frequency " +
+                                    "Offset Code");
+                            checkIntValueFromString(textFieldForSignalReceptionLevel.getText(), 0, 255, "Signal " +
+                                    "reception level");
 
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
 
                         Map<Integer, Boolean> changeMap = new HashMap<Integer, Boolean>();
-                        for (int i = 0; i < 25; i++) {
+                        for (int i = 0; i < 12; i++) {
                             changeMap.put(i, false);
                         }
                         if (checkBoxForSSI.isSelected()) {
@@ -1714,7 +1780,8 @@ public class UI extends JFrame {
                         listOfUDPMessages.add(longLipType1WithRecieveLevel);
 
                         dialogForLongLIPWithReceiveLevel.dispose();
-                        jTextAreaForUsersInputDATA.setText(jTextAreaForUsersInputDATA.getText() + "\nLong Lip type 1 with receive level " + textFieldForSSI.getText() + " " + convertChangeMapToString(changeMap));
+                        listModel.addElement("Lip with receive " +
+                                "level " + textFieldForSSI.getText() + " " + convertChangeMapToString(changeMap));
                     }
                 });
 
@@ -1734,7 +1801,7 @@ public class UI extends JFrame {
                 buttonAddLongLipType2.setEnabled(false);
                 buttonAddLongLipType3.setEnabled(false);
                 buttonAddTelemetryOfDeviceData.setEnabled(false);
-                buttonAddTelemetryWithReceiveLevel.setEnabled(false);
+                buttonAddLipWithReceiveLevel.setEnabled(false);
             }
         });
 
@@ -1749,7 +1816,7 @@ public class UI extends JFrame {
                 buttonAddLongLipType2.setEnabled(true);
                 buttonAddLongLipType3.setEnabled(true);
                 buttonAddTelemetryOfDeviceData.setEnabled(true);
-                buttonAddTelemetryWithReceiveLevel.setEnabled(true);
+                buttonAddLipWithReceiveLevel.setEnabled(true);
             }
         });
         buttonContinueSendingUPDMessage.addActionListener(new ActionListener() {
@@ -1763,7 +1830,7 @@ public class UI extends JFrame {
                 buttonAddLongLipType2.setEnabled(false);
                 buttonAddLongLipType3.setEnabled(false);
                 buttonAddTelemetryOfDeviceData.setEnabled(false);
-                buttonAddTelemetryWithReceiveLevel.setEnabled(false);
+                buttonAddLipWithReceiveLevel.setEnabled(false);
             }
         });
 
@@ -1771,7 +1838,7 @@ public class UI extends JFrame {
 
     private String convertChangeMapToString(Map<Integer, Boolean> changeMap) {
         StringBuilder stringBuilder = new StringBuilder();
-        for(int i=0; i<changeMap.size(); i++) {
+        for (int i = 0; i < changeMap.size(); i++) {
             stringBuilder.append(changeMap.get(i) ? 1 : 0);
         }
         return stringBuilder.toString();
@@ -1782,7 +1849,8 @@ public class UI extends JFrame {
             int checkNumber = Integer.parseInt(checkString);
 
             if ((checkNumber < beginRange) || (checkNumber > endRange)) {
-                String warning = nameOfField + " = " + checkNumber + " cannot be out of range [" + beginRange + ".." + endRange + "]";
+                String warning =
+                        nameOfField + " = " + checkNumber + " cannot be out of range [" + beginRange + ".." + endRange + "]";
                 JDialog dialog = createWarningDialog(warning);
                 dialog.setVisible(true);
                 throw new Exception(warning);
@@ -1795,11 +1863,13 @@ public class UI extends JFrame {
 
     }
 
-    private void checkDoubleValueFromString(String checkString, double beginRange, double endRange, String nameOfField) throws Exception {
+    private void checkDoubleValueFromString(String checkString, double beginRange, double endRange,
+                                            String nameOfField) throws Exception {
         try {
             double checkNumber = Double.parseDouble(checkString);
             if ((checkNumber < beginRange) || (checkNumber > endRange)) {
-                String warning = nameOfField + " = " + checkNumber + " cannot be out of range [" + beginRange + ".." + endRange + "]";
+                String warning =
+                        nameOfField + " = " + checkNumber + " cannot be out of range [" + beginRange + ".." + endRange + "]";
                 JDialog dialog = createWarningDialog(warning);
                 dialog.setVisible(true);
                 throw new Exception(checkNumber + "cannot be out of range [" + beginRange + ".." + endRange + "]");
@@ -1817,8 +1887,8 @@ public class UI extends JFrame {
         dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         dialog.setSize(width, height);
         dialog.setLayout(new GridLayout(columns, rows));
-        //Помещаем поцентру относительно главного фрейма contents
-        dialog.setLocationRelativeTo(contents);
+        //Помещаем поцентру относительно главного фрейма
+        dialog.setLocationRelativeTo(getContentPane());
         return dialog;
     }
 
@@ -1828,8 +1898,8 @@ public class UI extends JFrame {
         dialog.add(dialogLabel);
         dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         dialog.setSize(500, 90);
-        //Помещаем поцентру относительно главного фрейма contents
-        dialog.setLocationRelativeTo(contents);
+        //Помещаем поцентру относительно главного фрейма
+        dialog.setLocationRelativeTo(getContentPane());
         return dialog;
     }
 
