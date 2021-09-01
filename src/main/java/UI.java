@@ -2,6 +2,8 @@
 import model.*;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,6 +20,7 @@ public class UI extends JFrame {
     UDPClient udpClient = new UDPClient();
     AliveMessage aliveMessage = new AliveMessage();
     DefaultListModel listModel = new DefaultListModel();
+    int numberSelectedLipMessage = 0;
 
 
     public UI() {
@@ -36,15 +39,14 @@ public class UI extends JFrame {
         buttonAddLongLipType2.setEnabled(false);
         JButton buttonAddLongLipType3 = new JButton("Add long LIP type 3");
         buttonAddLongLipType3.setEnabled(false);
-        JButton buttonAddTelemetryOfDeviceData = new JButton("Add LIP with telemetry");
-        buttonAddTelemetryOfDeviceData.setEnabled(false);
         JButton buttonAddLipWithReceiveLevel = new JButton("Add LIP with receive level");
         buttonAddLipWithReceiveLevel.setEnabled(false);
+        JButton buttonAddTelemetryOfDeviceData = new JButton("Add LIP with telemetry");
+        buttonAddTelemetryOfDeviceData.setEnabled(false);
+        JButton buttonRemoveLip = new JButton("Remove LIP");
+        buttonRemoveLip.setEnabled(false);
 
-        JTextArea jTextAreaForUsersInputDATA = new JTextArea();
         Dimension s = new Dimension(200, 250);
-        jTextAreaForUsersInputDATA.setPreferredSize(s);
-        jTextAreaForUsersInputDATA.setText("This field show \n input data for UDP messages \n \n \n \n \n \n \n");
 
         JList listToShowMessages = new JList(listModel);
         listToShowMessages.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -61,17 +63,16 @@ public class UI extends JFrame {
 
 
         // Создание панели содержимого с размещением кнопок
-
-        // Создание панели содержимого с размещением кнопок
         final JPanel rightSide = new JPanel();
-        rightSide.setLayout(new GridLayout(10, 1, 1, 1));
+        rightSide.setLayout(new GridLayout(11, 1, 1, 1));
         rightSide.add(buttonSetUDPOptions);
         rightSide.add(buttonAddShortLip);
         rightSide.add(buttonAddLongLipType1);
         rightSide.add(buttonAddLongLipType2);
         rightSide.add(buttonAddLongLipType3);
-        rightSide.add(buttonAddTelemetryOfDeviceData);
         rightSide.add(buttonAddLipWithReceiveLevel);
+        rightSide.add(buttonAddTelemetryOfDeviceData);
+        rightSide.add(buttonRemoveLip);
         rightSide.add(buttonStartSendingUDPMessage);
         rightSide.add(buttonStopSendingUPDMessage);
         rightSide.add(buttonContinueSendingUPDMessage);
@@ -157,7 +158,7 @@ public class UI extends JFrame {
                 JDialog dialogForShortLIP = createDialog("Input data for short LIP", true, 600, 350, 12, 3);
 
                 JLabel labelForSSI = new JLabel("SSI");
-                JTextField textFieldForSSI = new JTextField("7031", 1);
+                JTextField textFieldForSSI = new JTextField("8000", 1);
                 JCheckBox checkBoxForSSI = new JCheckBox("Changing");
                 dialogForShortLIP.add(labelForSSI);
                 dialogForShortLIP.add(textFieldForSSI);
@@ -197,6 +198,7 @@ public class UI extends JFrame {
                 JLabel labelForLatitude = new JLabel("Latitude");
                 JTextField textFieldForLatitude = new JTextField("55.7839286", 1);
                 JCheckBox checkBoxForLatitude = new JCheckBox("Changing");
+                checkBoxForLatitude.setSelected(true);
                 dialogForShortLIP.add(labelForLatitude);
                 dialogForShortLIP.add(textFieldForLatitude);
                 dialogForShortLIP.add(checkBoxForLatitude);
@@ -308,7 +310,8 @@ public class UI extends JFrame {
                         listOfUDPMessages.add(shortLipMessage);
                         dialogForShortLIP.dispose();
 
-                        listModel.addElement("Short Lip " + textFieldForSSI.getText() + " " + convertChangeMapToString(changeMap));
+                        listModel.addElement("Short Lip________________" + textFieldForSSI.getText() +
+                                " " + convertChangeMapToString(changeMap));
 
                     }
 
@@ -318,13 +321,14 @@ public class UI extends JFrame {
                 dialogForShortLIP.setVisible(true);
             }
         });
+
         buttonAddLongLipType1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JDialog dialogForLongLIPType1 = createDialog("Input data for long LIP type 1", true, 600, 500, 17, 3);
 
                 JLabel labelForSSI = new JLabel("SSI");
-                JTextField textFieldForSSI = new JTextField("7031", 1);
+                JTextField textFieldForSSI = new JTextField("8001", 1);
                 JCheckBox checkBoxForSSI = new JCheckBox("Changing");
                 dialogForLongLIPType1.add(labelForSSI);
                 dialogForLongLIPType1.add(textFieldForSSI);
@@ -377,6 +381,7 @@ public class UI extends JFrame {
                 JLabel labelForLongitude = new JLabel("Longitude");
                 JTextField textFieldForLongitude = new JTextField("37.66000628471", 1);
                 JCheckBox checkBoxForLongitude = new JCheckBox("Changing");
+                checkBoxForLongitude.setSelected(true);
                 dialogForLongLIPType1.add(labelForLongitude);
                 dialogForLongLIPType1.add(textFieldForLongitude);
                 dialogForLongLIPType1.add(checkBoxForLongitude);
@@ -480,6 +485,7 @@ public class UI extends JFrame {
                         for (int i = 0; i < 8; i++) {
                             changeMap.put(i, false);
                         }
+
                         if (checkBoxForSSI.isSelected()) {
                             changeMap.replace(0, true);
                         }
@@ -522,7 +528,7 @@ public class UI extends JFrame {
                         listOfUDPMessages.add(longLipType1Message);
 
                         dialogForLongLIPType1.dispose();
-                        jTextAreaForUsersInputDATA.setText("Long Lip type 1 "
+                        listModel.addElement("Long Lip type 1___________"
                                 + textFieldForSSI.getText() + " " + convertChangeMapToString(changeMap));
                     }
                 });
@@ -530,13 +536,14 @@ public class UI extends JFrame {
                 dialogForLongLIPType1.setVisible(true);
             }
         });
+
         buttonAddLongLipType2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JDialog dialogForLongLIPType2 = createDialog("Input data for long LIP type 2", true, 600, 500, 19, 3);
 
                 JLabel labelForSSI = new JLabel("SSI");
-                JTextField textFieldForSSI = new JTextField("7031", 1);
+                JTextField textFieldForSSI = new JTextField("8002", 1);
                 JCheckBox checkBoxForSSI = new JCheckBox("Changing");
                 dialogForLongLIPType2.add(labelForSSI);
                 dialogForLongLIPType2.add(textFieldForSSI);
@@ -596,6 +603,7 @@ public class UI extends JFrame {
                 JLabel labelForLongitude = new JLabel("Longitude");
                 JTextField textFieldForLongitude = new JTextField("37.66000628471", 1);
                 JCheckBox checkBoxForLongitude = new JCheckBox("Changing");
+                checkBoxForLongitude.setSelected(true);
                 dialogForLongLIPType2.add(labelForLongitude);
                 dialogForLongLIPType2.add(textFieldForLongitude);
                 dialogForLongLIPType2.add(checkBoxForLongitude);
@@ -603,6 +611,7 @@ public class UI extends JFrame {
                 JLabel labelForLatitude = new JLabel("Latitude");
                 JTextField textFieldForLatitude = new JTextField("55.7839286", 1);
                 JCheckBox checkBoxForLatitude = new JCheckBox("Changing");
+                checkBoxForLatitude.setSelected(true);
                 dialogForLongLIPType2.add(labelForLatitude);
                 dialogForLongLIPType2.add(textFieldForLatitude);
                 dialogForLongLIPType2.add(checkBoxForLatitude);
@@ -746,7 +755,7 @@ public class UI extends JFrame {
 
                         dialogForLongLIPType2.dispose();
 
-                        listModel.addElement("Long Lip type 2 " + textFieldForSSI.getText() + " " + convertChangeMapToString(changeMap));
+                        listModel.addElement("Long Lip type 2___________" + textFieldForSSI.getText() + " " + convertChangeMapToString(changeMap));
                     }
                 });
 
@@ -759,7 +768,7 @@ public class UI extends JFrame {
                 JDialog dialogForLongLIPType3 = createDialog("Input data for long LIP type 3", true, 600, 500, 18, 3);
 
                 JLabel labelForSSI = new JLabel("SSI");
-                JTextField textFieldForSSI = new JTextField("7031", 1);
+                JTextField textFieldForSSI = new JTextField("8003", 1);
                 JCheckBox checkBoxForSSI = new JCheckBox("Changing");
                 dialogForLongLIPType3.add(labelForSSI);
                 dialogForLongLIPType3.add(textFieldForSSI);
@@ -820,14 +829,15 @@ public class UI extends JFrame {
                 dialogForLongLIPType3.add(checkBoxForLocationShape);
 
                 JLabel labelForLongitude = new JLabel("Longitude");
-                JTextField textFieldForLongitude = new JTextField("37.66000628471", 1);
+                JTextField textFieldForLongitude = new JTextField("37.65000628471", 1);
                 JCheckBox checkBoxForLongitude = new JCheckBox("Changing");
+                checkBoxForLongitude.setSelected(true);
                 dialogForLongLIPType3.add(labelForLongitude);
                 dialogForLongLIPType3.add(textFieldForLongitude);
                 dialogForLongLIPType3.add(checkBoxForLongitude);
 
                 JLabel labelForLatitude = new JLabel("Latitude");
-                JTextField textFieldForLatitude = new JTextField("55.7839286", 1);
+                JTextField textFieldForLatitude = new JTextField("55.7339286", 1);
                 JCheckBox checkBoxForLatitude = new JCheckBox("Changing");
                 dialogForLongLIPType3.add(labelForLatitude);
                 dialogForLongLIPType3.add(textFieldForLatitude);
@@ -966,22 +976,344 @@ public class UI extends JFrame {
                         listOfUDPMessages.add(longLipType3Message);
 
                         dialogForLongLIPType3.dispose();
-                        listModel.addElement("Long Lip type 3 " + textFieldForSSI.getText() + " " + convertChangeMapToString(changeMap));
+                        listModel.addElement("Long Lip type 3___________" + textFieldForSSI.getText() + " " + convertChangeMapToString(changeMap));
+                    }
+                });
+                dialogForLongLIPType3.setVisible(true);
+            }
+        });
+
+        buttonAddLipWithReceiveLevel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JDialog dialogForLongLIPWithReceiveLevel = createDialog("Input data for Long LIP with receive " +
+                        "level", true, 700, 700, 26, 3);
+
+                JLabel labelForSSI = new JLabel("SSI");
+                JTextField textFieldForSSI = new JTextField("8004", 1);
+                JCheckBox checkBoxForSSI = new JCheckBox("Changing");
+                dialogForLongLIPWithReceiveLevel.add(labelForSSI);
+                dialogForLongLIPWithReceiveLevel.add(textFieldForSSI);
+                dialogForLongLIPWithReceiveLevel.add(checkBoxForSSI);
+
+                JLabel labelForBaseStationNumber = new JLabel("BSNumber");
+                JTextField textFieldForBaseStationNumber = new JTextField("10", 1);
+                JCheckBox checkBoxForBaseStationNumber = new JCheckBox("Changing");
+                checkBoxForBaseStationNumber.setEnabled(false);
+                dialogForLongLIPWithReceiveLevel.add(labelForBaseStationNumber);
+                dialogForLongLIPWithReceiveLevel.add(textFieldForBaseStationNumber);
+                dialogForLongLIPWithReceiveLevel.add(checkBoxForBaseStationNumber);
+
+                JLabel labelForPDUType = new JLabel("PDU Type");
+                JTextField textFieldFoForPDUType = new JTextField("1", 1);
+                textFieldFoForPDUType.setEditable(false);
+                JCheckBox checkBoxForForPDUType = new JCheckBox("Changing");
+                checkBoxForForPDUType.setEnabled(false);
+                dialogForLongLIPWithReceiveLevel.add(labelForPDUType);
+                dialogForLongLIPWithReceiveLevel.add(textFieldFoForPDUType);
+                dialogForLongLIPWithReceiveLevel.add(checkBoxForForPDUType);
+
+                JLabel labelForPDUTypeExtension = new JLabel("PDU Type extension");
+                JTextField textFieldForPDUTypeExtension = new JTextField("3", 1);
+                textFieldForPDUTypeExtension.setEditable(false);
+                JCheckBox checkBoxForPDUTypeExtension = new JCheckBox("Changing");
+                checkBoxForPDUTypeExtension.setEnabled(false);
+                dialogForLongLIPWithReceiveLevel.add(labelForPDUTypeExtension);
+                dialogForLongLIPWithReceiveLevel.add(textFieldForPDUTypeExtension);
+                dialogForLongLIPWithReceiveLevel.add(checkBoxForPDUTypeExtension);
+
+                JLabel labelForTimeData = new JLabel("Time data");
+                JTextField textFieldFoTimeData = new JTextField("0", 1);
+                textFieldFoTimeData.setEditable(false);
+                JCheckBox checkBoxForForTimeData = new JCheckBox("Changing");
+                checkBoxForForTimeData.setEnabled(false);
+                dialogForLongLIPWithReceiveLevel.add(labelForTimeData);
+                dialogForLongLIPWithReceiveLevel.add(textFieldFoTimeData);
+                dialogForLongLIPWithReceiveLevel.add(checkBoxForForTimeData);
+
+                JLabel labelForLocationShape = new JLabel("Location shape");
+                JTextField textFieldForLocationShape = new JTextField("5", 1);
+                textFieldForLocationShape.setEditable(false);
+                JCheckBox checkBoxForLocationShape = new JCheckBox("Changing");
+                checkBoxForLocationShape.setEnabled(false);
+                dialogForLongLIPWithReceiveLevel.add(labelForLocationShape);
+                dialogForLongLIPWithReceiveLevel.add(textFieldForLocationShape);
+                dialogForLongLIPWithReceiveLevel.add(checkBoxForLocationShape);
+
+                JLabel labelForLongitude = new JLabel("Longitude");
+                JTextField textFieldForLongitude = new JTextField("37.56000628471", 1);
+                JCheckBox checkBoxForLongitude = new JCheckBox("Changing");
+                checkBoxForLongitude.setSelected(true);
+                dialogForLongLIPWithReceiveLevel.add(labelForLongitude);
+                dialogForLongLIPWithReceiveLevel.add(textFieldForLongitude);
+                dialogForLongLIPWithReceiveLevel.add(checkBoxForLongitude);
+
+                JLabel labelForLatitude = new JLabel("Latitude");
+                JTextField textFieldForLatitude = new JTextField("55.7139286", 1);
+                JCheckBox checkBoxForLatitude = new JCheckBox("Changing");
+                checkBoxForLatitude.setSelected(true);
+                dialogForLongLIPWithReceiveLevel.add(labelForLatitude);
+                dialogForLongLIPWithReceiveLevel.add(textFieldForLatitude);
+                dialogForLongLIPWithReceiveLevel.add(checkBoxForLatitude);
+
+                JLabel labelForHorizontalPositionUncertainty = new JLabel("Horizontal position uncertainty");
+                JTextField textFieldForHorizontalPositionUncertainty = new JTextField("0", 1);
+                JCheckBox checkBoxForHorizontalPositionUncertainty = new JCheckBox("Changing");
+                dialogForLongLIPWithReceiveLevel.add(labelForHorizontalPositionUncertainty);
+                dialogForLongLIPWithReceiveLevel.add(textFieldForHorizontalPositionUncertainty);
+                dialogForLongLIPWithReceiveLevel.add(checkBoxForHorizontalPositionUncertainty);
+
+                JLabel labelForLocationAltitude = new JLabel("Location altitude");
+                JTextField textFieldForLocationAltitude = new JTextField("0", 1);
+                JCheckBox checkBoxForLocationAltitude = new JCheckBox("Changing");
+                dialogForLongLIPWithReceiveLevel.add(labelForLocationAltitude);
+                dialogForLongLIPWithReceiveLevel.add(textFieldForLocationAltitude);
+                dialogForLongLIPWithReceiveLevel.add(checkBoxForLocationAltitude);
+
+                JLabel labelForVelocityType = new JLabel("Velocity type");
+                JTextField textFieldForVelocityType = new JTextField("5", 1);
+                textFieldForVelocityType.setEditable(false);
+                JCheckBox checkBoxForVelocityType = new JCheckBox("Changing");
+                checkBoxForVelocityType.setEnabled(false);
+                dialogForLongLIPWithReceiveLevel.add(labelForVelocityType);
+                dialogForLongLIPWithReceiveLevel.add(textFieldForVelocityType);
+                dialogForLongLIPWithReceiveLevel.add(checkBoxForVelocityType);
+
+                JLabel labelForHorizontalVelocity = new JLabel("Horizontal velocity");
+                JTextField textFieldForHorizontalVelocity = new JTextField("0", 1);
+                JCheckBox checkBoxForHorizontalVelocity = new JCheckBox("Changing");
+                dialogForLongLIPWithReceiveLevel.add(labelForHorizontalVelocity);
+                dialogForLongLIPWithReceiveLevel.add(textFieldForHorizontalVelocity);
+                dialogForLongLIPWithReceiveLevel.add(checkBoxForHorizontalVelocity);
+
+                JLabel labelForDirectionOfTravelExtended = new JLabel("Direction of travel extended");
+                JTextField textFieldForDirectionOfTravelExtended = new JTextField("0", 1);
+                JCheckBox checkBoxForDirectionOfTravelExtended = new JCheckBox("Changing");
+                dialogForLongLIPWithReceiveLevel.add(labelForDirectionOfTravelExtended);
+                dialogForLongLIPWithReceiveLevel.add(textFieldForDirectionOfTravelExtended);
+                dialogForLongLIPWithReceiveLevel.add(checkBoxForDirectionOfTravelExtended);
+
+                JLabel labelForAcknowledgementRequest = new JLabel("Acknowledgement request");
+                JTextField textFieldForAcknowledgementRequest = new JTextField("0", 1);
+                textFieldForAcknowledgementRequest.setEditable(false);
+                JCheckBox checkBoxForForAcknowledgementRequest = new JCheckBox("Changing");
+                checkBoxForForAcknowledgementRequest.setEnabled(false);
+                dialogForLongLIPWithReceiveLevel.add(labelForAcknowledgementRequest);
+                dialogForLongLIPWithReceiveLevel.add(textFieldForAcknowledgementRequest);
+                dialogForLongLIPWithReceiveLevel.add(checkBoxForForAcknowledgementRequest);
+
+                JLabel labelForTypeOfAdditionalData = new JLabel("Type of additional data");
+                JTextField textFieldForTypeOfAdditionalData = new JTextField("0", 1);
+                textFieldForTypeOfAdditionalData.setEditable(false);
+                JCheckBox checkBoxForTypeOfAdditionalData = new JCheckBox("Changing");
+                checkBoxForTypeOfAdditionalData.setEnabled(false);
+                dialogForLongLIPWithReceiveLevel.add(labelForTypeOfAdditionalData);
+                dialogForLongLIPWithReceiveLevel.add(textFieldForTypeOfAdditionalData);
+                dialogForLongLIPWithReceiveLevel.add(checkBoxForTypeOfAdditionalData);
+
+                JLabel labelForReasonForSending = new JLabel("Reason for sending");
+                JTextField textFieldForReasonForSending = new JTextField("129", 1);
+                JCheckBox checkBoxForReasonForSending = new JCheckBox("Changing");
+                dialogForLongLIPWithReceiveLevel.add(labelForReasonForSending);
+                dialogForLongLIPWithReceiveLevel.add(textFieldForReasonForSending);
+                dialogForLongLIPWithReceiveLevel.add(checkBoxForReasonForSending);
+
+                JLabel labelForType5ElementIdentifier = new JLabel("Type 5 element identifier");
+                JTextField textFieldForType5ElementIdentifier = new JTextField("1", 1);
+                textFieldForType5ElementIdentifier.setEditable(false);
+                JCheckBox checkBoxForType5ElementIdentifier = new JCheckBox("Changing");
+                checkBoxForTypeOfAdditionalData.setEnabled(false);
+                dialogForLongLIPWithReceiveLevel.add(labelForType5ElementIdentifier);
+                dialogForLongLIPWithReceiveLevel.add(textFieldForType5ElementIdentifier);
+                dialogForLongLIPWithReceiveLevel.add(checkBoxForType5ElementIdentifier);
+
+                JLabel labelForType5ElementLength = new JLabel("Type 5 element length");
+                JTextField textFieldForType5Type5ElementLength = new JTextField("0", 1);
+                textFieldForType5Type5ElementLength.setEditable(false);
+                JCheckBox checkBoxForType5ElementLength = new JCheckBox("Changing");
+                checkBoxForType5ElementLength.setEnabled(false);
+                dialogForLongLIPWithReceiveLevel.add(labelForType5ElementLength);
+                dialogForLongLIPWithReceiveLevel.add(textFieldForType5Type5ElementLength);
+                dialogForLongLIPWithReceiveLevel.add(checkBoxForType5ElementLength);
+
+                JLabel labelForType5ElementLengthExtension = new JLabel("Type 5 element length extension");
+                JTextField textFieldForType5ElementLengthExtension = new JTextField("9", 1);
+                textFieldForType5ElementLengthExtension.setEditable(false);
+                JCheckBox checkBoxForType5ElementLengthExtension = new JCheckBox("Changing");
+                checkBoxForType5ElementLengthExtension.setEnabled(false);
+                dialogForLongLIPWithReceiveLevel.add(labelForType5ElementLengthExtension);
+                dialogForLongLIPWithReceiveLevel.add(textFieldForType5ElementLengthExtension);
+                dialogForLongLIPWithReceiveLevel.add(checkBoxForType5ElementLengthExtension);
+
+                JLabel labelForTypeOfMessageFromDevice = new JLabel("Type of message from device");
+                JTextField textFieldForTypeOfMessageFromDevice = new JTextField("0", 1);
+                textFieldForTypeOfMessageFromDevice.setEditable(false);
+                JCheckBox checkBoxForTypeOfMessageFromDevice = new JCheckBox("Changing");
+                checkBoxForTypeOfMessageFromDevice.setEnabled(false);
+                dialogForLongLIPWithReceiveLevel.add(labelForTypeOfMessageFromDevice);
+                dialogForLongLIPWithReceiveLevel.add(textFieldForTypeOfMessageFromDevice);
+                dialogForLongLIPWithReceiveLevel.add(checkBoxForTypeOfMessageFromDevice);
+
+                JLabel labelForTypeOfDevice = new JLabel("Type of device");
+                JTextField textFieldForTypeOfDevice = new JTextField("0", 1);
+                JCheckBox checkBoxForTypeOfDevice = new JCheckBox("Changing");
+                dialogForLongLIPWithReceiveLevel.add(labelForTypeOfDevice);
+                dialogForLongLIPWithReceiveLevel.add(textFieldForTypeOfDevice);
+                dialogForLongLIPWithReceiveLevel.add(checkBoxForTypeOfDevice);
+
+                JLabel labelForMeasurementFrequency = new JLabel("Measurement frequency");
+                JTextField textFieldForMeasurementFrequency = new JTextField("1", 1);
+                JCheckBox checkBoxForMeasurementFrequency = new JCheckBox("Changing");
+                dialogForLongLIPWithReceiveLevel.add(labelForMeasurementFrequency);
+                dialogForLongLIPWithReceiveLevel.add(textFieldForMeasurementFrequency);
+                dialogForLongLIPWithReceiveLevel.add(checkBoxForMeasurementFrequency);
+
+                JLabel labelForChannelCode = new JLabel("Channel code");
+                JTextField textFieldForChannelCode = new JTextField("1000", 1);
+                JCheckBox checkBoxForChannelCode = new JCheckBox("Changing");
+                dialogForLongLIPWithReceiveLevel.add(labelForChannelCode);
+                dialogForLongLIPWithReceiveLevel.add(textFieldForChannelCode);
+                dialogForLongLIPWithReceiveLevel.add(checkBoxForChannelCode);
+
+                JLabel labelForFrequencyOffsetCode = new JLabel("Frequency Offset Code");
+                JTextField textFieldForFrequencyOffsetCode = new JTextField("3", 1);
+                JCheckBox checkBoxForFrequencyOffsetCode = new JCheckBox("Changing");
+                dialogForLongLIPWithReceiveLevel.add(labelForFrequencyOffsetCode);
+                dialogForLongLIPWithReceiveLevel.add(textFieldForFrequencyOffsetCode);
+                dialogForLongLIPWithReceiveLevel.add(checkBoxForFrequencyOffsetCode);
+
+                JLabel labelForSignalReceptionLevel = new JLabel("Signal reception level");
+                JTextField textFieldForSignalReceptionLevel = new JTextField("50", 1);
+                JCheckBox checkBoxForSignalReceptionLevel = new JCheckBox("Changing");
+                dialogForLongLIPWithReceiveLevel.add(labelForSignalReceptionLevel);
+                dialogForLongLIPWithReceiveLevel.add(textFieldForSignalReceptionLevel);
+                dialogForLongLIPWithReceiveLevel.add(checkBoxForSignalReceptionLevel);
+
+                JButton buttonToAddLongLipType1WithReceiveLevel = new JButton("LIP with receive level");
+                dialogForLongLIPWithReceiveLevel.add(buttonToAddLongLipType1WithReceiveLevel);
+
+                buttonToAddLongLipType1WithReceiveLevel.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            checkIntValueFromString(textFieldForSSI.getText(), 0, 16777215, "SSI");
+                            checkIntValueFromString(textFieldForBaseStationNumber.getText(), 1, 130,
+                                    "BaseStationNumber");
+                            checkDoubleValueFromString(textFieldForLongitude.getText(), -180.0, 179.0, "Longitude");
+                            checkDoubleValueFromString(textFieldForLatitude.getText(), -90.0, 89.0, "Latitude");
+                            checkIntValueFromString(textFieldForHorizontalPositionUncertainty.getText(), 0, 63,
+                                    "Horizontal position uncertainty");
+                            checkIntValueFromString(textFieldForLocationAltitude.getText(), 0, 2047, "Location " +
+                                    "altitude");
+                            checkIntValueFromString(textFieldForHorizontalVelocity.getText(), 0, 127, "Horizontal " +
+                                    "velocity");
+                            checkIntValueFromString(textFieldForDirectionOfTravelExtended.getText(), 0, 255,
+                                    "Direction Of travel extended");
+                            checkIntValueFromString(textFieldForReasonForSending.getText(), 0, 255, "Reason for " +
+                                    "sending");
+
+                            checkIntValueFromString(textFieldForTypeOfDevice.getText(), 0, 7, "Type of device");
+                            checkIntValueFromString(textFieldForMeasurementFrequency.getText(), 0, 1, "Measurement " +
+                                    "frequency");
+                            checkIntValueFromString(textFieldForChannelCode.getText(), 0, 4095, "Channel code");
+                            checkIntValueFromString(textFieldForFrequencyOffsetCode.getText(), 0, 3, "Frequency " +
+                                    "Offset Code");
+                            checkIntValueFromString(textFieldForSignalReceptionLevel.getText(), 0, 255, "Signal " +
+                                    "reception level");
+
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+
+                        Map<Integer, Boolean> changeMap = new HashMap<Integer, Boolean>();
+                        for (int i = 0; i < 12; i++) {
+                            changeMap.put(i, false);
+                        }
+                        if (checkBoxForSSI.isSelected()) {
+                            changeMap.replace(0, true);
+                        }
+
+                        if (checkBoxForLongitude.isSelected()) {
+                            changeMap.replace(1, true);
+                        }
+                        if (checkBoxForLatitude.isSelected()) {
+                            changeMap.replace(2, true);
+                        }
+                        if (checkBoxForHorizontalPositionUncertainty.isSelected()) {
+                            changeMap.replace(3, true);
+                        }
+                        if (checkBoxForLocationAltitude.isSelected()) {
+                            changeMap.replace(4, true);
+                        }
+                        if (checkBoxForHorizontalVelocity.isSelected()) {
+                            changeMap.replace(5, true);
+                        }
+                        if (checkBoxForDirectionOfTravelExtended.isSelected()) {
+                            changeMap.replace(6, true);
+                        }
+                        if (checkBoxForReasonForSending.isSelected()) {
+                            changeMap.replace(7, true);
+                        }
+
+                        if (checkBoxForTypeOfDevice.isSelected()) {
+                            changeMap.replace(8, true);
+                        }
+
+                        if (checkBoxForMeasurementFrequency.isSelected()) {
+                            changeMap.replace(9, true);
+                        }
+
+                        if (checkBoxForChannelCode.isSelected()) {
+                            changeMap.replace(10, true);
+                        }
+
+                        if (checkBoxForFrequencyOffsetCode.isSelected()) {
+                            changeMap.replace(11, true);
+                        }
+
+                        if (checkBoxForSignalReceptionLevel.isSelected()) {
+                            changeMap.replace(12, true);
+                        }
+
+
+                        LongLipType1WithRecieveLevel longLipType1WithRecieveLevel = new LongLipType1WithRecieveLevel();
+                        longLipType1WithRecieveLevel.withSSI(textFieldForSSI.getText())
+                                .withLongitude(textFieldForLongitude.getText())
+                                .withLatitude(textFieldForLatitude.getText())
+                                .withHorizontal_position_uncertainty(textFieldForHorizontalPositionUncertainty.getText())
+                                .withLocation_altitude(textFieldForLocationAltitude.getText())
+                                .withHorizontal_velocity(textFieldForHorizontalVelocity.getText())
+                                .withDirection_of_travel_extended(textFieldForDirectionOfTravelExtended.getText())
+                                .withReason_for_sending(textFieldForReasonForSending.getText())
+                                .withType_of_device(textFieldForTypeOfDevice.getText())
+                                .withMeasurement_frequency(textFieldForMeasurementFrequency.getText())
+                                .withChannel_code(textFieldForChannelCode.getText())
+                                .withFrequency_offset_code(textFieldForFrequencyOffsetCode.getText())
+                                .withSignal_reception_level(textFieldForSignalReceptionLevel.getText())
+                                .withBaseStationNumber(textFieldForBaseStationNumber.getText())
+                                .withChangeMap(changeMap)
+                                .initValuesFromUI();
+
+                        listOfUDPMessages.add(longLipType1WithRecieveLevel);
+
+                        dialogForLongLIPWithReceiveLevel.dispose();
+                        listModel.addElement("Long Lip with receive level__" + textFieldForSSI.getText() + " " + convertChangeMapToString(changeMap));
                     }
                 });
 
-                dialogForLongLIPType3.setVisible(true);
+                dialogForLongLIPWithReceiveLevel.setVisible(true);
+
             }
         });
 
         buttonAddTelemetryOfDeviceData.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JDialog dialogForLongLIPWithTelemetryOfDeviceData = createDialog("Input Lip with telemetry" +
+                JDialog dialogForLongLIPWithTelemetryOfDeviceData = createDialog("Input long Lip with telemetry" +
                         " telemetry data", true, 700, 700, 38, 3);
 
                 JLabel labelForSSI = new JLabel("SSI");
-                JTextField textFieldForSSI = new JTextField("7031", 1);
+                JTextField textFieldForSSI = new JTextField("8005", 1);
                 JCheckBox checkBoxForSSI = new JCheckBox("Changing");
                 dialogForLongLIPWithTelemetryOfDeviceData.add(labelForSSI);
                 dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForSSI);
@@ -1032,14 +1364,15 @@ public class UI extends JFrame {
                 dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForLocationShape);
 
                 JLabel labelForLongitude = new JLabel("Longitude");
-                JTextField textFieldForLongitude = new JTextField("37.66000628471", 1);
+                JTextField textFieldForLongitude = new JTextField("37.56000628471", 1);
                 JCheckBox checkBoxForLongitude = new JCheckBox("Changing");
+                checkBoxForLongitude.setSelected(true);
                 dialogForLongLIPWithTelemetryOfDeviceData.add(labelForLongitude);
                 dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForLongitude);
                 dialogForLongLIPWithTelemetryOfDeviceData.add(checkBoxForLongitude);
 
                 JLabel labelForLatitude = new JLabel("Latitude");
-                JTextField textFieldForLatitude = new JTextField("55.7839286", 1);
+                JTextField textFieldForLatitude = new JTextField("55.7239286", 1);
                 JCheckBox checkBoxForLatitude = new JCheckBox("Changing");
                 dialogForLongLIPWithTelemetryOfDeviceData.add(labelForLatitude);
                 dialogForLongLIPWithTelemetryOfDeviceData.add(textFieldForLatitude);
@@ -1459,7 +1792,7 @@ public class UI extends JFrame {
                         listOfUDPMessages.add(longLipType1WithTelemetryDataMessage);
 
                         dialogForLongLIPWithTelemetryOfDeviceData.dispose();
-                        listModel.addElement("Lip with telemetry" + textFieldForSSI.getText() + " " + convertChangeMapToString(changeMap));
+                        listModel.addElement("Long Lip with telemetry____" + textFieldForSSI.getText() + " " + convertChangeMapToString(changeMap));
                     }
                 });
 
@@ -1468,327 +1801,6 @@ public class UI extends JFrame {
             }
         });
 
-        buttonAddLipWithReceiveLevel.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JDialog dialogForLongLIPWithReceiveLevel = createDialog("Input data for LIP with receive " +
-                        "level", true, 700, 700, 26, 3);
-
-                JLabel labelForSSI = new JLabel("SSI");
-                JTextField textFieldForSSI = new JTextField("7070", 1);
-                JCheckBox checkBoxForSSI = new JCheckBox("Changing");
-                dialogForLongLIPWithReceiveLevel.add(labelForSSI);
-                dialogForLongLIPWithReceiveLevel.add(textFieldForSSI);
-                dialogForLongLIPWithReceiveLevel.add(checkBoxForSSI);
-
-                JLabel labelForBaseStationNumber = new JLabel("BSNumber");
-                JTextField textFieldForBaseStationNumber = new JTextField("10", 1);
-                JCheckBox checkBoxForBaseStationNumber = new JCheckBox("Changing");
-                checkBoxForBaseStationNumber.setEnabled(false);
-                dialogForLongLIPWithReceiveLevel.add(labelForBaseStationNumber);
-                dialogForLongLIPWithReceiveLevel.add(textFieldForBaseStationNumber);
-                dialogForLongLIPWithReceiveLevel.add(checkBoxForBaseStationNumber);
-
-                JLabel labelForPDUType = new JLabel("PDU Type");
-                JTextField textFieldFoForPDUType = new JTextField("1", 1);
-                textFieldFoForPDUType.setEditable(false);
-                JCheckBox checkBoxForForPDUType = new JCheckBox("Changing");
-                checkBoxForForPDUType.setEnabled(false);
-                dialogForLongLIPWithReceiveLevel.add(labelForPDUType);
-                dialogForLongLIPWithReceiveLevel.add(textFieldFoForPDUType);
-                dialogForLongLIPWithReceiveLevel.add(checkBoxForForPDUType);
-
-                JLabel labelForPDUTypeExtension = new JLabel("PDU Type extension");
-                JTextField textFieldForPDUTypeExtension = new JTextField("3", 1);
-                textFieldForPDUTypeExtension.setEditable(false);
-                JCheckBox checkBoxForPDUTypeExtension = new JCheckBox("Changing");
-                checkBoxForPDUTypeExtension.setEnabled(false);
-                dialogForLongLIPWithReceiveLevel.add(labelForPDUTypeExtension);
-                dialogForLongLIPWithReceiveLevel.add(textFieldForPDUTypeExtension);
-                dialogForLongLIPWithReceiveLevel.add(checkBoxForPDUTypeExtension);
-
-                JLabel labelForTimeData = new JLabel("Time data");
-                JTextField textFieldFoTimeData = new JTextField("0", 1);
-                textFieldFoTimeData.setEditable(false);
-                JCheckBox checkBoxForForTimeData = new JCheckBox("Changing");
-                checkBoxForForTimeData.setEnabled(false);
-                dialogForLongLIPWithReceiveLevel.add(labelForTimeData);
-                dialogForLongLIPWithReceiveLevel.add(textFieldFoTimeData);
-                dialogForLongLIPWithReceiveLevel.add(checkBoxForForTimeData);
-
-                JLabel labelForLocationShape = new JLabel("Location shape");
-                JTextField textFieldForLocationShape = new JTextField("5", 1);
-                textFieldForLocationShape.setEditable(false);
-                JCheckBox checkBoxForLocationShape = new JCheckBox("Changing");
-                checkBoxForLocationShape.setEnabled(false);
-                dialogForLongLIPWithReceiveLevel.add(labelForLocationShape);
-                dialogForLongLIPWithReceiveLevel.add(textFieldForLocationShape);
-                dialogForLongLIPWithReceiveLevel.add(checkBoxForLocationShape);
-
-                JLabel labelForLongitude = new JLabel("Longitude");
-                JTextField textFieldForLongitude = new JTextField("37.66000628471", 1);
-                JCheckBox checkBoxForLongitude = new JCheckBox("Changing");
-                dialogForLongLIPWithReceiveLevel.add(labelForLongitude);
-                dialogForLongLIPWithReceiveLevel.add(textFieldForLongitude);
-                dialogForLongLIPWithReceiveLevel.add(checkBoxForLongitude);
-
-                JLabel labelForLatitude = new JLabel("Latitude");
-                JTextField textFieldForLatitude = new JTextField("55.7839286", 1);
-                JCheckBox checkBoxForLatitude = new JCheckBox("Changing");
-                dialogForLongLIPWithReceiveLevel.add(labelForLatitude);
-                dialogForLongLIPWithReceiveLevel.add(textFieldForLatitude);
-                dialogForLongLIPWithReceiveLevel.add(checkBoxForLatitude);
-
-                JLabel labelForHorizontalPositionUncertainty = new JLabel("Horizontal position uncertainty");
-                JTextField textFieldForHorizontalPositionUncertainty = new JTextField("0", 1);
-                JCheckBox checkBoxForHorizontalPositionUncertainty = new JCheckBox("Changing");
-                dialogForLongLIPWithReceiveLevel.add(labelForHorizontalPositionUncertainty);
-                dialogForLongLIPWithReceiveLevel.add(textFieldForHorizontalPositionUncertainty);
-                dialogForLongLIPWithReceiveLevel.add(checkBoxForHorizontalPositionUncertainty);
-
-                JLabel labelForLocationAltitude = new JLabel("Location altitude");
-                JTextField textFieldForLocationAltitude = new JTextField("0", 1);
-                JCheckBox checkBoxForLocationAltitude = new JCheckBox("Changing");
-                dialogForLongLIPWithReceiveLevel.add(labelForLocationAltitude);
-                dialogForLongLIPWithReceiveLevel.add(textFieldForLocationAltitude);
-                dialogForLongLIPWithReceiveLevel.add(checkBoxForLocationAltitude);
-
-                JLabel labelForVelocityType = new JLabel("Velocity type");
-                JTextField textFieldForVelocityType = new JTextField("5", 1);
-                textFieldForVelocityType.setEditable(false);
-                JCheckBox checkBoxForVelocityType = new JCheckBox("Changing");
-                checkBoxForVelocityType.setEnabled(false);
-                dialogForLongLIPWithReceiveLevel.add(labelForVelocityType);
-                dialogForLongLIPWithReceiveLevel.add(textFieldForVelocityType);
-                dialogForLongLIPWithReceiveLevel.add(checkBoxForVelocityType);
-
-                JLabel labelForHorizontalVelocity = new JLabel("Horizontal velocity");
-                JTextField textFieldForHorizontalVelocity = new JTextField("0", 1);
-                JCheckBox checkBoxForHorizontalVelocity = new JCheckBox("Changing");
-                dialogForLongLIPWithReceiveLevel.add(labelForHorizontalVelocity);
-                dialogForLongLIPWithReceiveLevel.add(textFieldForHorizontalVelocity);
-                dialogForLongLIPWithReceiveLevel.add(checkBoxForHorizontalVelocity);
-
-                JLabel labelForDirectionOfTravelExtended = new JLabel("Direction of travel extended");
-                JTextField textFieldForDirectionOfTravelExtended = new JTextField("0", 1);
-                JCheckBox checkBoxForDirectionOfTravelExtended = new JCheckBox("Changing");
-                dialogForLongLIPWithReceiveLevel.add(labelForDirectionOfTravelExtended);
-                dialogForLongLIPWithReceiveLevel.add(textFieldForDirectionOfTravelExtended);
-                dialogForLongLIPWithReceiveLevel.add(checkBoxForDirectionOfTravelExtended);
-
-                JLabel labelForAcknowledgementRequest = new JLabel("Acknowledgement request");
-                JTextField textFieldForAcknowledgementRequest = new JTextField("0", 1);
-                textFieldForAcknowledgementRequest.setEditable(false);
-                JCheckBox checkBoxForForAcknowledgementRequest = new JCheckBox("Changing");
-                checkBoxForForAcknowledgementRequest.setEnabled(false);
-                dialogForLongLIPWithReceiveLevel.add(labelForAcknowledgementRequest);
-                dialogForLongLIPWithReceiveLevel.add(textFieldForAcknowledgementRequest);
-                dialogForLongLIPWithReceiveLevel.add(checkBoxForForAcknowledgementRequest);
-
-                JLabel labelForTypeOfAdditionalData = new JLabel("Type of additional data");
-                JTextField textFieldForTypeOfAdditionalData = new JTextField("0", 1);
-                textFieldForTypeOfAdditionalData.setEditable(false);
-                JCheckBox checkBoxForTypeOfAdditionalData = new JCheckBox("Changing");
-                checkBoxForTypeOfAdditionalData.setEnabled(false);
-                dialogForLongLIPWithReceiveLevel.add(labelForTypeOfAdditionalData);
-                dialogForLongLIPWithReceiveLevel.add(textFieldForTypeOfAdditionalData);
-                dialogForLongLIPWithReceiveLevel.add(checkBoxForTypeOfAdditionalData);
-
-                JLabel labelForReasonForSending = new JLabel("Reason for sending");
-                JTextField textFieldForReasonForSending = new JTextField("129", 1);
-                JCheckBox checkBoxForReasonForSending = new JCheckBox("Changing");
-                dialogForLongLIPWithReceiveLevel.add(labelForReasonForSending);
-                dialogForLongLIPWithReceiveLevel.add(textFieldForReasonForSending);
-                dialogForLongLIPWithReceiveLevel.add(checkBoxForReasonForSending);
-
-                JLabel labelForType5ElementIdentifier = new JLabel("Type 5 element identifier");
-                JTextField textFieldForType5ElementIdentifier = new JTextField("1", 1);
-                textFieldForType5ElementIdentifier.setEditable(false);
-                JCheckBox checkBoxForType5ElementIdentifier = new JCheckBox("Changing");
-                checkBoxForTypeOfAdditionalData.setEnabled(false);
-                dialogForLongLIPWithReceiveLevel.add(labelForType5ElementIdentifier);
-                dialogForLongLIPWithReceiveLevel.add(textFieldForType5ElementIdentifier);
-                dialogForLongLIPWithReceiveLevel.add(checkBoxForType5ElementIdentifier);
-
-                JLabel labelForType5ElementLength = new JLabel("Type 5 element length");
-                JTextField textFieldForType5Type5ElementLength = new JTextField("0", 1);
-                textFieldForType5Type5ElementLength.setEditable(false);
-                JCheckBox checkBoxForType5ElementLength = new JCheckBox("Changing");
-                checkBoxForType5ElementLength.setEnabled(false);
-                dialogForLongLIPWithReceiveLevel.add(labelForType5ElementLength);
-                dialogForLongLIPWithReceiveLevel.add(textFieldForType5Type5ElementLength);
-                dialogForLongLIPWithReceiveLevel.add(checkBoxForType5ElementLength);
-
-                JLabel labelForType5ElementLengthExtension = new JLabel("Type 5 element length extension");
-                JTextField textFieldForType5ElementLengthExtension = new JTextField("9", 1);
-                textFieldForType5ElementLengthExtension.setEditable(false);
-                JCheckBox checkBoxForType5ElementLengthExtension = new JCheckBox("Changing");
-                checkBoxForType5ElementLengthExtension.setEnabled(false);
-                dialogForLongLIPWithReceiveLevel.add(labelForType5ElementLengthExtension);
-                dialogForLongLIPWithReceiveLevel.add(textFieldForType5ElementLengthExtension);
-                dialogForLongLIPWithReceiveLevel.add(checkBoxForType5ElementLengthExtension);
-
-                JLabel labelForTypeOfMessageFromDevice = new JLabel("Type of message from device");
-                JTextField textFieldForTypeOfMessageFromDevice = new JTextField("0", 1);
-                textFieldForTypeOfMessageFromDevice.setEditable(false);
-                JCheckBox checkBoxForTypeOfMessageFromDevice = new JCheckBox("Changing");
-                checkBoxForTypeOfMessageFromDevice.setEnabled(false);
-                dialogForLongLIPWithReceiveLevel.add(labelForTypeOfMessageFromDevice);
-                dialogForLongLIPWithReceiveLevel.add(textFieldForTypeOfMessageFromDevice);
-                dialogForLongLIPWithReceiveLevel.add(checkBoxForTypeOfMessageFromDevice);
-
-                JLabel labelForTypeOfDevice = new JLabel("Type of device");
-                JTextField textFieldForTypeOfDevice = new JTextField("0", 1);
-                JCheckBox checkBoxForTypeOfDevice = new JCheckBox("Changing");
-                dialogForLongLIPWithReceiveLevel.add(labelForTypeOfDevice);
-                dialogForLongLIPWithReceiveLevel.add(textFieldForTypeOfDevice);
-                dialogForLongLIPWithReceiveLevel.add(checkBoxForTypeOfDevice);
-
-                JLabel labelForMeasurementFrequency = new JLabel("Measurement frequency");
-                JTextField textFieldForMeasurementFrequency = new JTextField("1", 1);
-                JCheckBox checkBoxForMeasurementFrequency = new JCheckBox("Changing");
-                dialogForLongLIPWithReceiveLevel.add(labelForMeasurementFrequency);
-                dialogForLongLIPWithReceiveLevel.add(textFieldForMeasurementFrequency);
-                dialogForLongLIPWithReceiveLevel.add(checkBoxForMeasurementFrequency);
-
-                JLabel labelForChannelCode = new JLabel("Channel code");
-                JTextField textFieldForChannelCode = new JTextField("1000", 1);
-                JCheckBox checkBoxForChannelCode = new JCheckBox("Changing");
-                dialogForLongLIPWithReceiveLevel.add(labelForChannelCode);
-                dialogForLongLIPWithReceiveLevel.add(textFieldForChannelCode);
-                dialogForLongLIPWithReceiveLevel.add(checkBoxForChannelCode);
-
-                JLabel labelForFrequencyOffsetCode = new JLabel("Frequency Offset Code");
-                JTextField textFieldForFrequencyOffsetCode = new JTextField("3", 1);
-                JCheckBox checkBoxForFrequencyOffsetCode = new JCheckBox("Changing");
-                dialogForLongLIPWithReceiveLevel.add(labelForFrequencyOffsetCode);
-                dialogForLongLIPWithReceiveLevel.add(textFieldForFrequencyOffsetCode);
-                dialogForLongLIPWithReceiveLevel.add(checkBoxForFrequencyOffsetCode);
-
-                JLabel labelForSignalReceptionLevel = new JLabel("Signal reception level");
-                JTextField textFieldForSignalReceptionLevel = new JTextField("50", 1);
-                JCheckBox checkBoxForSignalReceptionLevel = new JCheckBox("Changing");
-                dialogForLongLIPWithReceiveLevel.add(labelForSignalReceptionLevel);
-                dialogForLongLIPWithReceiveLevel.add(textFieldForSignalReceptionLevel);
-                dialogForLongLIPWithReceiveLevel.add(checkBoxForSignalReceptionLevel);
-
-                JButton buttonToAddLongLipType1WithReceiveLevel = new JButton("LIP with receive level");
-                dialogForLongLIPWithReceiveLevel.add(buttonToAddLongLipType1WithReceiveLevel);
-
-                buttonToAddLongLipType1WithReceiveLevel.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        try {
-                            checkIntValueFromString(textFieldForSSI.getText(), 0, 16777215, "SSI");
-                            checkIntValueFromString(textFieldForBaseStationNumber.getText(), 1, 130,
-                                    "BaseStationNumber");
-                            checkDoubleValueFromString(textFieldForLongitude.getText(), -180.0, 179.0, "Longitude");
-                            checkDoubleValueFromString(textFieldForLatitude.getText(), -90.0, 89.0, "Latitude");
-                            checkIntValueFromString(textFieldForHorizontalPositionUncertainty.getText(), 0, 63,
-                                    "Horizontal position uncertainty");
-                            checkIntValueFromString(textFieldForLocationAltitude.getText(), 0, 2047, "Location " +
-                                    "altitude");
-                            checkIntValueFromString(textFieldForHorizontalVelocity.getText(), 0, 127, "Horizontal " +
-                                    "velocity");
-                            checkIntValueFromString(textFieldForDirectionOfTravelExtended.getText(), 0, 255,
-                                    "Direction Of travel extended");
-                            checkIntValueFromString(textFieldForReasonForSending.getText(), 0, 255, "Reason for " +
-                                    "sending");
-
-                            checkIntValueFromString(textFieldForTypeOfDevice.getText(), 0, 7, "Type of device");
-                            checkIntValueFromString(textFieldForMeasurementFrequency.getText(), 0, 1, "Measurement " +
-                                    "frequency");
-                            checkIntValueFromString(textFieldForChannelCode.getText(), 0, 4095, "Channel code");
-                            checkIntValueFromString(textFieldForFrequencyOffsetCode.getText(), 0, 3, "Frequency " +
-                                    "Offset Code");
-                            checkIntValueFromString(textFieldForSignalReceptionLevel.getText(), 0, 255, "Signal " +
-                                    "reception level");
-
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-
-                        Map<Integer, Boolean> changeMap = new HashMap<Integer, Boolean>();
-                        for (int i = 0; i < 12; i++) {
-                            changeMap.put(i, false);
-                        }
-                        if (checkBoxForSSI.isSelected()) {
-                            changeMap.replace(0, true);
-                        }
-
-                        if (checkBoxForLongitude.isSelected()) {
-                            changeMap.replace(1, true);
-                        }
-                        if (checkBoxForLatitude.isSelected()) {
-                            changeMap.replace(2, true);
-                        }
-                        if (checkBoxForHorizontalPositionUncertainty.isSelected()) {
-                            changeMap.replace(3, true);
-                        }
-                        if (checkBoxForLocationAltitude.isSelected()) {
-                            changeMap.replace(4, true);
-                        }
-                        if (checkBoxForHorizontalVelocity.isSelected()) {
-                            changeMap.replace(5, true);
-                        }
-                        if (checkBoxForDirectionOfTravelExtended.isSelected()) {
-                            changeMap.replace(6, true);
-                        }
-                        if (checkBoxForReasonForSending.isSelected()) {
-                            changeMap.replace(7, true);
-                        }
-
-                        if (checkBoxForTypeOfDevice.isSelected()) {
-                            changeMap.replace(8, true);
-                        }
-
-                        if (checkBoxForMeasurementFrequency.isSelected()) {
-                            changeMap.replace(9, true);
-                        }
-
-                        if (checkBoxForChannelCode.isSelected()) {
-                            changeMap.replace(10, true);
-                        }
-
-                        if (checkBoxForFrequencyOffsetCode.isSelected()) {
-                            changeMap.replace(11, true);
-                        }
-
-                        if (checkBoxForSignalReceptionLevel.isSelected()) {
-                            changeMap.replace(12, true);
-                        }
-
-
-                        LongLipType1WithRecieveLevel longLipType1WithRecieveLevel = new LongLipType1WithRecieveLevel();
-                        longLipType1WithRecieveLevel.withSSI(textFieldForSSI.getText())
-                                .withLongitude(textFieldForLongitude.getText())
-                                .withLatitude(textFieldForLatitude.getText())
-                                .withHorizontal_position_uncertainty(textFieldForHorizontalPositionUncertainty.getText())
-                                .withLocation_altitude(textFieldForLocationAltitude.getText())
-                                .withHorizontal_velocity(textFieldForHorizontalVelocity.getText())
-                                .withDirection_of_travel_extended(textFieldForDirectionOfTravelExtended.getText())
-                                .withReason_for_sending(textFieldForReasonForSending.getText())
-                                .withType_of_device(textFieldForTypeOfDevice.getText())
-                                .withMeasurement_frequency(textFieldForMeasurementFrequency.getText())
-                                .withChannel_code(textFieldForChannelCode.getText())
-                                .withFrequency_offset_code(textFieldForFrequencyOffsetCode.getText())
-                                .withSignal_reception_level(textFieldForSignalReceptionLevel.getText())
-                                .withBaseStationNumber(textFieldForBaseStationNumber.getText())
-                                .withChangeMap(changeMap)
-                                .initValuesFromUI();
-
-                        listOfUDPMessages.add(longLipType1WithRecieveLevel);
-
-                        dialogForLongLIPWithReceiveLevel.dispose();
-                        listModel.addElement("Lip with receive " +
-                                "level " + textFieldForSSI.getText() + " " + convertChangeMapToString(changeMap));
-                    }
-                });
-
-                dialogForLongLIPWithReceiveLevel.setVisible(true);
-
-            }
-        });
 
         buttonStartSendingUDPMessage.addActionListener(new ActionListener() {
             @Override
@@ -1797,6 +1809,7 @@ public class UI extends JFrame {
                 buttonStopSendingUPDMessage.setEnabled(true);
                 buttonStartSendingUDPMessage.setEnabled(false);
                 buttonAddShortLip.setEnabled(false);
+                buttonRemoveLip.setEnabled(false);
                 buttonAddLongLipType1.setEnabled(false);
                 buttonAddLongLipType2.setEnabled(false);
                 buttonAddLongLipType3.setEnabled(false);
@@ -1812,6 +1825,7 @@ public class UI extends JFrame {
                 buttonContinueSendingUPDMessage.setEnabled(true);
                 buttonStopSendingUPDMessage.setEnabled(false);
                 buttonAddShortLip.setEnabled(true);
+                buttonRemoveLip.setEnabled(true);
                 buttonAddLongLipType1.setEnabled(true);
                 buttonAddLongLipType2.setEnabled(true);
                 buttonAddLongLipType3.setEnabled(true);
@@ -1828,13 +1842,43 @@ public class UI extends JFrame {
                 buttonAddShortLip.setEnabled(false);
                 buttonAddLongLipType1.setEnabled(false);
                 buttonAddLongLipType2.setEnabled(false);
+                buttonRemoveLip.setEnabled(false);
                 buttonAddLongLipType3.setEnabled(false);
                 buttonAddTelemetryOfDeviceData.setEnabled(false);
                 buttonAddLipWithReceiveLevel.setEnabled(false);
             }
         });
 
+        buttonRemoveLip.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //This index uses for removal element
+                //plus one, because list of udpmessage start from 0 and it is
+                //alive message (alive message can't be removed)
+                if (!listModel.isEmpty()) {
+                    listOfUDPMessages.remove(numberSelectedLipMessage + 1);
+                    listModel.remove(numberSelectedLipMessage);
+                    System.out.println("udp   " + listOfUDPMessages.size());
+                    System.out.println("model " + listModel.size());
+                    buttonRemoveLip.setEnabled(false);
+                    numberSelectedLipMessage = 0;
+                }
+
+            }
+        });
+
+
+        listToShowMessages.addListSelectionListener(
+                new ListSelectionListener() {
+                    public void valueChanged(ListSelectionEvent e) {
+                        numberSelectedLipMessage = listToShowMessages.getSelectedIndex();
+                        buttonRemoveLip.setEnabled(true);
+                    }
+                });
+
+
     }
+
 
     private String convertChangeMapToString(Map<Integer, Boolean> changeMap) {
         StringBuilder stringBuilder = new StringBuilder();
