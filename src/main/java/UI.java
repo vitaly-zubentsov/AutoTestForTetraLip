@@ -98,7 +98,7 @@ public class UI extends JFrame {
                 JDialog dialogForUDPOptions = createDialog("Input options for UDP messages", true, 400, 200, 5, 2);
 
                 JLabel labelForIpDestination = new JLabel("Input destination IP");
-                JTextField textFieldForIpDestination = new JTextField("192.168.252.146", 1);
+                JTextField textFieldForIpDestination = new JTextField("10.10.126.151", 1);
                 dialogForUDPOptions.add(labelForIpDestination);
                 dialogForUDPOptions.add(textFieldForIpDestination);
 
@@ -1226,7 +1226,7 @@ public class UI extends JFrame {
                         }
 
                         Map<Integer, Boolean> changeMap = new HashMap<Integer, Boolean>();
-                        for (int i = 0; i < 12; i++) {
+                        for (int i = 0; i < 13; i++) {
                             changeMap.put(i, false);
                         }
                         if (checkBoxForSSI.isSelected()) {
@@ -1858,8 +1858,6 @@ public class UI extends JFrame {
                 if (!listModel.isEmpty()) {
                     listOfUDPMessages.remove(numberSelectedLipMessage + 1);
                     listModel.remove(numberSelectedLipMessage);
-                    System.out.println("udp   " + listOfUDPMessages.size());
-                    System.out.println("model " + listModel.size());
                     buttonRemoveLip.setEnabled(false);
                     numberSelectedLipMessage = 0;
                 }

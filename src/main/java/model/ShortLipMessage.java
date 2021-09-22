@@ -47,6 +47,7 @@ public class ShortLipMessage implements UDPMessage {
     public byte[] getUdpMessage() {
         String udpMessage = udpPacketsCounter.getPacket_counter() +
                 binSSI +
+                binBaseStationNumber +
                 "0000000" + binLongitude +
                 "00000000" + binLatitude +
                 LENGTH_IN_BITS +
@@ -63,7 +64,6 @@ public class ShortLipMessage implements UDPMessage {
                 pdu_tail +
                 "000"; // без этого хвостика почему то сервер не может распарсить сообщение
         changeValuesOfElementsLipMessage();
-        System.out.println(udpPacketsCounter.getPacket_counter());
         return udpMessageHelper.convertBinStringToByteArray(udpMessage);
     }
 

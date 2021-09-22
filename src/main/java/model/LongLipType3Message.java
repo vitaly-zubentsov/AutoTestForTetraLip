@@ -11,11 +11,11 @@ public class LongLipType3Message implements UDPMessage {
     private String baseStationNumber;
     private static String LONGITUDE_FROM_SERVER_OV = "00000000000000000000000000000000";
     private static String LATITUDE_FROM_SERVER_OV = "00000000000000000000000000000000";
-    private static String LENGTH_IN_BITS = "00000000000000000000000010001010"; //в лонг лип типе 3 = 143 бит
+    private static String LENGTH_IN_BITS = "00000000000000000000000010001001"; //в лонг лип типе 3 = 137 бит
     private static String PDU_HEADERS = "00001010";
     private static String PDU_TYPE = "01";
     private static String PDU_TYPE_EXTENSIONS = "0011";
-    private static String TIME_DATA = "10";
+    private static String TIME_TYPE = "10";
     private static String TIME_OF_POSITION = "0000110111111011000000"; // в данной версии константа(1 число, 23 часа,59 минут, 0 секунд)
     private static String LOCATION_SHAPE = "0101";
     private String longitude;
@@ -57,13 +57,14 @@ public class LongLipType3Message implements UDPMessage {
     public byte[] getUdpMessage() {
         String udpMessage = udpPacketsCounter.getPacket_counter() +
                 binSSI +
+                binBaseStationNumber +
                 LONGITUDE_FROM_SERVER_OV +
                 LATITUDE_FROM_SERVER_OV +
                 LENGTH_IN_BITS +
                 PDU_HEADERS +
                 PDU_TYPE +
                 PDU_TYPE_EXTENSIONS +
-                TIME_DATA +
+                TIME_TYPE +
                 TIME_OF_POSITION +
                 LOCATION_SHAPE +
                 binLongitude +

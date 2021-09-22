@@ -48,7 +48,6 @@ public class UDPMessageHelper {
     protected byte[] convertBinStringToByteArray(String binString) {
 
         float numberOfDecNumbersFromBinString = binString.length() / 8;
-        float numberOfDecNumbersFromBinString2 = (float) (binString.length() / 8.0);
         int lengthOfByteArrayFromBinString = (int) Math.ceil(numberOfDecNumbersFromBinString);
         byte[] byteArray = new byte[lengthOfByteArrayFromBinString];
         for (int i = 0; i < lengthOfByteArrayFromBinString; ++i) {
@@ -82,12 +81,12 @@ public class UDPMessageHelper {
             hexString.append(Integer.toHexString(parseInt(binString.substring(0, 4), 2)));
             binString = binString.substring(4);
         }
-        // hexString += Integer.toHexString(Integer.parseInt(binString.substring(0,3), 2));
         return hexString.toString();
     }
 
     protected String calculateLipLatitudeFromDecLatitude(String latitude) {
         double decLatitude = Double.parseDouble(latitude);
+        //TODO fix this, not right maths
         double x = 180.000000000 / 16777216.000000000;
         long decLipLatitude = Math.round(decLatitude / x);
         String f = Long.toString(decLipLatitude);
@@ -95,11 +94,12 @@ public class UDPMessageHelper {
     }
 
     protected String calculateLipLongitudeFromDecLongitude(String longitude) {
-        double decLatitude = Double.parseDouble(longitude);
+        //TODO negative value do not calculate
+        double decLongitude = Double.parseDouble(longitude);
         double x = 180.000000000 / 16777216.000000000;
-        long decLipLatitude = Math.round(decLatitude / x);
-        String f = Long.toString(decLipLatitude);
-        return convertDecStringNumberToBinStringNumber(Long.toString(decLipLatitude), 25);
+        long decLipLongitude = Math.round(decLongitude / x);
+        String f = Long.toString(decLipLongitude);
+        return convertDecStringNumberToBinStringNumber(Long.toString(decLipLongitude), 25);
     }
 
 }

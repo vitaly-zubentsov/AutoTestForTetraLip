@@ -11,7 +11,7 @@ public class LongLipType1Message implements UDPMessage {
     private String baseStationNumber;
     private static String LONGITUDE_FROM_SERVER_OV = "00000000000000000000000000000000";
     private static String LATITUDE_FROM_SERVER_OV = "00000000000000000000000000000000";
-    private static String LENGTH_IN_BITS = "00000000000000000000000001110100"; //в лонг лип типе 1 = 116 бит
+    private static String LENGTH_IN_BITS = "00000000000000000000000001110011";
     private static String PDU_HEADERS = "00001010";
     private static String PDU_TYPE = "01";
     private static String PDU_TYPE_EXTENSIONS = "0011";
